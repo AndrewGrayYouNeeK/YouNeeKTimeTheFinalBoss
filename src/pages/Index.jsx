@@ -10,7 +10,7 @@ export default function Index() {
   };
 
   return (
-    <div className="min-h-screen relative bg-black text-white">
+    <div className="min-h-screen relative text-white" style={{ background: 'transparent' }}>
       <CosmicBackground />
       <ShootingStar />
       <PullToRefresh onRefresh={handleRefresh}>
