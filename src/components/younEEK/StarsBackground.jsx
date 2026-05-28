@@ -19,14 +19,19 @@ export default function StarsBackground() {
     ];
 
     const stars = layers.flatMap((layer) =>
-      Array.from({ length: layer.count }, () => ({
-        x: Math.random() * width,
-        y: Math.random() * height,
-        r: layer.size[0] + Math.random() * (layer.size[1] - layer.size[0]),
-        baseOpacity: layer.opacity[0] + Math.random() * (layer.opacity[1] - layer.opacity[0]),
-        twinkleSpeed: 0.005 + Math.random() * 0.02,
-        twinkleOffset: Math.random() * Math.PI * 2,
-      }))
+      Array.from({ length: layer.count }, () => {
+        // ~30% of stars are "strong twinklers" — faster, deeper twinkle
+        const isStrongTwinkler = Math.random() < 0.3;
+        return {
+          x: Math.random() * width,
+          y: Math.random() * height,
+          r: layer.size[0] + Math.random() * (layer.size[1] - layer.size[0]),
+          baseOpacity: layer.opacity[0] + Math.random() * (layer.opacity[1] - layer.opacity[0]),
+          twinkleSpeed: isStrongTwinkler ? 0.04 + Math.random() * 0.05 : 0.005 + Math.random() * 0.015,
+          twinkleOffset: Math.random() * Math.PI * 2,
+          twinkleDepth: isStrongTwinkler ? 0.95 : 0.4,
+        };
+      })
     );
 
     // Shooting stars
@@ -55,7 +60,7 @@ export default function StarsBackground() {
       // Stars with twinkling
       stars.forEach((s) => {
         const twinkle = Math.sin(frame * s.twinkleSpeed + s.twinkleOffset);
-        const opacity = s.baseOpacity * (0.5 + twinkle * 0.5);
+        const opacity = Math.max(0, s.baseOpacity * (1 - s.twinkleDepth + twinkle * s.twinkleDepth));
         ctx.fillStyle = `rgba(255, 255, 255, ${opacity})`;
         ctx.beginPath();
         ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
