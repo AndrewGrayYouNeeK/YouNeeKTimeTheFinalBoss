@@ -41,28 +41,29 @@ export default function ClockDial({ time, isGlitching }) {
       )}
 
       <ClockTicks />
-      <ClockLabels />
-      <ClockHands
-        unitRotation={time.unitRotation}
-        minuteRotation={time.minuteRotation}
-        secondRotation={time.secondRotation}
-      />
-
-      {/* Red "0" label on top of everything */}
-      <svg viewBox="0 0 400 400" className="absolute inset-0 h-full w-full pointer-events-none z-20">
-        <text
-          x="200" y="60"
-          textAnchor="middle"
-          dominantBaseline="middle"
-          fill="#ff2222"
-          fontSize="10"
-          fontFamily="monospace"
-          fontWeight="700"
-          style={{ filter: 'drop-shadow(0 0 3px #ff222288)' }}
-        >
-          0
-        </text>
-      </svg>
+      <div className="absolute inset-0 z-20 pointer-events-none">
+        <ClockLabels />
+        <ClockHands
+          unitRotation={time.unitRotation}
+          minuteRotation={time.minuteRotation}
+          secondRotation={time.secondRotation}
+        />
+        {/* Red "0" label at 12 o'clock */}
+        <svg viewBox="0 0 400 400" className="absolute inset-0 h-full w-full">
+          <text
+            x="200" y="60"
+            textAnchor="middle"
+            dominantBaseline="middle"
+            fill="#ff2222"
+            fontSize="10"
+            fontFamily="monospace"
+            fontWeight="700"
+            style={{ filter: 'drop-shadow(0 0 3px #ff222288)' }}
+          >
+            0
+          </text>
+        </svg>
+      </div>
     </motion.div>
   );
 }
