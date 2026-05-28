@@ -47,30 +47,20 @@ export default function ClockHands({ unitRotation, minuteRotation, secondRotatio
         />
       </g>
 
-      {/* ── Second hand ── thick, darkest black body, bright neon tip */}
+      {/* ── Second hand ── solid yellow */}
       <g transform={`rotate(${secondRotation}, 200, 200)`}>
         {/* tail */}
         <line
           x1="200" y1="200"
           x2="200" y2="218"
-          stroke="#000000" strokeWidth="4" strokeLinecap="round"
-        />
-        <line
-          x1="200" y1="200"
-          x2="200" y2="218"
-          stroke={YELLOW} strokeWidth="1.5" strokeLinecap="round"
+          stroke={YELLOW} strokeWidth="3" strokeLinecap="round"
           style={{ filter: `drop-shadow(0 0 4px ${YELLOW})` }}
         />
-        {/* main — short, thick, black with yellow edge */}
+        {/* main */}
         <line
           x1="200" y1="200"
           x2="200" y2="100"
-          stroke="#000000" strokeWidth="4" strokeLinecap="round"
-        />
-        <line
-          x1="200" y1="200"
-          x2="200" y2="100"
-          stroke={YELLOW} strokeWidth="1.5" strokeLinecap="round"
+          stroke={YELLOW} strokeWidth="3" strokeLinecap="round"
           style={{ filter: `drop-shadow(0 0 4px ${YELLOW})` }}
         />
       </g>
