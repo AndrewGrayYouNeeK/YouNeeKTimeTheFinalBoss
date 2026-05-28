@@ -26,7 +26,7 @@ export default function ClockDial({ time, isGlitching }) {
       className="relative aspect-square w-full max-w-[32rem]"
     >
       {/* Clock face — transparent to let stars show through */}
-      <div className="absolute inset-0 rounded-full border border-[#39ff14]/15 bg-transparent" />
+      <div className="absolute inset-0 rounded-full border border-[#39ff14] bg-transparent" />
 
       {/* Center image — darkens when clock shrinks, brightens when it expands */}
       {centerImage && (
