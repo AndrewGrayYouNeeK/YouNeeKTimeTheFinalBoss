@@ -6,6 +6,7 @@ import { useToast } from '@/components/ui/use-toast';
 import { useState, useEffect } from 'react';
 import { Switch } from '@/components/ui/switch';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import CosmicBackground from '@/components/younEEK/CosmicBackground';
 
 export default function Settings() {
   const { user } = useAuth();
@@ -33,8 +34,9 @@ export default function Settings() {
   };
 
   return (
-    <div className="min-h-screen pb-24">
-      <div className="pt-24 px-6 py-8 max-w-2xl mx-auto">
+    <div className="min-h-screen pb-24 relative">
+      <CosmicBackground />
+      <div className="pt-24 px-6 py-8 max-w-2xl mx-auto relative z-10">
         <div className="space-y-6">
           <div className="border-b border-border pb-6">
             <h2 className="text-xl font-semibold mb-4">Account</h2>
