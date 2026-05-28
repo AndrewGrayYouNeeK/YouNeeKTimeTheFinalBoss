@@ -65,9 +65,9 @@ export default function ClockHands({ unitRotation, minuteRotation, secondRotatio
         />
       </g>
 
-      {/* ── Center dot — solid bright neon green, no hollow ring ── */}
-      <circle cx="200" cy="200" r="5" fill={GREEN}
-        style={{ filter: `drop-shadow(0 0 8px ${GREEN}) drop-shadow(0 0 4px ${GREEN})` }} />
+      {/* ── Center dot — solid bright yellow ── */}
+      <circle cx="200" cy="200" r="5" fill={YELLOW}
+        style={{ filter: `drop-shadow(0 0 8px ${YELLOW}) drop-shadow(0 0 4px ${YELLOW})` }} />
     </svg>
   );
 }
