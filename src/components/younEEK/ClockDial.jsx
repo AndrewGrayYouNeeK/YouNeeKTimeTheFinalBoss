@@ -47,6 +47,22 @@ export default function ClockDial({ time, isGlitching }) {
         minuteRotation={time.minuteRotation}
         secondRotation={time.secondRotation}
       />
+
+      {/* Red "0" label on top of everything */}
+      <svg viewBox="0 0 400 400" className="absolute inset-0 h-full w-full pointer-events-none z-20">
+        <text
+          x="200" y="60"
+          textAnchor="middle"
+          dominantBaseline="middle"
+          fill="#ff2222"
+          fontSize="10"
+          fontFamily="monospace"
+          fontWeight="700"
+          style={{ filter: 'drop-shadow(0 0 3px #ff222288)' }}
+        >
+          0
+        </text>
+      </svg>
     </motion.div>
   );
 }

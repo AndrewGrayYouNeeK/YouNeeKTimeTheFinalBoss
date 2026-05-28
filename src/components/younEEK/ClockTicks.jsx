@@ -47,20 +47,6 @@ export default function ClockTicks() {
       {/* Outer ring around green ticks */}
       <circle cx="200" cy="200" r="199" stroke="rgba(255,255,255,1)" strokeWidth="0.3" fill="none" />
 
-      {/* Red "0" label at 12 o'clock on the inner tick ring */}
-      <text
-        x="200" y="60"
-        textAnchor="middle"
-        dominantBaseline="middle"
-        fill={RED}
-        fontSize="10"
-        fontFamily="monospace"
-        fontWeight="700"
-        style={{ filter: `drop-shadow(0 0 3px ${RED}88)` }}
-      >
-        0
-      </text>
-
       {/* Outer green ticks */}
       {OUTER_TICKS.map((t) => (
         <line
