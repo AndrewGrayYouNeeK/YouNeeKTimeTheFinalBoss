@@ -1,5 +1,5 @@
 import YouNeekClock from '@/components/YouNeekClock';
-import CosmicBackground from '@/components/younEEK/CosmicBackground';
+import StarsBackground from '@/components/younEEK/StarsBackground';
 import PullToRefresh from '@/components/PullToRefresh';
 
 export default function Index() {
@@ -10,7 +10,7 @@ export default function Index() {
 
   return (
     <div className="min-h-screen relative text-white" style={{ background: 'transparent' }}>
-      <CosmicBackground />
+      <StarsBackground />
       <PullToRefresh onRefresh={handleRefresh}>
         <div className="relative z-10">
           <YouNeekClock />
