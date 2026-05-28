@@ -41,8 +41,8 @@ export default function ClockTicks() {
       {/* Black background between the green and red ticks */}
       <circle cx="200" cy="200" r="172.5" stroke="black" strokeWidth="22" fill="none" />
 
-      {/* Subtle guide ring */}
-      <circle cx="200" cy="200" r="162" stroke="rgba(255,255,255,1)" strokeWidth="0.15" fill="none" />
+      {/* Ring around red ticks */}
+      <circle cx="200" cy="200" r="162" stroke={RED} strokeWidth="1" fill="none" style={{ filter: `drop-shadow(0 0 2px ${RED}88)` }} />
 
       {/* Outer ring around green ticks */}
       <circle cx="200" cy="200" r="199" stroke="rgba(255,255,255,1)" strokeWidth="0.3" fill="none" />
