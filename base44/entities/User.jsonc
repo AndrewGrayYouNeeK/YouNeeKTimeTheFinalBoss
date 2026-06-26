@@ -13,5 +13,8 @@
     "clock_face_url": {
       "type": "string"
     }
-  }
+  },
+  "required": [
+    "clock_face_url"
+  ]
 }

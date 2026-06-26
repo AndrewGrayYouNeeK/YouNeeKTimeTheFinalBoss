@@ -40,8 +40,8 @@ export default function StarsBackground() {
       shootingStars.push({
         x: Math.random() * width,
         y: Math.random() * height * 0.5,
-        len: 80 + Math.random() * 120,
-        speed: 8 + Math.random() * 6,
+        len: 120 + Math.random() * 160,
+        speed: 18 + Math.random() * 10,
         angle: Math.PI / 4 + (Math.random() - 0.5) * 0.3,
         life: 1,
       });
@@ -57,10 +57,13 @@ export default function StarsBackground() {
       ctx.fillStyle = '#000000';
       ctx.fillRect(0, 0, width, height);
 
+      // Slow global pulse — makes the whole field breathe (~6s cycle at 60fps)
+      const globalPulse = 0.85 + Math.sin(frame * 0.0175) * 0.15;
+
       // Stars with twinkling
       stars.forEach((s) => {
         const twinkle = Math.sin(frame * s.twinkleSpeed + s.twinkleOffset);
-        const opacity = Math.max(0, s.baseOpacity * (1 - s.twinkleDepth + twinkle * s.twinkleDepth));
+        const opacity = Math.max(0, s.baseOpacity * (1 - s.twinkleDepth + twinkle * s.twinkleDepth) * globalPulse);
         ctx.fillStyle = `rgba(255, 255, 255, ${opacity})`;
         ctx.beginPath();
         ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
