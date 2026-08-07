@@ -1,5 +1,6 @@
 import { useAuth } from '@/lib/AuthContext';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
 import { useToast } from '@/components/ui/use-toast';
 
@@ -9,9 +10,10 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import StarsBackground from '@/components/younEEK/StarsBackground';
 
 export default function Settings() {
-  const { user } = useAuth();
+  const { user, setEmail } = useAuth();
   const { toast } = useToast();
-  
+
+  const [emailInput, setEmailInput] = useState(user?.email || '');
   const [freqEnabled, setFreqEnabled] = useState(() => localStorage.getItem('hourlyFreqEnabled') === 'true');
   const [freqHz, setFreqHz] = useState(() => localStorage.getItem('hourlyFreqHz') || '432');
   const [freqDuration, setFreqDuration] = useState(() => localStorage.getItem('hourlyFreqDuration') || '5');
@@ -22,15 +24,15 @@ export default function Settings() {
     localStorage.setItem('hourlyFreqDuration', freqDuration);
   }, [freqEnabled, freqHz, freqDuration]);
 
-  const handleDeleteAccount = async () => {
-    if (window.confirm('Are you sure you want to delete your account? This action cannot be undone.')) {
-      try {
-        await fetch('/api/auth/delete-account', { method: 'POST' });
-        window.location.href = '/';
-      } catch (error) {
-        console.error('Error deleting account:', error);
-      }
-    }
+  const handleSaveEmail = () => {
+    setEmail(emailInput.trim());
+    toast({ title: emailInput.trim() ? 'Profile saved' : 'Profile cleared' });
+  };
+
+  const handleResetData = () => {
+    localStorage.clear();
+    window.dispatchEvent(new Event('clock-face-updated'));
+    window.location.href = '/';
   };
 
   return (
@@ -39,9 +41,18 @@ export default function Settings() {
       <div className="pt-24 px-6 py-8 max-w-2xl mx-auto relative z-10">
         <div className="space-y-6">
           <div className="border-b border-border pb-6">
-            <h2 className="text-xl font-semibold mb-4">Account</h2>
-            <p className="text-sm text-muted-foreground mb-2">Email</p>
-            <p className="text-base">{user?.email || 'Not logged in'}</p>
+            <h2 className="text-xl font-semibold mb-4">Profile</h2>
+            <p className="text-sm text-muted-foreground mb-2">Email (stored locally on this device)</p>
+            <div className="flex gap-3 items-center">
+              <Input
+                type="email"
+                placeholder="you@example.com"
+                value={emailInput}
+                onChange={(e) => setEmailInput(e.target.value)}
+                className="max-w-xs"
+              />
+              <Button variant="outline" onClick={handleSaveEmail}>Save</Button>
+            </div>
           </div>
 
           <div className="border-b border-border pb-6">
@@ -175,19 +186,19 @@ export default function Settings() {
             <h2 className="text-xl font-semibold mb-4">Danger Zone</h2>
             <AlertDialog>
               <AlertDialogTrigger asChild>
-                <Button variant="destructive">Delete Account</Button>
+                <Button variant="destructive">Reset App Data</Button>
               </AlertDialogTrigger>
               <AlertDialogContent>
                 <AlertDialogHeader>
-                  <AlertDialogTitle>Delete Account</AlertDialogTitle>
+                  <AlertDialogTitle>Reset App Data</AlertDialogTitle>
                   <AlertDialogDescription>
-                    This action cannot be undone. Your account and all associated data will be permanently deleted.
+                    This clears all locally stored settings (profile email, custom clock face, and hourly frequency preferences) from this device. This action cannot be undone.
                   </AlertDialogDescription>
                 </AlertDialogHeader>
                 <div className="flex justify-end gap-3">
                   <AlertDialogCancel>Cancel</AlertDialogCancel>
-                  <AlertDialogAction onClick={handleDeleteAccount} className="bg-destructive hover:bg-destructive/90">
-                    Delete
+                  <AlertDialogAction onClick={handleResetData} className="bg-destructive hover:bg-destructive/90">
+                    Reset
                   </AlertDialogAction>
                 </div>
               </AlertDialogContent>

@@ -2,17 +2,19 @@
 
 ## Cursor Cloud specific instructions
 
-`YouNeeK Time` is a single React 18 + Vite 6 SPA (a dark-themed decimal-time clock) built on the Base44 BaaS platform. Package manager is npm. Standard scripts live in `package.json` (`dev`, `build`, `lint`, `typecheck`, `preview`); the Base44 site config is in `base44/config.jsonc`.
+`YouNeeK Time` is a single React 18 + Vite 6 SPA (a dark-themed decimal-time clock). It is now **fully local / client-side** — all Base44 (BaaS) integrations have been removed. Package manager is npm. Standard scripts live in `package.json` (`dev`, `build`, `lint`, `typecheck`, `preview`).
 
 ### Running the app
 - Dev server: `npm run dev` (Vite, serves on `http://localhost:5173`).
-- The dev server sets `logLevel: 'error'` in `vite.config.js`, so Vite does NOT print its usual "Local: http://localhost:5173" banner. Absence of that banner is expected — confirm the server is up with `curl -sf http://localhost:5173/` instead.
-- The log line `[base44] Proxy not enabled (VITE_BASE44_APP_BASE_URL not set)` on `dev`/`build` is expected and harmless when no Base44 backend env vars are configured.
+- Build: `npm run build` → `./dist`. Preview a built bundle with `npm run preview`.
+- No backend, database, environment variables, or credentials are required. The app runs entirely in the browser.
 
-### Backend / credentials (non-obvious)
-- No Base44 credentials are required to run and test the core UI locally. The app calls the Base44 backend for app public settings on load, but an "unknown" failure (no `VITE_BASE44_APP_ID`/token, no proxy) falls through to rendering the main app anyway (see `src/lib/AuthContext.jsx` + `src/App.jsx`). So the decimal clock and the Settings page render and are interactive without any secrets.
-- Client-side Settings (hourly frequency sound toggle, custom clock-face upload) persist in `localStorage` and work offline.
-- Features that genuinely need a live Base44 backend + `VITE_BASE44_APP_ID` (+ access token, normally injected as URL query params by the Base44 host): email/password + Google login/register flows, the account email shown in Settings, delete-account, and the `getMoonPhase` Deno function powering the Live Moon Phase card. These degrade gracefully when unavailable.
+### Architecture notes (non-obvious)
+- The `@` import alias (`@/...` → `src/...`) is defined in `vite.config.js` under `resolve.alias`. It used to be provided by the removed `@base44/vite-plugin`; if you see "Rollup failed to resolve import '@/...'", that alias is the thing to check.
+- "Auth" is local-only: `src/lib/AuthContext.jsx` stores an optional profile email in `localStorage` (key `localProfileEmail`) and stubs all loading/error states. There is no login/logout backend and no auth-gating — the app opens straight to the clock.
+- The Live Moon Phase card computes phase/illumination client-side via the `suncalc` npm package (`src/lib/moonPhase.js`); moonrise/moonset are filled in only if the user grants geolocation.
+- User preferences (custom clock-face image, hourly-frequency sound settings, profile email) are all persisted in `localStorage`. Settings → "Reset App Data" clears them.
+- Local static assets live in `public/` (`favicon.svg`, `clock-face-default.svg`, the default clock-face center image).
 
 ### Lint / typecheck caveat
-- `npm run lint` and `npm run typecheck` currently report pre-existing failures in committed code (e.g. an unused `Smartphone` import in `src/components/BottomTab.jsx`; JSX type errors in `src/pages/Settings.jsx`). These are not caused by environment setup — do not "fix" them as part of setup.
+- `npm run lint` currently reports one pre-existing failure unrelated to setup: an unused `Smartphone` import in `src/components/BottomTab.jsx`. `npm run typecheck` also reports pre-existing JSX type errors in `src/pages/Settings.jsx`. Neither blocks `dev`/`build`.
