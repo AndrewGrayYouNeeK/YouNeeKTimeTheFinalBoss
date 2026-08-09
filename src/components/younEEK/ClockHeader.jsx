@@ -1,11 +1,14 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { triggerSingle, triggerConfirm } from '@/lib/haptics';
 
 function pad(v) { return String(v).padStart(2, '0'); }
 
 export default function ClockHeader({ now, time }) {
+  const headerRef = useRef(null);
+
   useEffect(() => {
-    const bolts = document.querySelectorAll('.bolt:not(.branch)');
+    const bolts = headerRef.current?.querySelectorAll('.bolt:not(.branch)');
+    if (!bolts?.length) return;
 
     const handleAnimationStart = () => {
       triggerSingle();
@@ -30,8 +33,8 @@ export default function ClockHeader({ now, time }) {
   const army12Str = `${pad(time.hours12)}:${pad(time.armyMinutes)}:${pad(time.armySeconds)}`;
 
   return (
-    <div className="header relative">
-      <svg className="lightning-bg" viewBox="0 0 1200 200" preserveAspectRatio="xMidYMid slice">
+    <div className="header relative" ref={headerRef}>
+      <svg className="lightning-bg" viewBox="0 0 1200 200" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
         <defs>
           <filter id="glow">
             <feGaussianBlur stdDeviation="3" result="blur"/>
@@ -65,7 +68,7 @@ export default function ClockHeader({ now, time }) {
         <path className="bolt bolt-3 branch" d="M940 120 L970 130 L985 155" filter="url(#glow)"/>
         <path className="bolt bolt-3 branch" d="M920 155 L900 170 L895 190" filter="url(#glow)"/>
       </svg>
-      <div className="text-center relative z-10">
+      <div className="text-center relative z-10 px-2">
         <p className="font-mono text-5xl sm:text-6xl uppercase tracking-[0.45em] text-black font-bold animate-lightning">YouNeeK Time</p>
         <p className="mt-3 font-mono text-xs uppercase tracking-[0.3em] text-black font-bold animate-lightning">by Andrew Gray</p>
 

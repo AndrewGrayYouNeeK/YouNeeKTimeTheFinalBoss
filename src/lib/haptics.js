@@ -1,7 +1,50 @@
-import { haptic } from 'ios-haptics';
+import { hapticTrigger } from 'ios-haptics';
 
-function vibrate(pattern) {
-  if (typeof navigator.vibrate === 'function') {
+export { hapticTrigger };
+
+function isAndroid() {
+  return typeof navigator !== 'undefined' && /Android/i.test(navigator.userAgent);
+}
+
+function isIOS() {
+  if (typeof navigator === 'undefined') return false;
+  return (
+    /iPhone|iPad|iPod/i.test(navigator.userAgent) ||
+    (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)
+  );
+}
+
+/** iOS Safari checkbox-switch trick (works on iOS 17.4–26.4). */
+export function iosSwitchTap() {
+  if (!isIOS()) return;
+  try {
+    const label = document.createElement('label');
+    label.setAttribute('aria-hidden', 'true');
+    label.style.cssText =
+      'position:fixed;top:0;left:0;width:100%;height:100%;opacity:0;pointer-events:none;';
+    const input = document.createElement('input');
+    input.type = 'checkbox';
+    input.setAttribute('switch', '');
+    Object.assign(input.style, {
+      position: 'absolute',
+      top: '0',
+      left: '0',
+      width: '100%',
+      height: '100%',
+      opacity: '0',
+      margin: '0',
+    });
+    label.appendChild(input);
+    document.body.appendChild(label);
+    label.click();
+    document.body.removeChild(label);
+  } catch {
+    // Haptics are optional — never break the app
+  }
+}
+
+function androidVibrate(pattern) {
+  if (isAndroid() && typeof navigator.vibrate === 'function') {
     navigator.vibrate(pattern);
     return true;
   }
@@ -10,30 +53,30 @@ function vibrate(pattern) {
 
 /** Light double pulse — YouNeeK minutes / heartbeat */
 export function triggerFaint() {
-  if (!vibrate([50, 100, 80])) {
-    haptic();
-    setTimeout(() => haptic(), 200);
+  if (!androidVibrate([50, 100, 80])) {
+    iosSwitchTap();
+    setTimeout(iosSwitchTap, 200);
   }
 }
 
 /** Strong double pulse — YouNeeK hours / digit counts */
 export function triggerStrong() {
-  if (!vibrate([80, 100, 120])) {
-    haptic.confirm();
-    setTimeout(() => haptic.confirm(), 200);
+  if (!androidVibrate([80, 100, 120])) {
+    iosSwitchTap();
+    setTimeout(iosSwitchTap, 120);
+    setTimeout(iosSwitchTap, 240);
   }
 }
 
 /** Single tap */
 export function triggerSingle() {
-  if (!vibrate(50)) {
-    haptic();
-  }
+  if (!androidVibrate(50)) iosSwitchTap();
 }
 
-/** Rapid double tap — confirmations / lightning flashes */
+/** Rapid double tap — lightning flashes */
 export function triggerConfirm() {
-  if (!vibrate([50, 70, 50])) {
-    haptic.confirm();
+  if (!androidVibrate([50, 70, 50])) {
+    iosSwitchTap();
+    setTimeout(iosSwitchTap, 120);
   }
 }
