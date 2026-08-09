@@ -9,25 +9,33 @@ import {
 } from "@/components/ui/toast";
 
 export function Toaster() {
-  const { toasts } = useToast();
+  const { toasts, dismiss } = useToast();
 
   return (
     <ToastProvider>
-      {toasts.map(function ({ id, title, description, action, ...props }) {
-        return (
-          <Toast key={id} {...props}>
-            <div className="grid gap-1">
-              {title && <ToastTitle>{title}</ToastTitle>}
-              {description && (
-                <ToastDescription>{description}</ToastDescription>
-              )}
-            </div>
-            {action}
-            <ToastClose />
-          </Toast>
-        );
-      })}
+      {toasts
+        .filter((t) => t.open)
+        .map(function ({ id, title, description, action, ...props }) {
+          return (
+            <Toast
+              key={id}
+              {...props}
+              className="border-emerald-500/20 bg-[#101010] text-white"
+            >
+              <div className="grid gap-1">
+                {title && <ToastTitle>{title}</ToastTitle>}
+                {description && (
+                  <ToastDescription className="text-white/70">
+                    {description}
+                  </ToastDescription>
+                )}
+              </div>
+              {action}
+              <ToastClose onClick={() => dismiss(id)} />
+            </Toast>
+          );
+        })}
       <ToastViewport />
     </ToastProvider>
   );
-} 
+}

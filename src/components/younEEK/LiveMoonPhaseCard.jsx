@@ -24,10 +24,8 @@ export default function LiveMoonPhaseCard() {
     const loadMoon = () => {
       setLoading(true);
       try {
-        // Base phase/illumination need no location; compute immediately.
         setMoon(getMoonPhase());
 
-        // Enrich with moonrise/moonset if the user grants geolocation.
         if (typeof navigator !== 'undefined' && navigator.geolocation) {
           navigator.geolocation.getCurrentPosition(
             (position) => {
@@ -41,7 +39,7 @@ export default function LiveMoonPhaseCard() {
           );
         }
       } catch (error) {
-        console.error("Failed to compute moon phase:", error);
+        console.error('Failed to compute moon phase:', error);
       } finally {
         setLoading(false);
       }
@@ -60,6 +58,8 @@ export default function LiveMoonPhaseCard() {
     return p.includes('waxing') || p.includes('first') || p.includes('new');
   }, [phaseName]);
 
+  const shadowOffset = (moon?.illumination || 0) * 1.6;
+
   if (loading) {
     return (
       <section className="w-full relative rounded-[1.6rem] overflow-hidden border border-emerald-200/15 bg-[#101010] p-6 sm:p-8 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.04),0_0_26px_rgba(74,222,128,0.06)]">
@@ -77,37 +77,41 @@ export default function LiveMoonPhaseCard() {
 
   return (
     <section className="w-full relative rounded-[1.6rem] overflow-hidden border border-emerald-200/15 bg-[#101010] shadow-[inset_0_0_0_1px_rgba(255,255,255,0.04),0_0_26px_rgba(74,222,128,0.06)]">
-      
-      {/* Giant Moon Background */}
-      <div className="absolute top-[-25%] left-1/2 -translate-x-1/2 w-[160%] aspect-square rounded-full overflow-hidden pointer-events-none opacity-80">
-        <img 
-          src="https://images.unsplash.com/photo-1522030299830-16b8d3d049fe?auto=format&fit=crop&w=800&q=80" 
-          className="absolute inset-0 w-full h-full object-cover"
-          alt="Moon"
-          style={{ filter: 'grayscale(100%) contrast(1.1) brightness(1.2)' }}
-        />
-        {/* Shadow Overlay */}
-        <div 
-          className="absolute bg-[#101010]"
+
+      {/* CSS moon — clean disc with phase shadow */}
+      <div className="absolute top-[-20%] left-1/2 -translate-x-1/2 w-[140%] aspect-square pointer-events-none">
+        <div
+          className="absolute inset-0 rounded-full"
           style={{
-            top: '-5%', bottom: '-5%', width: '100%',
-            left: isWaxing ? `-${moon?.illumination || 0}%` : `${moon?.illumination || 0}%`,
-            filter: 'blur(20px)',
-            borderRadius: '50%',
+            background: 'radial-gradient(circle at 35% 35%, #f0f4f8 0%, #c8d0dc 40%, #8a96a8 100%)',
+            boxShadow: '0 0 80px rgba(255,244,200,0.15), inset -8px -8px 20px rgba(0,0,0,0.3)',
+          }}
+        />
+        {/* Subtle crater texture */}
+        <div
+          className="absolute inset-0 rounded-full opacity-30"
+          style={{
+            background: 'radial-gradient(circle at 60% 40%, transparent 20%, rgba(0,0,0,0.08) 21%, transparent 22%), radial-gradient(circle at 30% 60%, transparent 15%, rgba(0,0,0,0.06) 16%, transparent 17%), radial-gradient(circle at 70% 70%, transparent 10%, rgba(0,0,0,0.05) 11%, transparent 12%)',
+          }}
+        />
+        {/* Phase shadow */}
+        <div
+          className="absolute inset-0 rounded-full bg-[#101010]"
+          style={{
+            transform: `translateX(${isWaxing ? -shadowOffset : shadowOffset}%)`,
+            transition: 'transform 1s ease-out',
           }}
         />
       </div>
 
-      {/* Gradient to fade bottom of the moon into the card background */}
       <div className="absolute inset-0 bg-gradient-to-t from-[#101010] from-35% via-[#101010]/80 via-55% to-transparent pointer-events-none" />
 
-      {/* Content */}
       <div className="relative z-10 px-6 sm:px-8 pt-44 pb-8 flex flex-col items-center text-center">
         <div className="mb-8">
           <p className="font-mono text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.4em] text-[#39ff14] drop-shadow-[0_0_8px_rgba(57,255,20,0.4)]">Live moon phase</p>
           <h2 className="mt-3 font-mono text-xl sm:text-2xl font-bold uppercase tracking-[0.35em] text-white drop-shadow-lg">{phaseName}</h2>
         </div>
-        
+
         <div className="flex flex-col gap-4 items-center">
           <div>
             <p className="font-mono text-[9px] font-bold uppercase tracking-[0.3em] text-white/40">Illumination</p>

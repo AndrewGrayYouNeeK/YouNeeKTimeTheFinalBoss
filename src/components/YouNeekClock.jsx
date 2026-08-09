@@ -39,7 +39,7 @@ export default function YouNeekClock() {
         <DigitalTimeDisplay time={time} />
       </div>
       <div className={`w-full transition-opacity duration-100 ${isGlitching ? 'opacity-0' : ''}`}>
-        <HapticTimeManager time={time} now={now} />
+        <HapticTimeManager time={time} />
         <FrequencyManager time={time} />
       </div>
       <div className={`w-full ${isGlitching ? 'animate-glitch' : ''}`}>

@@ -36,44 +36,46 @@ export default function Settings() {
   };
 
   return (
-    <div className="min-h-screen pb-24 relative">
+    <div className="min-h-screen pb-24 relative text-white">
       <StarsBackground />
       <div className="pt-24 px-6 py-8 max-w-2xl mx-auto relative z-10">
         <div className="space-y-6">
-          <div className="border-b border-border pb-6">
-            <h2 className="text-xl font-semibold mb-4">Profile</h2>
-            <p className="text-sm text-muted-foreground mb-2">Email (stored locally on this device)</p>
+          <div className="border-b border-white/10 pb-6">
+            <h2 className="text-xl font-semibold mb-4 text-white">Profile</h2>
+            <p className="text-sm text-white/50 mb-2">Email (stored locally on this device)</p>
             <div className="flex gap-3 items-center">
               <Input
                 type="email"
                 placeholder="you@example.com"
                 value={emailInput}
                 onChange={(e) => setEmailInput(e.target.value)}
-                className="max-w-xs"
+                className="max-w-xs bg-white/5 border-white/20 text-white placeholder:text-white/30"
               />
-              <Button variant="outline" onClick={handleSaveEmail}>Save</Button>
+              <Button variant="outline" onClick={handleSaveEmail} className="border-white/20 text-white hover:bg-white/10">Save</Button>
             </div>
           </div>
 
-          <div className="border-b border-border pb-6">
-            <h2 className="text-xl font-semibold mb-4">Clock Appearance</h2>
+          <div className="border-b border-white/10 pb-6">
+            <h2 className="text-xl font-semibold mb-4 text-white">Clock Appearance</h2>
             <div className="space-y-4">
               <div>
-                <p className="text-sm text-muted-foreground mb-2">Clock Face Background</p>
+                <p className="text-sm text-white/50 mb-2">Clock Face Background</p>
                 <div className="flex gap-3 items-center">
-                  <Button 
-                    variant="outline" 
+                  <Button
+                    variant="outline"
                     onClick={() => document.getElementById('clock-face-upload').click()}
+                    className="border-white/20 text-white hover:bg-white/10"
                   >
                     Choose Image
                   </Button>
-                  <Button 
-                    variant="ghost" 
+                  <Button
+                    variant="ghost"
                     onClick={() => {
                       localStorage.removeItem('clockFaceUrl');
                       window.dispatchEvent(new Event('clock-face-updated'));
                       toast({ title: 'Clock face reset to default' });
                     }}
+                    className="text-white/60 hover:text-white hover:bg-white/10"
                   >
                     Reset
                   </Button>
@@ -124,13 +126,13 @@ export default function Settings() {
 
 
 
-          <div className="border-b border-border pb-6">
-            <h2 className="text-xl font-semibold mb-4">Hourly Frequency</h2>
+          <div className="border-b border-white/10 pb-6">
+            <h2 className="text-xl font-semibold mb-4 text-white">Hourly Frequency</h2>
             <div className="space-y-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="font-medium text-base">Play Frequency on the Hour</p>
-                  <p className="text-sm text-muted-foreground">Plays a sound frequency every YouNeeK Hour.</p>
+                  <p className="font-medium text-base text-white">Play Frequency on the Hour</p>
+                  <p className="text-sm text-white/50">Plays a sound frequency every YouNeeK Hour.</p>
                 </div>
                 <Switch 
                   checked={freqEnabled}
@@ -141,9 +143,9 @@ export default function Settings() {
               {freqEnabled && (
                 <div className="space-y-4">
                   <div>
-                    <p className="text-sm text-muted-foreground mb-2">Frequency</p>
+                    <p className="text-sm text-white/50 mb-2">Frequency</p>
                     <Select value={freqHz} onValueChange={setFreqHz}>
-                      <SelectTrigger className="w-full sm:w-[200px]">
+                      <SelectTrigger className="w-full sm:w-[200px] bg-white/5 border-white/20 text-white">
                         <SelectValue placeholder="Select frequency" />
                       </SelectTrigger>
                       <SelectContent>
@@ -162,9 +164,9 @@ export default function Settings() {
                   </div>
 
                   <div>
-                    <p className="text-sm text-muted-foreground mb-2">Duration: {freqDuration} Seconds</p>
+                    <p className="text-sm text-white/50 mb-2">Duration: {freqDuration} Seconds</p>
                     <Select value={freqDuration} onValueChange={setFreqDuration}>
-                      <SelectTrigger className="w-full sm:w-[200px]">
+                      <SelectTrigger className="w-full sm:w-[200px] bg-white/5 border-white/20 text-white">
                         <SelectValue placeholder="Select duration" />
                       </SelectTrigger>
                       <SelectContent>
@@ -182,8 +184,8 @@ export default function Settings() {
             </div>
           </div>
 
-          <div className="border-b border-border pb-6">
-            <h2 className="text-xl font-semibold mb-4">Danger Zone</h2>
+          <div className="border-b border-white/10 pb-6">
+            <h2 className="text-xl font-semibold mb-4 text-white">Danger Zone</h2>
             <AlertDialog>
               <AlertDialogTrigger asChild>
                 <Button variant="destructive">Reset App Data</Button>
