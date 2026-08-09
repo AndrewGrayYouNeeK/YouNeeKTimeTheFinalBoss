@@ -37,15 +37,28 @@ const INNER_TICKS = Array.from({ length: 100 }, (_, i) => {
 
 export default function ClockTicks() {
   return (
-    <motion.svg viewBox="0 0 400 400" className="absolute inset-0 h-full w-full" animate={{ opacity: [1, 0.7, 1] }} transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}>
-      {/* Black background between the green and red ticks */}
+    <svg viewBox="0 0 400 400" className="absolute inset-0 h-full w-full z-20 pointer-events-none">
+      {/* Black band between green and red rings */}
       <circle cx="200" cy="200" r="172.5" stroke="black" strokeWidth="22" fill="none" />
 
-      {/* Ring around red ticks */}
-      <circle cx="200" cy="200" r="162" stroke={RED} strokeWidth="1" fill="none" style={{ filter: `drop-shadow(0 0 2px ${RED}88)` }} />
+      {/* Inner dashed red ring */}
+      <circle
+        cx="200" cy="200" r="162"
+        stroke={RED}
+        strokeWidth="1"
+        fill="none"
+        strokeDasharray="4 5"
+        style={{ filter: `drop-shadow(0 0 3px ${RED}aa)` }}
+      />
 
-      {/* Outer ring around green ticks */}
-      <circle cx="200" cy="200" r="199" stroke="rgba(255,255,255,1)" strokeWidth="0.3" fill="none" />
+      {/* Outer neon green ring */}
+      <circle
+        cx="200" cy="200" r="199"
+        stroke={GREEN}
+        strokeWidth="1.2"
+        fill="none"
+        style={{ filter: `drop-shadow(0 0 4px ${GREEN})` }}
+      />
 
       {/* Outer green ticks */}
       {OUTER_TICKS.map((t) => (
@@ -66,6 +79,6 @@ export default function ClockTicks() {
           style={{ filter: `drop-shadow(0 0 2px ${RED}66)` }}
         />
       ))}
-    </motion.svg>
+    </svg>
   );
 }

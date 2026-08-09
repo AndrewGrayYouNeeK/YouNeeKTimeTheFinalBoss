@@ -1,7 +1,4 @@
-// NEON colors
-const GREEN = '#39ff14';
-const RED   = '#ff2222';
-const YELLOW = '#ffff00';
+import { GREEN, RED, YELLOW } from './clockConstants';
 
 export default function ClockHands({ unitRotation, minuteRotation, secondRotation }) {
   return (

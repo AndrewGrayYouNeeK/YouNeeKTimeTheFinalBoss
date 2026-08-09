@@ -1,14 +1,10 @@
-import { motion } from 'framer-motion';
-
-const GREEN = '#39ff14';
-const RED   = '#ff2222';
+import { GREEN, RED } from './clockConstants';
 
 const polarPoint = (radius, angleDeg) => {
   const angle = (angleDeg - 90) * (Math.PI / 180);
   return { x: 200 + Math.cos(angle) * radius, y: 200 + Math.sin(angle) * radius };
 };
 
-// Outer labels: hour markers for 24h ring (green)
 const outerLabels = [
   { label: '03', angle: 45 },
   { label: '06', angle: 90 },
@@ -19,7 +15,6 @@ const outerLabels = [
   { label: '21', angle: 315 },
 ];
 
-// Inner labels: YouNeeK minute markers (red), skip 0 since we have the tick "0" label
 const innerLabels = [
   { label: '10', angle: 36 },
   { label: '20', angle: 72 },
@@ -34,36 +29,58 @@ const innerLabels = [
 
 export default function ClockLabels() {
   return (
-    <motion.svg viewBox="0 0 400 400" className="absolute inset-0 h-full w-full" animate={{ opacity: [1, 0.7, 1] }} transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}>
-      {/* Faint YOUNEEK watermark — placeholder for center image */}
-      <text x="200" y="212" textAnchor="middle" fill="rgba(255,255,255,0.03)"
-        fontSize="26" fontFamily="monospace" letterSpacing="4">
-        YOUNEEK
-      </text>
-
+    <svg viewBox="0 0 400 400" className="absolute inset-0 h-full w-full pointer-events-none">
       {outerLabels.map((item) => {
         const p = polarPoint(170, item.angle);
         return (
-          <text key={item.label} x={p.x} y={p.y}
-            textAnchor="middle" dominantBaseline="middle"
-            fill={GREEN} fontSize="12" fontFamily="monospace" fontWeight="700"
-            style={{ filter: `drop-shadow(0 0 4px ${GREEN}99)` }}>
+          <text
+            key={item.label}
+            x={p.x} y={p.y}
+            textAnchor="middle"
+            dominantBaseline="middle"
+            fill={GREEN}
+            fontSize="12"
+            fontFamily="monospace"
+            fontWeight="700"
+            style={{ filter: `drop-shadow(0 0 4px ${GREEN}99)` }}
+          >
             {item.label}
           </text>
         );
       })}
+
+      {/* Red zero at 12 o'clock */}
+      <text
+        x="200" y="60"
+        textAnchor="middle"
+        dominantBaseline="middle"
+        fill={RED}
+        fontSize="10"
+        fontFamily="monospace"
+        fontWeight="700"
+        style={{ filter: `drop-shadow(0 0 3px ${RED}88)` }}
+      >
+        0
+      </text>
 
       {innerLabels.map((item) => {
         const p = polarPoint(140, item.angle);
         return (
-          <text key={item.label} x={p.x} y={p.y}
-            textAnchor="middle" dominantBaseline="middle"
-            fill={RED} fontSize="10" fontFamily="monospace" fontWeight="700"
-            style={{ filter: `drop-shadow(0 0 3px ${RED}88)` }}>
+          <text
+            key={item.label}
+            x={p.x} y={p.y}
+            textAnchor="middle"
+            dominantBaseline="middle"
+            fill={RED}
+            fontSize="10"
+            fontFamily="monospace"
+            fontWeight="700"
+            style={{ filter: `drop-shadow(0 0 3px ${RED}88)` }}
+          >
             {item.label}
           </text>
         );
       })}
-    </motion.svg>
+    </svg>
   );
 }
