@@ -31,7 +31,7 @@ export default function YouNeekClock() {
   }, [now, lastHour]);
 
   return (
-    <div className={`mx-auto flex min-h-screen w-full max-w-[36rem] flex-col items-center gap-8 px-4 py-8 sm:gap-9 sm:py-10 transition-colors duration-100 ${isGlitching ? 'bg-black' : 'bg-transparent'}`}>
+    <div className={`mx-auto flex min-h-screen w-full max-w-[36rem] flex-col items-center gap-6 px-3 py-6 pb-28 sm:gap-8 sm:px-4 sm:py-10 sm:pb-32 transition-colors duration-100 ${isGlitching ? 'bg-black' : 'bg-transparent'}`}>
       <div className={`w-full transition-opacity duration-100 ${isGlitching ? 'opacity-0' : ''}`}>
         <ClockHeader now={now} time={time} />
       </div>
@@ -42,7 +42,7 @@ export default function YouNeekClock() {
         <HapticTimeManager time={time} />
         <FrequencyManager time={time} />
       </div>
-      <div className={`w-full ${isGlitching ? 'animate-glitch' : ''}`}>
+      <div className={`w-full flex justify-center ${isGlitching ? 'animate-glitch' : ''}`}>
         <ClockDial time={time} isGlitching={isGlitching} />
       </div>
 

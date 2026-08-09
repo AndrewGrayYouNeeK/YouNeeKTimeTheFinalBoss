@@ -33,7 +33,7 @@ export default function ClockHeader({ now, time }) {
   const army12Str = `${pad(time.hours12)}:${pad(time.armyMinutes)}:${pad(time.armySeconds)}`;
 
   return (
-    <div className="header relative" ref={headerRef}>
+    <div className="header relative w-full" ref={headerRef}>
       <svg className="lightning-bg" viewBox="0 0 1200 200" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
         <defs>
           <filter id="glow">
@@ -67,39 +67,43 @@ export default function ClockHeader({ now, time }) {
         <path className="bolt bolt-3 branch" d="M920 155 L900 170 L895 190" filter="url(#glow)" />
       </svg>
 
-      <div className="text-center relative z-10 px-2">
-        <div className="header-silhouette mx-auto max-w-lg">
+      <div className="header-content relative z-10 w-full px-2 sm:px-3">
+        <div className="header-silhouette mx-auto">
           <div className="header-backlight" aria-hidden="true" />
           <div className="header-line">
-            <p className="header-shadow font-mono text-4xl sm:text-5xl md:text-6xl uppercase tracking-[0.35em] sm:tracking-[0.45em] font-bold" aria-hidden="true">
+            <p className="header-shadow header-title-text font-mono uppercase font-bold" aria-hidden="true">
               YouNeeK Time
             </p>
-            <p className="header-title font-mono text-4xl sm:text-5xl md:text-6xl uppercase tracking-[0.35em] sm:tracking-[0.45em] font-bold">
+            <p className="header-title header-title-text font-mono uppercase font-bold">
               YouNeeK Time
             </p>
           </div>
-          <div className="header-line mt-3">
-            <p className="header-shadow font-mono text-[10px] sm:text-xs uppercase tracking-[0.25em] sm:tracking-[0.3em] font-bold" aria-hidden="true">
+          <div className="header-line mt-2 sm:mt-3">
+            <p className="header-shadow header-subtitle-text font-mono uppercase font-bold" aria-hidden="true">
               by Andrew Gray
             </p>
-            <p className="header-subtitle font-mono text-[10px] sm:text-xs uppercase tracking-[0.25em] sm:tracking-[0.3em] font-bold">
+            <p className="header-subtitle header-subtitle-text font-mono uppercase font-bold">
               by Andrew Gray
             </p>
           </div>
         </div>
 
-        <div className="mt-10 sm:mt-12 inline-grid grid-cols-[1fr_auto_1fr] gap-x-3 gap-y-1 items-center justify-center">
-          <div className="font-mono text-[11px] uppercase tracking-[0.18em] text-white/30 text-right">Regular Time</div>
-          <div className="font-mono text-[11px] uppercase tracking-[0.18em] text-white/30 text-center">•</div>
-          <div className="font-mono text-[11px] uppercase tracking-[0.18em] text-white/30 text-left">{standardTime}</div>
-
-          <div className="font-mono text-[11px] uppercase tracking-[0.18em] text-[#1f990a] text-right" style={{ textShadow: '0 0 8px #1f990a99' }}>YouNeeK Time</div>
-          <div className="font-mono text-[11px] uppercase tracking-[0.18em] text-[#1f990a] text-center" style={{ textShadow: '0 0 8px #1f990a99' }}>•</div>
-          <div className="font-mono text-[11px] uppercase tracking-[0.18em] text-[#1f990a] text-left" style={{ textShadow: '0 0 8px #1f990a99' }}>{army12Str}</div>
-
-          <div className="font-mono text-[11px] uppercase tracking-[0.18em] text-[#2dd900] text-right" style={{ textShadow: '0 0 8px #2dd90099' }}>Army YouNeeK Time</div>
-          <div className="font-mono text-[11px] uppercase tracking-[0.18em] text-[#2dd900] text-center" style={{ textShadow: '0 0 8px #2dd90099' }}>•</div>
-          <div className="font-mono text-[11px] uppercase tracking-[0.18em] text-[#2dd900] text-left" style={{ textShadow: '0 0 8px #2dd90099' }}>{armyStr}</div>
+        <div className="header-times mx-auto mt-8 sm:mt-10">
+          <div className="header-time-row">
+            <span className="header-time-label text-white/30">Regular Time</span>
+            <span className="header-time-dot text-white/30">•</span>
+            <span className="header-time-value text-white/30">{standardTime}</span>
+          </div>
+          <div className="header-time-row">
+            <span className="header-time-label text-[#1f990a]" style={{ textShadow: '0 0 8px #1f990a99' }}>YouNeeK Time</span>
+            <span className="header-time-dot text-[#1f990a]" style={{ textShadow: '0 0 8px #1f990a99' }}>•</span>
+            <span className="header-time-value text-[#1f990a]" style={{ textShadow: '0 0 8px #1f990a99' }}>{army12Str}</span>
+          </div>
+          <div className="header-time-row">
+            <span className="header-time-label text-[#2dd900]" style={{ textShadow: '0 0 8px #2dd90099' }}>Army YouNeeK Time</span>
+            <span className="header-time-dot text-[#2dd900]" style={{ textShadow: '0 0 8px #2dd90099' }}>•</span>
+            <span className="header-time-value text-[#2dd900]" style={{ textShadow: '0 0 8px #2dd90099' }}>{armyStr}</span>
+          </div>
         </div>
       </div>
     </div>

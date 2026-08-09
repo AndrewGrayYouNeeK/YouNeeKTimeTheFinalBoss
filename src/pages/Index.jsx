@@ -9,7 +9,7 @@ export default function Index() {
   };
 
   return (
-    <div className="min-h-screen relative text-white" style={{ background: 'transparent' }}>
+    <div className="min-h-screen relative w-full overflow-x-hidden text-white" style={{ background: 'transparent' }}>
       <StarsBackground />
       <PullToRefresh onRefresh={handleRefresh}>
         <div className="relative z-10">

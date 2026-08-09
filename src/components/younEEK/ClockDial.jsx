@@ -24,7 +24,7 @@ export default function ClockDial({ time, isGlitching }) {
     <motion.div
       animate={{ scale: [1, 1.018, 1] }}
       transition={{ duration: 8.64, repeat: Infinity, ease: 'easeInOut' }}
-      className="relative aspect-square w-full max-w-[32rem]"
+      className="relative mx-auto aspect-square w-full max-w-[min(100%,32rem)]"
     >
       {/* Volcano center image — sits inside the red dashed ring */}
       {centerImage && (
