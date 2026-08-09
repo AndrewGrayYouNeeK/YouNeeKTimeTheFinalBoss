@@ -4,7 +4,7 @@ import ClockTicks from './ClockTicks';
 import ClockLabels from './ClockLabels';
 import ClockHands from './ClockHands';
 
-const DEFAULT_CENTER_IMAGE = '/clock-face-default.svg';
+const DEFAULT_CENTER_IMAGE = '/clock-face-default.jpg';
 
 export default function ClockDial({ time, isGlitching }) {
   const [centerImage, setCenterImage] = useState(
@@ -36,7 +36,7 @@ export default function ClockDial({ time, isGlitching }) {
           className="absolute inset-[12%] rounded-full overflow-hidden z-10"
           style={{ pointerEvents: 'none' }}
         >
-          <img src={centerImage} alt="center" className="w-full h-full object-cover" style={{ opacity: isGlitching ? 0 : 0.7, transition: 'opacity 0.05s' }} />
+          <img src={centerImage} alt="YouNeek volcano" className="w-full h-full object-cover" style={{ opacity: isGlitching ? 0 : 0.85, transition: 'opacity 0.05s' }} />
         </motion.div>
       )}
 
