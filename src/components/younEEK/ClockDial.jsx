@@ -4,7 +4,7 @@ import ClockTicks from './ClockTicks';
 import ClockLabels from './ClockLabels';
 import ClockHands from './ClockHands';
 
-const DEFAULT_CENTER_IMAGE = 'https://media.base44.com/images/public/69c46a76857b7906981251c6/681da2836_IMG_1030.jpeg';
+const DEFAULT_CENTER_IMAGE = '/clock-face-default.svg';
 
 export default function ClockDial({ time, isGlitching }) {
   const [centerImage, setCenterImage] = useState(

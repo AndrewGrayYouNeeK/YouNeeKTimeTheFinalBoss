@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { base44 } from '@/api/base44Client';
+import { getMoonPhase } from '@/lib/moonPhase';
 
 function normalizePhase(phase) {
   const value = (phase || '').toLowerCase();
@@ -21,15 +21,27 @@ export default function LiveMoonPhaseCard() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const loadMoon = async () => {
+    const loadMoon = () => {
       setLoading(true);
       try {
-        const response = await base44.functions.invoke('getMoonPhase', {});
-        if (response && response.data) {
-          setMoon(response.data);
+        // Base phase/illumination need no location; compute immediately.
+        setMoon(getMoonPhase());
+
+        // Enrich with moonrise/moonset if the user grants geolocation.
+        if (typeof navigator !== 'undefined' && navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(
+            (position) => {
+              setMoon(getMoonPhase({
+                latitude: position.coords.latitude,
+                longitude: position.coords.longitude,
+              }));
+            },
+            () => {},
+            { timeout: 5000 }
+          );
         }
       } catch (error) {
-        console.error("Failed to load moon phase:", error);
+        console.error("Failed to compute moon phase:", error);
       } finally {
         setLoading(false);
       }
