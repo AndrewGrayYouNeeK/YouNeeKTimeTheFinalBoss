@@ -103,10 +103,36 @@
   isolation: isolate;
 }
 
-.header-title-wrap,
-.header-subtitle-wrap {
+.header-silhouette {
   position: relative;
   display: inline-block;
+  padding: 1.1rem 1.5rem 1rem;
+  background: #000000;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.75);
+}
+
+.header-backlight {
+  position: absolute;
+  inset: -35%;
+  z-index: 0;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(255, 255, 255, 0.95) 0%,
+    rgba(220, 255, 225, 0.8) 22%,
+    rgba(57, 255, 20, 0.5) 48%,
+    transparent 72%
+  );
+  opacity: 0;
+  transform: scale(0.88);
+  filter: blur(8px);
+  animation: silhouette-reveal 8.5s ease-in-out infinite;
+}
+
+.header-line {
+  position: relative;
 }
 
 .header-title,
@@ -116,22 +142,16 @@
   color: #000000;
 }
 
-.header-title-glow,
-.header-subtitle-glow {
+.header-shadow {
   position: absolute;
   inset: 0;
   z-index: 1;
-  color: transparent;
+  color: #000000;
   opacity: 0;
+  filter: blur(6px);
+  transform: translate(3px, 3px) scale(1.01);
   pointer-events: none;
-}
-
-.header-title-glow {
-  animation: title-halo 8.5s ease-in-out infinite;
-}
-
-.header-subtitle-glow {
-  animation: subtitle-halo 8.5s ease-in-out infinite;
+  animation: shadow-reveal 8.5s ease-in-out infinite;
 }
 
 .lightning-bg {
@@ -197,40 +217,34 @@
   65%, 100% { opacity: 0; }
 }
 
-@keyframes title-halo {
+@keyframes silhouette-reveal {
   0%, 30%, 52%, 100% {
     opacity: 0;
-    text-shadow: none;
+    transform: scale(0.88);
   }
-  37%, 39%, 41% {
-    opacity: 1;
-    text-shadow:
-      0 0 8px #ffffff,
-      0 0 18px #ffffff,
-      0 0 36px #39ff14,
-      0 0 64px rgba(57, 255, 20, 0.7);
+  36%, 38% {
+    opacity: 0.5;
+    transform: scale(0.98);
   }
-  43% {
-    opacity: 0;
-    text-shadow: none;
-  }
-}
-
-@keyframes subtitle-halo {
-  0%, 32%, 54%, 100% {
-    opacity: 0;
-    text-shadow: none;
-  }
-  38%, 40%, 42% {
-    opacity: 1;
-    text-shadow:
-      0 0 6px #39ff14,
-      0 0 16px #39ff14,
-      0 0 32px rgba(57, 255, 20, 0.65);
+  40%, 42% {
+    opacity: 0.9;
+    transform: scale(1.03);
   }
   44% {
     opacity: 0;
-    text-shadow: none;
+    transform: scale(0.92);
+  }
+}
+
+@keyframes shadow-reveal {
+  0%, 30%, 52%, 100% {
+    opacity: 0;
+  }
+  37%, 39%, 41% {
+    opacity: 0.35;
+  }
+  43% {
+    opacity: 0;
   }
 }
 
