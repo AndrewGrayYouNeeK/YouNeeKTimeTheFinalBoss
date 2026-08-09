@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { triggerSingle, triggerConfirm } from '@/lib/haptics';
 
 function getUtcOffsetLabel(now) {
   const offsetMinutes = -now.getTimezoneOffset();
@@ -13,18 +14,11 @@ function pad(v) { return String(v).padStart(2, '0'); }
 
 export default function ClockHeader({ now, time }) {
   useEffect(() => {
-    const haptic = window.iosHaptics?.haptic;
-
-    if (!haptic) {
-      console.warn('Haptics not loaded');
-      return;
-    }
-
     const bolts = document.querySelectorAll('.bolt:not(.branch)');
 
     const handleAnimationStart = () => {
-      haptic();
-      setTimeout(() => haptic.confirm(), 80);
+      triggerSingle();
+      setTimeout(() => triggerConfirm(), 80);
     };
 
     bolts.forEach(bolt => {

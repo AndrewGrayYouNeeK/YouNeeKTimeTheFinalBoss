@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { Activity, Smartphone } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { triggerFaint, triggerStrong } from '@/lib/haptics';
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -18,25 +19,6 @@ export default function HapticTimeManager({ time, now }) {
   useEffect(() => {
     isPlayingRef.current = isPlayingTime;
   }, [isPlayingTime]);
-
-  const triggerFaint = () => {
-    if (navigator.vibrate) navigator.vibrate([50, 100, 80]);
-    if (window.iosHaptics?.haptic) {
-      window.iosHaptics.haptic();
-      setTimeout(() => window.iosHaptics.haptic(), 200);
-    }
-  };
-
-  const triggerStrong = () => {
-    if (navigator.vibrate) navigator.vibrate([80, 100, 120]);
-    if (window.iosHaptics?.haptic?.confirm) {
-       window.iosHaptics.haptic.confirm();
-       setTimeout(() => window.iosHaptics.haptic.confirm(), 200);
-    } else if (window.iosHaptics?.haptic) {
-       window.iosHaptics.haptic();
-       setTimeout(() => window.iosHaptics.haptic(), 200);
-    }
-  };
 
   const playDigit = async (digit, isHour) => {
     if (digit === 0) {
