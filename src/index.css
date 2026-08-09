@@ -99,137 +99,62 @@
   overflow: hidden;
 }
 
-.header-title-panel {
-  background: #000000;
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  border-radius: 14px;
-  padding: 1.25rem 1.5rem 1.1rem;
-  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 1), 0 0 24px rgba(0, 0, 0, 0.8);
-  position: relative;
-  z-index: 15;
-}
-
 .lightning-bg {
   position: absolute;
   inset: 0;
   opacity: 0;
-  animation: flash 8.5s infinite;
+  animation: flash 8s infinite;
 }
 
 .bolt {
   fill: none;
   stroke: #fff;
-  stroke-width: 5;
+  stroke-width: 6;
   stroke-linecap: round;
   stroke-linejoin: round;
   opacity: 0;
 }
 
 .bolt-1 {
-  animation: strike1 8.5s infinite;
+  animation: strike1 7.2s infinite;
 }
 
 .bolt-2 {
-  stroke: #e8ffe8;
   animation: strike2 8.5s infinite;
 }
 
 .bolt-3 {
-  animation: strike3 8.5s infinite;
+  animation: strike3 9.1s infinite;
 }
 
 .bolt.branch {
-  stroke-width: 2.5;
-}
-
-.lightning-reveal-title {
-  color: #000000;
-  text-shadow: none;
-  opacity: 0;
-  animation: reveal-title 8.5s infinite;
-}
-
-.lightning-reveal-subtitle {
-  color: #000000;
-  text-shadow: none;
-  opacity: 0;
-  animation: reveal-subtitle 8.5s infinite;
+  stroke-width: 3;
 }
 
 @keyframes flash {
-  0%, 32%, 52%, 100% { opacity: 0; }
-  35%, 37%, 39% { opacity: 0.5; }
-  41%, 43% { opacity: 0.7; }
-  45% { opacity: 0; }
+  0%, 20%, 40%, 60%, 80%, 100% { opacity: 0; }
+  5%, 25%, 45%, 65%, 85% { opacity: 0.6; }
 }
 
 @keyframes strike1 {
   0%, 100% { opacity: 0; }
   8%, 10%, 12% { opacity: 1; }
-  11% { opacity: 0.4; }
-  14%, 100% { opacity: 0; }
+  11% { opacity: 0.5; }
+  13%, 100% { opacity: 0; }
 }
 
 @keyframes strike2 {
   0%, 100% { opacity: 0; }
   35%, 37%, 39% { opacity: 1; }
   38% { opacity: 0.5; }
-  41%, 43% { opacity: 1; }
-  44% { opacity: 0.3; }
-  46%, 100% { opacity: 0; }
+  40%, 100% { opacity: 0; }
 }
 
 @keyframes strike3 {
   0%, 100% { opacity: 0; }
   62%, 64%, 66% { opacity: 1; }
-  65% { opacity: 0.4; }
-  68%, 100% { opacity: 0; }
-}
-
-@keyframes reveal-title {
-  0%, 32%, 52%, 100% {
-    color: #000000;
-    text-shadow: none;
-    opacity: 0;
-  }
-  35%, 37%, 39% {
-    color: #ffffff;
-    text-shadow: 0 0 20px #ffffff, 0 0 40px #ffffff, 0 0 80px #39ff14, 0 0 120px #39ff14aa;
-    opacity: 1;
-  }
-  41%, 43% {
-    color: #ffffff;
-    text-shadow: 0 0 30px #ffffff, 0 0 60px #ffffff, 0 0 100px #39ff14, 0 0 160px #39ff14cc;
-    opacity: 1;
-  }
-  45% {
-    color: #000000;
-    text-shadow: none;
-    opacity: 0;
-  }
-}
-
-@keyframes reveal-subtitle {
-  0%, 34%, 54%, 100% {
-    color: #000000;
-    text-shadow: none;
-    opacity: 0;
-  }
-  37%, 39% {
-    color: #39ff14;
-    text-shadow: 0 0 12px #39ff14, 0 0 24px #39ff14aa;
-    opacity: 1;
-  }
-  42%, 44% {
-    color: #ffffff;
-    text-shadow: 0 0 16px #ffffff, 0 0 32px #39ff14;
-    opacity: 1;
-  }
-  46% {
-    color: #000000;
-    text-shadow: none;
-    opacity: 0;
-  }
+  65% { opacity: 0.5; }
+  67%, 100% { opacity: 0; }
 }
 
 @keyframes twinkle {
