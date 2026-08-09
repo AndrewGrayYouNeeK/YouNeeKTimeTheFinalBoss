@@ -29,6 +29,26 @@ account, and no environment variables. All preferences (custom clock face, hourl
 frequency sound, and an optional local profile email) are stored in `localStorage`.
 The live moon phase is computed on-device with [`suncalc`](https://github.com/mourner/suncalc).
 
+## Live Site
+
+**https://youneektime.com**
+
+The app deploys automatically to GitHub Pages on every push to `main`.
+
+### Custom domain DNS
+
+Point `youneektime.com` at GitHub Pages with these records at your registrar:
+
+| Type | Name | Value |
+|------|------|-------|
+| A | `@` | `185.199.108.153` |
+| A | `@` | `185.199.109.153` |
+| A | `@` | `185.199.110.153` |
+| A | `@` | `185.199.111.153` |
+| CNAME | `www` | `andrewgrayyouneek.github.io` |
+
+Then in the repo **Settings → Pages**, set the custom domain to `youneektime.com` and enable **Enforce HTTPS**. The `public/CNAME` file in this repo keeps the domain configured across deploys.
+
 ## Built By
 
 Andrew Gray — YouNeeK

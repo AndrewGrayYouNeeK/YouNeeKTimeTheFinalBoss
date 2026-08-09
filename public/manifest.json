@@ -1,0 +1,17 @@
+{
+  "name": "YouNeeK Time",
+  "short_name": "YouNeeK Time",
+  "description": "A decimal time clock app. Base-10 daily time — 100 units per day, 100 minutes per unit.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#050505",
+  "theme_color": "#050505",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

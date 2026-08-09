@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "vite build && cp dist/index.html dist/404.html",
     "lint": "eslint . --quiet",
     "lint:fix": "eslint . --fix",
     "typecheck": "tsc -p ./jsconfig.json",
@@ -99,9 +99,9 @@
   "description": "Minimal dark world clock with YouNeeK branding",
   "author": "Andrew Gray <andrew@youneek.com>",
   "license": "MIT",
-  "homepage": "https://github.com/AndrewGrayYouNeeK/youneek-time",
+  "homepage": "https://youneektime.com",
   "repository": {
     "type": "git",
-    "url": "https://github.com/AndrewGrayYouNeeK/youneek-time.git"
+    "url": "https://github.com/AndrewGrayYouNeeK/YouNeeKTimeTheFinalBoss.git"
   }
 }
