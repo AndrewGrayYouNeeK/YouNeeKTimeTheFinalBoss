@@ -35,19 +35,30 @@ The live moon phase is computed on-device with [`suncalc`](https://github.com/mo
 
 The app deploys automatically to GitHub Pages on every push to `main`.
 
-### Custom domain DNS
+### Custom domain (Cloudflare DNS → GitHub Pages)
 
-Point `youneektime.com` at GitHub Pages with these records at your registrar:
+The domain `youneektime.com` is managed in Cloudflare. Add these DNS records in
+**Cloudflare → youneektime.com → DNS → Records**:
 
-| Type | Name | Value |
-|------|------|-------|
-| A | `@` | `185.199.108.153` |
-| A | `@` | `185.199.109.153` |
-| A | `@` | `185.199.110.153` |
-| A | `@` | `185.199.111.153` |
-| CNAME | `www` | `andrewgrayyouneek.github.io` |
+| Type | Name | Content | Proxy |
+|------|------|---------|-------|
+| A | `@` | `185.199.108.153` | DNS only (grey cloud) |
+| A | `@` | `185.199.109.153` | DNS only |
+| A | `@` | `185.199.110.153` | DNS only |
+| A | `@` | `185.199.111.153` | DNS only |
+| CNAME | `www` | `andrewgrayyouneek.github.io` | DNS only |
 
-Then in the repo **Settings → Pages**, set the custom domain to `youneektime.com` and enable **Enforce HTTPS**. The `public/CNAME` file in this repo keeps the domain configured across deploys.
+Keep records **DNS only** (grey cloud, not proxied) while GitHub provisions its
+SSL certificate. You can try enabling the Cloudflare proxy later, but DNS-only is
+the most reliable setup with GitHub Pages.
+
+Then in the repo **Settings → Pages**:
+
+1. Set **Build and deployment** source to **GitHub Actions**
+2. Under **Custom domain**, enter `youneektime.com`
+3. After DNS propagates, enable **Enforce HTTPS**
+
+The `public/CNAME` file in this repo keeps the domain configured across deploys.
 
 ## Built By
 
