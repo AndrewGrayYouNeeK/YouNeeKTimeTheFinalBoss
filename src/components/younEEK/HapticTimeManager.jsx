@@ -133,7 +133,9 @@ export default function HapticTimeManager({ time }) {
     if (!enabled) return;
     if (time.units !== lastUnitRef.current) {
       lastUnitRef.current = time.units;
-      tellTime(time);
+      if (!isPlayingRef.current) {
+        tellTime(time);
+      }
     }
   }, [time.units, enabled]);
 
