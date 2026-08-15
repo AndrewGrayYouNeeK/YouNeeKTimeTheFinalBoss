@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { Activity, Smartphone, Hand } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { triggerFaint, triggerStrong, hapticTrigger } from '@/lib/haptics';
+import { triggerFaint, triggerStrong } from '@/lib/haptics';
 import { requestWakeLock, releaseWakeLock } from '@/lib/wakeLock';
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -144,7 +144,6 @@ export default function HapticTimeManager({ time }) {
     setEnabled(newState);
 
     if (newState) {
-      triggerStrong();
       setTimeout(() => {
         if (enabledRef.current) tellTime(timeRef.current);
       }, 1500);
@@ -156,14 +155,13 @@ export default function HapticTimeManager({ time }) {
 
   const handleFeelNow = () => {
     if (!enabled) return;
-    triggerFaint();
     setTimeout(() => tellTime(timeRef.current), 400);
   };
 
   return (
     <div className="flex flex-col items-center justify-center w-full mt-2">
       <Button
-        ref={hapticTrigger}
+        data-haptic="strong"
         variant="outline"
         className={`gap-2 rounded-full transition-colors border-2 ${
           enabled
@@ -188,7 +186,7 @@ export default function HapticTimeManager({ time }) {
           </div>
 
           <Button
-            ref={hapticTrigger}
+            data-haptic="faint"
             variant="outline"
             size="sm"
             disabled={isPlayingTime}
