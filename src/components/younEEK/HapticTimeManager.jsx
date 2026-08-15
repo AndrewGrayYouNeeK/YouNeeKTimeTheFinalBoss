@@ -141,6 +141,7 @@ export default function HapticTimeManager({ time }) {
     setEnabled(newState);
 
     if (newState) {
+      triggerTimeStart();
       setTimeout(() => {
         if (enabledRef.current) tellTime(timeRef.current);
       }, 1500);
@@ -158,7 +159,6 @@ export default function HapticTimeManager({ time }) {
   return (
     <div className="flex flex-col items-center justify-center w-full mt-2">
       <Button
-        data-haptic="timeStart"
         variant="outline"
         className={`gap-2 rounded-full transition-colors border-2 ${
           enabled
