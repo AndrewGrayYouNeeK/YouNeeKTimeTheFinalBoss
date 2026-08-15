@@ -6,18 +6,26 @@ import {
 } from '@haptics/core';
 
 export const HAPTIC_PATTERNS = {
-  faint: [
-    { duration: 50, intensity: 0.5 },
-    { delay: 100, duration: 80, intensity: 0.5 },
+  tickMinute: [{ duration: 35, intensity: 0.4 }],
+  tickHour: [{ duration: 70, intensity: 0.95 }],
+  tickZero: [
+    { duration: 40, intensity: 0.5 },
+    { delay: 90, duration: 40, intensity: 0.5 },
   ],
-  strong: [
-    { duration: 80, intensity: 1 },
-    { delay: 100, duration: 120, intensity: 0.8 },
+  heartbeat: [{ duration: 28, intensity: 0.35 }],
+  timeStart: [
+    { duration: 75, intensity: 1 },
+    { delay: 160, duration: 75, intensity: 1 },
+    { delay: 160, duration: 75, intensity: 1 },
   ],
-  single: [{ duration: 50, intensity: 0.7 }],
+  timeEnd: [
+    { duration: 35, intensity: 0.4 },
+    { delay: 130, duration: 35, intensity: 0.4 },
+  ],
+  single: [{ duration: 45, intensity: 0.65 }],
   confirm: [
-    { duration: 50, intensity: 0.7 },
-    { delay: 70, duration: 50, intensity: 0.7 },
+    { duration: 45, intensity: 0.65 },
+    { delay: 65, duration: 45, intensity: 0.65 },
   ],
 };
 
@@ -31,12 +39,28 @@ function firePattern(name) {
   }
 }
 
-export function triggerFaint() {
-  firePattern('faint');
+export function triggerTickMinute() {
+  firePattern('tickMinute');
 }
 
-export function triggerStrong() {
-  firePattern('strong');
+export function triggerTickHour() {
+  firePattern('tickHour');
+}
+
+export function triggerTickZero() {
+  firePattern('tickZero');
+}
+
+export function triggerHeartbeat() {
+  firePattern('heartbeat');
+}
+
+export function triggerTimeStart() {
+  firePattern('timeStart');
+}
+
+export function triggerTimeEnd() {
+  firePattern('timeEnd');
 }
 
 export function triggerSingle() {

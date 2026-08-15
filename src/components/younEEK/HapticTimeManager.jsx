@@ -1,7 +1,14 @@
 import { useEffect, useRef, useState } from 'react';
 import { Activity, Smartphone, Hand } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { triggerFaint, triggerStrong } from '@/lib/haptics';
+import {
+  triggerTickMinute,
+  triggerTickHour,
+  triggerTickZero,
+  triggerHeartbeat,
+  triggerTimeStart,
+  triggerTimeEnd,
+} from '@/lib/haptics';
 import { requestWakeLock, releaseWakeLock } from '@/lib/wakeLock';
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -58,17 +65,15 @@ export default function HapticTimeManager({ time }) {
 
   const playDigit = async (digit, isHour) => {
     if (digit === 0) {
-      isHour ? triggerStrong() : triggerFaint();
-      await sleep(150);
-      isHour ? triggerStrong() : triggerFaint();
+      triggerTickZero();
       await sleep(500);
       return;
     }
 
     for (let i = 0; i < digit; i++) {
       if (!enabledRef.current) return;
-      isHour ? triggerStrong() : triggerFaint();
-      await sleep(isHour ? 500 : 300);
+      isHour ? triggerTickHour() : triggerTickMinute();
+      await sleep(isHour ? 480 : 280);
     }
   };
 
@@ -80,13 +85,8 @@ export default function HapticTimeManager({ time }) {
     const hours = currentTime.units;
     const minutes = currentTime.minutes;
 
-    // Opening signal — three strong pulses so you know time is starting
-    triggerStrong();
-    await sleep(200);
-    triggerStrong();
-    await sleep(200);
-    triggerStrong();
-    await sleep(800);
+    triggerTimeStart();
+    await sleep(900);
 
     const hTens = Math.floor(hours / 10);
     const hOnes = hours % 10;
@@ -107,11 +107,8 @@ export default function HapticTimeManager({ time }) {
     if (!enabledRef.current) { setIsPlayingTime(false); isPlayingRef.current = false; return; }
     await playDigit(mOnes, false);
 
-    // Closing signal — two faint pulses
     await sleep(600);
-    triggerFaint();
-    await sleep(200);
-    triggerFaint();
+    triggerTimeEnd();
 
     setIsPlayingTime(false);
     isPlayingRef.current = false;
@@ -124,7 +121,7 @@ export default function HapticTimeManager({ time }) {
     if (time.minutes !== lastMinuteRef.current) {
       lastMinuteRef.current = time.minutes;
       if (!isPlayingRef.current) {
-        triggerFaint();
+        triggerHeartbeat();
       }
     }
   }, [time.minutes, enabled]);
@@ -161,7 +158,7 @@ export default function HapticTimeManager({ time }) {
   return (
     <div className="flex flex-col items-center justify-center w-full mt-2">
       <Button
-        data-haptic="strong"
+        data-haptic="timeStart"
         variant="outline"
         className={`gap-2 rounded-full transition-colors border-2 ${
           enabled
@@ -186,7 +183,7 @@ export default function HapticTimeManager({ time }) {
           </div>
 
           <Button
-            data-haptic="faint"
+            data-haptic="tickMinute"
             variant="outline"
             size="sm"
             disabled={isPlayingTime}
@@ -200,13 +197,13 @@ export default function HapticTimeManager({ time }) {
           <div className="rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-left space-y-1.5">
             <p className="text-[9px] text-white/50 font-mono uppercase tracking-widest">How to read by feel</p>
             <p className="text-[9px] text-white/35 font-mono leading-relaxed">
-              <span className="text-[#39ff14]/60">Strong</span> pulses = YouNeeK hour digits (tens, then ones)
+              <span className="text-[#39ff14]/60">Long</span> ticks = YouNeeK hour digits (tens, then ones)
             </p>
             <p className="text-[9px] text-white/35 font-mono leading-relaxed">
-              <span className="text-white/50">Soft</span> pulses = minute digits (tens, then ones)
+              <span className="text-white/50">Short</span> ticks = minute digits (tens, then ones)
             </p>
             <p className="text-[9px] text-white/35 font-mono leading-relaxed">
-              Double pulse = zero · Soft heartbeat every ~8 sec
+              Double tick = zero · One soft tick each minute
             </p>
           </div>
         </div>
