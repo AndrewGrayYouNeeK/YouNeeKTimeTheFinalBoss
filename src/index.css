@@ -107,6 +107,21 @@
   overflow: hidden;
 }
 
+.radar-scope-wrap {
+  position: absolute;
+  inset: 0;
+  transform-origin: 50% 42%;
+  animation: radar-spin 8s linear infinite;
+}
+
+.radar-scope {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.85;
+}
+
 .lightning-bg {
   position: absolute;
   inset: 0;
@@ -208,6 +223,11 @@
 
 .bolt.branch {
   stroke-width: 2.5;
+}
+
+@keyframes radar-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }
 
 @keyframes sky-flash {

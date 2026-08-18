@@ -28,7 +28,20 @@ export default function LightningBackdrop() {
 
   return (
     <div ref={layerRef} className="lightning-backdrop" aria-hidden="true">
-      <svg className="lightning-bg" viewBox="0 0 1200 420" preserveAspectRatio="xMidYMid slice">
+      <div className="radar-scope-wrap">
+        <svg className="radar-scope" viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid slice">
+          <circle cx="600" cy="360" r="320" fill="none" stroke="#1e40af" strokeWidth="2" opacity="0.35" />
+          <circle cx="600" cy="360" r="220" fill="none" stroke="#1e40af" strokeWidth="2" opacity="0.45" />
+          <circle cx="600" cy="360" r="120" fill="none" stroke="#1e40af" strokeWidth="2" opacity="0.55" />
+          <line x1="600" y1="40" x2="600" y2="720" stroke="#1e40af" strokeWidth="1.5" opacity="0.25" />
+          <line x1="80" y1="360" x2="1120" y2="360" stroke="#1e40af" strokeWidth="1.5" opacity="0.25" />
+          <path d="M600 360 L920 240 A320 320 0 0 0 600 40 Z" fill="#22d3ee" opacity="0.06" />
+          <path d="M600 360 L920 240" stroke="#22d3ee" strokeWidth="2.5" opacity="0.35" />
+          <circle cx="600" cy="360" r="10" fill="#22d3ee" opacity="0.7" />
+        </svg>
+      </div>
+
+      <svg className="lightning-bg" viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid slice">
         <defs>
           <filter id="bolt-glow-phosphor" x="-50%" y="-50%" width="200%" height="200%">
             <feGaussianBlur stdDeviation="4" result="blur" />
@@ -59,25 +72,26 @@ export default function LightningBackdrop() {
           </filter>
         </defs>
 
-        <path className="bolt bolt-1" d="M180 15 L185 50 L180 100 L182 150 L175 200" filter="url(#bolt-glow-phosphor)" />
-        <path className="bolt bolt-1 branch" d="M185 50 L210 55 L205 75" filter="url(#bolt-glow-phosphor)" />
-        <path className="bolt bolt-1 branch" d="M180 100 L150 115 L145 140" filter="url(#bolt-glow-phosphor)" />
-        <path className="bolt bolt-1 branch" d="M182 150 L165 175 L160 195" filter="url(#bolt-glow-phosphor)" />
-        <path className="bolt bolt-1 branch" d="M180 100 L200 120 L210 145" filter="url(#bolt-glow-phosphor)" />
+        <path className="bolt bolt-1" d="M180 20 L195 90 L185 180 L200 270 L188 390 L195 520" filter="url(#bolt-glow-phosphor)" />
+        <path className="bolt bolt-1 branch" d="M195 90 L240 100 L235 140" filter="url(#bolt-glow-phosphor)" />
+        <path className="bolt bolt-1 branch" d="M185 180 L140 200 L125 250" filter="url(#bolt-glow-phosphor)" />
+        <path className="bolt bolt-1 branch" d="M200 270 L175 320 L165 380" filter="url(#bolt-glow-phosphor)" />
+        <path className="bolt bolt-1 branch" d="M185 180 L220 220 L235 280" filter="url(#bolt-glow-phosphor)" />
 
-        <path className="bolt bolt-2" d="M550 5 L545 35 L560 65 L535 95 L555 130 L540 160 L550 190" filter="url(#bolt-glow-core)" />
-        <path className="bolt bolt-2 branch" d="M545 35 L525 40 L520 55" filter="url(#bolt-glow-core)" />
-        <path className="bolt bolt-2 branch" d="M560 65 L585 70 L595 90" filter="url(#bolt-glow-core)" />
-        <path className="bolt bolt-2 branch" d="M535 95 L515 105 L510 125" filter="url(#bolt-glow-core)" />
-        <path className="bolt bolt-2 branch" d="M555 130 L575 140 L585 160" filter="url(#bolt-glow-core)" />
-        <path className="bolt bolt-2 branch" d="M540 160 L525 170 L530 185" filter="url(#bolt-glow-core)" />
+        <path className="bolt bolt-2" d="M600 10 L585 70 L610 130 L555 190 L580 280 L545 400 L570 520" filter="url(#bolt-glow-core)" />
+        <path className="bolt bolt-2 branch" d="M585 70 L545 80 L530 110" filter="url(#bolt-glow-core)" />
+        <path className="bolt bolt-2 branch" d="M610 130 L660 140 L680 190" filter="url(#bolt-glow-core)" />
+        <path className="bolt bolt-2 branch" d="M555 190 L515 210 L500 260" filter="url(#bolt-glow-core)" />
+        <path className="bolt bolt-2 branch" d="M580 280 L620 300 L640 360" filter="url(#bolt-glow-core)" />
+        <path className="bolt bolt-2 branch" d="M545 400 L525 430 L535 480" filter="url(#bolt-glow-core)" />
 
-        <path className="bolt bolt-3" d="M920 25 L935 55 L915 90 L940 120 L920 155 L945 185 L925 200" filter="url(#bolt-glow-cyan)" />
-        <path className="bolt bolt-3 branch" d="M935 55 L965 50 L975 70" filter="url(#bolt-glow-cyan)" />
-        <path className="bolt bolt-3 branch" d="M915 90 L885 95 L875 115" filter="url(#bolt-glow-cyan)" />
-        <path className="bolt bolt-3 branch" d="M940 120 L970 130 L985 155" filter="url(#bolt-glow-cyan)" />
-        <path className="bolt bolt-3 branch" d="M920 155 L900 170 L895 190" filter="url(#bolt-glow-cyan)" />
+        <path className="bolt bolt-3" d="M1020 40 L1045 110 L1015 180 L1050 250 L1025 340 L1060 430 L1035 520" filter="url(#bolt-glow-cyan)" />
+        <path className="bolt bolt-3 branch" d="M1045 110 L1090 100 L1110 140" filter="url(#bolt-glow-cyan)" />
+        <path className="bolt bolt-3 branch" d="M1015 180 L960 190 L940 240" filter="url(#bolt-glow-cyan)" />
+        <path className="bolt bolt-3 branch" d="M1050 250 L1100 270 L1120 320" filter="url(#bolt-glow-cyan)" />
+        <path className="bolt bolt-3 branch" d="M1025 340 L990 370 L980 420" filter="url(#bolt-glow-cyan)" />
       </svg>
+
       <div className="lightning-sky-flash" />
     </div>
   );
