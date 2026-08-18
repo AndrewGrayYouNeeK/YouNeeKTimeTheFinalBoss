@@ -48,11 +48,7 @@ export default function ClockDial({ time, isGlitching }) {
 
       <div className="absolute inset-0 z-30 pointer-events-none">
         <ClockLabels />
-        <ClockHands
-          unitRotation={time.unitRotation}
-          minuteRotation={time.minuteRotation}
-          secondRotation={time.secondRotation}
-        />
+        <ClockHands time={time} />
       </div>
 
       {/* Outer neon green bezel */}

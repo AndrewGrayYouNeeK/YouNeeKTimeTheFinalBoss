@@ -46,10 +46,17 @@ export function getDecimalTime(now = new Date()) {
   // Second hand: 360 = 1 YouNeeK minute
   const secondRotation = (totalBaseSeconds % 100) * 3.6;
 
+  // Army 24h hour hand: full 360 = one day (same sweep as YouNeeK units)
+  const armyHourRotation = dayProgress * 360;
   // Army minute hand rotation: 360 = 1 real hour (100 army minutes)
   const armyMinuteRotation = armyMinutesFrac * 3.6;
   // Army second hand rotation: 360 = 1 army minute (100 army seconds)
   const armySecondRotation = armySecondsFrac * 3.6;
+
+  const hours12Frac = (realHours % 12) + fractionalRealMinutes / 60;
+  const regularHourRotation = hours12Frac * 30;
+  const regularMinuteRotation = fractionalRealMinutes * 6;
+  const regularSecondRotation = fractionalRealSeconds * 6;
 
   return {
     progress: dayProgress,
@@ -66,7 +73,11 @@ export function getDecimalTime(now = new Date()) {
     unitRotation,
     minuteRotation,
     secondRotation,
+    armyHourRotation,
     armyMinuteRotation,
     armySecondRotation,
+    regularHourRotation,
+    regularMinuteRotation,
+    regularSecondRotation,
   };
 }

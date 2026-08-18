@@ -15,8 +15,12 @@ struct DecimalTime: Equatable {
     let unitRotation: Double
     let minuteRotation: Double
     let secondRotation: Double
+    let armyHourRotation: Double
     let armyMinuteRotation: Double
     let armySecondRotation: Double
+    let regularHourRotation: Double
+    let regularMinuteRotation: Double
+    let regularSecondRotation: Double
 
     static func current(now: Date = Date(), calendar: Calendar = .current) -> DecimalTime {
         let startOfDay = calendar.startOfDay(for: now)
@@ -53,8 +57,14 @@ struct DecimalTime: Equatable {
         let unitRotation = dayProgress * 360
         let minuteRotation = (totalBaseMinutes.truncatingRemainder(dividingBy: 100)) * 3.6
         let secondRotation = (totalBaseSeconds.truncatingRemainder(dividingBy: 100)) * 3.6
+        let armyHourRotation = dayProgress * 360
         let armyMinuteRotation = armyMinutesFrac * 3.6
         let armySecondRotation = armySecondsFrac * 3.6
+
+        let hours12Frac = Double(realHours % 12) + fractionalRealMinutes / 60
+        let regularHourRotation = hours12Frac * 30
+        let regularMinuteRotation = fractionalRealMinutes * 6
+        let regularSecondRotation = fractionalRealSeconds * 6
 
         let display = [units, minutes, seconds]
             .map { String(format: "%02d", $0) }
@@ -75,8 +85,12 @@ struct DecimalTime: Equatable {
             unitRotation: unitRotation,
             minuteRotation: minuteRotation,
             secondRotation: secondRotation,
+            armyHourRotation: armyHourRotation,
             armyMinuteRotation: armyMinuteRotation,
-            armySecondRotation: armySecondRotation
+            armySecondRotation: armySecondRotation,
+            regularHourRotation: regularHourRotation,
+            regularMinuteRotation: regularMinuteRotation,
+            regularSecondRotation: regularSecondRotation
         )
     }
 

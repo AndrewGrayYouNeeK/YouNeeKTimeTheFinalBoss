@@ -8,11 +8,20 @@ struct WatchClockView: View {
     var body: some View {
         TimelineView(.periodic(from: .now, by: 0.05)) { context in
             let time = DecimalTime.current(now: context.date)
-            VStack(spacing: 4) {
+            VStack(spacing: 2) {
                 Text(time.unitsMinutesDisplay)
-                    .font(.system(size: 22, weight: .semibold, design: .monospaced))
+                    .font(.system(size: 18, weight: .semibold, design: .monospaced))
                     .foregroundStyle(green)
                     .shadow(color: green.opacity(0.8), radius: 6)
+                HStack {
+                    Text(String(format: "%02d:%02d", time.hours12, Calendar.current.component(.minute, from: context.date)))
+                        .foregroundStyle(Color(red: 0.96, green: 0.96, blue: 0.96))
+                    Spacer()
+                    Text(String(format: "%02d:%02d", time.armyHours, time.armyMinutes))
+                        .foregroundStyle(Color(red: 0x2d / 255, green: 0xd9 / 255, blue: 0))
+                }
+                .font(.system(size: 9, weight: .medium, design: .monospaced))
+                .padding(.horizontal, 10)
                 AnalogDial(time: time)
                     .padding(2)
                 GeometryReader { geo in
@@ -98,6 +107,27 @@ struct AnalogDial: View {
                     ctx.stroke(path, with: .color(color), style: StrokeStyle(lineWidth: width * scale, lineCap: .round))
                 }
             }
+
+            let white = Color(red: 0.96, green: 0.96, blue: 0.96)
+            let army = Color(red: 0x2d / 255, green: 0xd9 / 255, blue: 0)
+
+            hand(rotation: time.regularHourRotation, tipY: 78, tailY: 218, color: white, width: 4.5)
+            hand(rotation: time.regularMinuteRotation, tipY: 36, tailY: 222, color: white, width: 2.6)
+            hand(rotation: time.regularSecondRotation, tipY: 22, tailY: 214, color: white, width: 1.2)
+
+            context.drawLayer { ctx in
+                ctx.translateBy(x: c.x, y: c.y)
+                ctx.rotate(by: .degrees(time.armyHourRotation))
+                ctx.translateBy(x: -c.x, y: -c.y)
+                var pip = Path()
+                pip.move(to: p(200, 8))
+                pip.addLine(to: p(206, 22))
+                pip.addLine(to: p(194, 22))
+                pip.closeSubpath()
+                ctx.fill(pip, with: .color(army))
+            }
+            hand(rotation: time.armyMinuteRotation, tipY: 48, tailY: 210, color: army, width: 2)
+            hand(rotation: time.armySecondRotation, tipY: 28, tailY: 208, color: army, width: 1)
 
             hand(rotation: time.unitRotation, tipY: 18, tailY: 230, color: green, width: 3.5)
             hand(rotation: time.minuteRotation, tipY: 52, tailY: 230, color: red, width: 3.5)
