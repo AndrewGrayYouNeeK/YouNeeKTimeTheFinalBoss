@@ -29,3 +29,8 @@ dist-ssr
 
 .env
 .vite
+
+# Xcode
+xcuserdata/
+*.xcuserstate
+DerivedData/

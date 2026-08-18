@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { useAuth } from '@/lib/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -125,6 +126,17 @@ export default function Settings() {
           </div>
 
 
+
+          <div className="border-b border-white/10 pb-6">
+            <h2 className="text-xl font-semibold mb-4 text-white">Apple Watch</h2>
+            <p className="text-sm text-white/50 mb-3">
+              Safari on Apple Watch cannot install this site. Use the native watchOS app in
+              {' '}<span className="text-white/80">native/YouNeeKTime</span>, or open the compact watch face below.
+            </p>
+            <Button asChild variant="outline" className="border-white/20 text-white hover:bg-white/10">
+              <Link to="/watch">Open Watch Face</Link>
+            </Button>
+          </div>
 
           <div className="border-b border-white/10 pb-6">
             <h2 className="text-xl font-semibold mb-4 text-white">Hourly Frequency</h2>
