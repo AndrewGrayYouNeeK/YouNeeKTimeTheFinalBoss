@@ -21,6 +21,7 @@ struct DecimalTime: Equatable {
     let regularHourRotation: Double
     let regularMinuteRotation: Double
     let regularSecondRotation: Double
+    let regularMinutes: Int
 
     static func current(now: Date = Date(), calendar: Calendar = .current) -> DecimalTime {
         let startOfDay = calendar.startOfDay(for: now)
@@ -62,9 +63,10 @@ struct DecimalTime: Equatable {
         let armySecondRotation = armySecondsFrac * 3.6
 
         let hours12Frac = Double(realHours % 12) + fractionalRealMinutes / 60
-        let regularHourRotation = hours12Frac * 30
+    let regularHourRotation = hours12Frac * 30
         let regularMinuteRotation = fractionalRealMinutes * 6
         let regularSecondRotation = fractionalRealSeconds * 6
+        let regularMinutes = realMinutes
 
         let display = [units, minutes, seconds]
             .map { String(format: "%02d", $0) }
@@ -90,11 +92,27 @@ struct DecimalTime: Equatable {
             armySecondRotation: armySecondRotation,
             regularHourRotation: regularHourRotation,
             regularMinuteRotation: regularMinuteRotation,
-            regularSecondRotation: regularSecondRotation
+            regularSecondRotation: regularSecondRotation,
+            regularMinutes: regularMinutes
         )
     }
 
+    func digits(source: String) -> (hours: Int, minutes: Int) {
+        switch source {
+        case "regular": return (hours12, regularMinutes)
+        case "army": return (armyHours, armyMinutes)
+        case "youneek12": return (hours12, armyMinutes)
+        default: return (units, minutes)
+        }
+    }
+
+    func digitalDisplay(source: String) -> String {
+        let pair = digits(source: source)
+        let sep = source == "youneek" ? "•" : ":"
+        return String(format: "%02d%@%02d", pair.hours, sep, pair.minutes)
+    }
+
     var unitsMinutesDisplay: String {
-        String(format: "%02d•%02d", units, minutes)
+        digitalDisplay(source: "youneek")
     }
 }

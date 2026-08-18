@@ -12,6 +12,15 @@ import {
 } from '@/lib/haptics';
 import { buildTimeTellingSteps, stepsToVibratePattern, PULSE, isQuarterMinute } from '@/lib/hapticPattern';
 import { requestWakeLock, releaseWakeLock } from '@/lib/wakeLock';
+import {
+  CLOCK_SOURCES,
+  readClockSource,
+  writeClockSource,
+  sourceLabel,
+  getHapticDigits,
+  PREFS_EVENT,
+} from '@/lib/clockPrefs';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 const STORAGE_KEY = 'hapticPocketMode';
@@ -20,14 +29,30 @@ export default function HapticTimeManager({ time }) {
   const [enabled, setEnabled] = useState(() => localStorage.getItem(STORAGE_KEY) === 'true');
   const [isPlayingTime, setIsPlayingTime] = useState(false);
   const [wakeLockOn, setWakeLockOn] = useState(false);
+  const [clockSource, setClockSource] = useState(readClockSource);
   const enabledRef = useRef(enabled);
   const isPlayingRef = useRef(isPlayingTime);
   const timeRef = useRef(time);
-  const lastQuarterKeyRef = useRef(`${time.units}:${time.minutes}`);
+  const sourceRef = useRef(clockSource);
+  const lastQuarterKeyRef = useRef('');
 
   useEffect(() => {
     timeRef.current = time;
   }, [time]);
+
+  useEffect(() => {
+    sourceRef.current = clockSource;
+  }, [clockSource]);
+
+  useEffect(() => {
+    const sync = () => setClockSource(readClockSource());
+    window.addEventListener(PREFS_EVENT, sync);
+    window.addEventListener('storage', sync);
+    return () => {
+      window.removeEventListener(PREFS_EVENT, sync);
+      window.removeEventListener('storage', sync);
+    };
+  }, []);
 
   useEffect(() => {
     enabledRef.current = enabled;
@@ -70,7 +95,8 @@ export default function HapticTimeManager({ time }) {
     setIsPlayingTime(true);
     isPlayingRef.current = true;
 
-    const steps = buildTimeTellingSteps(currentTime.units, currentTime.minutes);
+    const { hours, minutes } = getHapticDigits(currentTime, sourceRef.current);
+    const steps = buildTimeTellingSteps(hours, minutes);
     const pattern = stepsToVibratePattern(steps);
 
     if (!isIOS() && playVibratePattern(pattern)) {
@@ -107,12 +133,13 @@ export default function HapticTimeManager({ time }) {
 
   useEffect(() => {
     if (!enabled) return;
-    if (!isQuarterMinute(time.minutes)) return;
-    const key = `${time.units}:${time.minutes}`;
+    const { hours, minutes } = getHapticDigits(time, clockSource);
+    if (!isQuarterMinute(minutes)) return;
+    const key = `${clockSource}:${hours}:${minutes}`;
     if (key === lastQuarterKeyRef.current) return;
     lastQuarterKeyRef.current = key;
     if (!isPlayingRef.current) tellTime(time);
-  }, [time.units, time.minutes, enabled]);
+  }, [time.units, time.minutes, time.armyHours, time.armyMinutes, time.hours12, time.regularMinutes, clockSource, enabled]);
 
   const handleToggle = (event) => {
     unlockHaptics();
@@ -121,7 +148,7 @@ export default function HapticTimeManager({ time }) {
     setEnabled(newState);
 
     if (newState) {
-      lastQuarterKeyRef.current = `${timeRef.current.units}:${timeRef.current.minutes}`;
+      lastQuarterKeyRef.current = `${clockSource}:${getHapticDigits(timeRef.current, clockSource).hours}:${getHapticDigits(timeRef.current, clockSource).minutes}`;
       tellTime(timeRef.current);
     } else {
       stopHaptics();
@@ -178,12 +205,29 @@ export default function HapticTimeManager({ time }) {
         <div className="mt-4 text-center space-y-3 max-w-xs">
           <div className="space-y-1">
             <p className="text-[10px] text-[#39ff14]/70 font-mono tracking-widest uppercase">
-              {isPlayingTime ? 'Playing time…' : 'Active — tells YouNeeK time every 15 min'}
+              {isPlayingTime ? 'Playing time…' : `Active — tells ${sourceLabel(clockSource)} every 15 min`}
             </p>
             <p className="text-[9px] text-white/40 font-mono tracking-wide leading-relaxed">
               {wakeLockOn ? 'Screen kept awake' : 'Keep screen on in pocket'}
             </p>
           </div>
+
+          <Select
+            value={clockSource}
+            onValueChange={(id) => {
+              setClockSource(id);
+              writeClockSource(id);
+            }}
+          >
+            <SelectTrigger className="w-full bg-black/40 border-[#39ff14]/30 text-[#39ff14] text-[10px] font-mono uppercase tracking-widest">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              {CLOCK_SOURCES.map((item) => (
+                <SelectItem key={item.id} value={item.id}>{item.label}</SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
 
           <div className="relative inline-flex">
             <Button
@@ -203,7 +247,7 @@ export default function HapticTimeManager({ time }) {
           <div className="rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-left space-y-1.5">
             <p className="text-[9px] text-white/50 font-mono uppercase tracking-widest">How to read by feel</p>
             <p className="text-[9px] text-white/35 font-mono leading-relaxed">
-              <span className="text-[#39ff14]/60">Long buzz</span> = each YouNeeK hour digit (tens, then ones)
+              <span className="text-[#39ff14]/60">Long buzz</span> = each hour digit of {sourceLabel(clockSource)} (tens, then ones)
             </p>
             <p className="text-[9px] text-white/35 font-mono leading-relaxed">
               <span className="text-white/50">Spaced shorts</span> = tens of minutes

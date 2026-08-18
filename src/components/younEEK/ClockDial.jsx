@@ -7,7 +7,7 @@ import { GREEN } from './clockConstants';
 
 const DEFAULT_CENTER_IMAGE = '/clock-face-default.jpg';
 
-export default function ClockDial({ time, isGlitching }) {
+export default function ClockDial({ time, isGlitching, source = 'all' }) {
   const [centerImage, setCenterImage] = useState(
     localStorage.getItem('clockFaceUrl') || DEFAULT_CENTER_IMAGE
   );
@@ -48,7 +48,7 @@ export default function ClockDial({ time, isGlitching }) {
 
       <div className="absolute inset-0 z-30 pointer-events-none">
         <ClockLabels />
-        <ClockHands time={time} />
+        <ClockHands time={time} source={source} />
       </div>
 
       {/* Outer neon green bezel */}

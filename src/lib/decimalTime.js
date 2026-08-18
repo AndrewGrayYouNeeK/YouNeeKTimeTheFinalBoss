@@ -79,5 +79,6 @@ export function getDecimalTime(now = new Date()) {
     regularHourRotation,
     regularMinuteRotation,
     regularSecondRotation,
+    regularMinutes: realMinutes,
   };
 }
