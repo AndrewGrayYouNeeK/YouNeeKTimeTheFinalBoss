@@ -1,10 +1,10 @@
 export const PULSE = {
-  hourOn: 1500,
+  hourOn: 1200,
   hourGap: 650,
-  tenthOn: 400,
-  tenthGap: 550,
-  onesOn: 200,
-  onesGap: 320,
+  tenthOn: 120,
+  tenthGap: 520,
+  onesOn: 60,
+  onesGap: 130,
   groupGap: 1400,
 };
 

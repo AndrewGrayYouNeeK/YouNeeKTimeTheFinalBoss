@@ -1,15 +1,14 @@
 export default function ClockHeader() {
   return (
     <div className="header relative">
-      <div className="relative z-10 w-full px-2 text-center">
-        <div className="header-title-reveal mx-auto max-w-lg relative">
-          <p className="lightning-reveal-title font-mono text-3xl sm:text-4xl md:text-5xl font-bold uppercase tracking-[0.16em] leading-tight">
+      <div className="text-center relative z-10 px-2">
+        <div className="header-title-panel mx-auto max-w-lg">
+          <p className="font-mono text-4xl sm:text-5xl md:text-6xl uppercase tracking-[0.35em] sm:tracking-[0.45em] font-bold lightning-reveal-title">
             YouNeeK Time
           </p>
-          <p className="lightning-reveal-subtitle mt-3 font-mono text-[10px] sm:text-xs font-bold uppercase tracking-[0.22em]">
+          <p className="mt-3 font-mono text-[10px] sm:text-xs uppercase tracking-[0.25em] sm:tracking-[0.3em] font-bold lightning-reveal-subtitle">
             by Andrew Gray
           </p>
-          <div className="header-rain-trickle" aria-hidden="true" />
         </div>
       </div>
     </div>
