@@ -1,13 +1,12 @@
 import { Toaster } from "@/components/ui/toaster"
 import { QueryClientProvider } from '@tanstack/react-query'
 import { queryClientInstance } from '@/lib/query-client'
-import { HapticsProvider } from '@haptics/react'
-import { HAPTIC_PATTERNS } from '@/lib/haptics'
 import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-router-dom';
 import PageNotFound from './lib/PageNotFound';
 import { AuthProvider } from '@/lib/AuthContext';
 import Index from '@/pages/Index';
 import Settings from '@/pages/Settings';
+import Watch from '@/pages/Watch';
 import Header from '@/components/Header';
 import BottomTab from '@/components/BottomTab';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -31,18 +30,20 @@ const AuthenticatedApp = () => {
   const location = useLocation();
 
   // Render the main app
+  const isWatch = location.pathname === '/watch';
+
   return (
-    <div style={{ paddingTop: 'max(0, env(safe-area-inset-top))' }}>
-      <Header />
+    <div style={{ paddingTop: isWatch ? 0 : 'max(0, env(safe-area-inset-top))' }}>
+      {!isWatch && <Header />}
       <AnimatePresence mode="wait">
         <Routes location={location} key={location.pathname}>
-          {/* Add your page Route elements here */}
           <Route path="/" element={<PageTransition><Index /></PageTransition>} />
           <Route path="/settings" element={<PageTransition><Settings /></PageTransition>} />
+          <Route path="/watch" element={<Watch />} />
           <Route path="*" element={<PageNotFound />} />
         </Routes>
       </AnimatePresence>
-      <BottomTab />
+      {!isWatch && <BottomTab />}
     </div>
   );
 };
@@ -57,12 +58,10 @@ function App() {
   return (
     <AuthProvider>
       <QueryClientProvider client={queryClientInstance}>
-        <HapticsProvider patterns={HAPTIC_PATTERNS}>
-          <Router>
-            <AuthenticatedApp />
-            <Toaster />
-          </Router>
-        </HapticsProvider>
+        <Router>
+          <AuthenticatedApp />
+          <Toaster />
+        </Router>
       </QueryClientProvider>
     </AuthProvider>
   )

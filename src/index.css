@@ -107,6 +107,7 @@
   box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 1), 0 0 24px rgba(0, 0, 0, 0.8);
   position: relative;
   z-index: 15;
+  animation: panel-flash 8.5s infinite;
 }
 
 .lightning-bg {
@@ -145,14 +146,14 @@
 .lightning-reveal-title {
   color: #000000;
   text-shadow: none;
-  opacity: 1;
+  opacity: 0;
   animation: reveal-title 8.5s infinite;
 }
 
 .lightning-reveal-subtitle {
   color: #000000;
   text-shadow: none;
-  opacity: 1;
+  opacity: 0;
   animation: reveal-subtitle 8.5s infinite;
 }
 
@@ -186,49 +187,62 @@
   68%, 100% { opacity: 0; }
 }
 
+@keyframes panel-flash {
+  0%, 32%, 52%, 100% {
+    background: #000000;
+    border-color: rgba(255, 255, 255, 0.06);
+    box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 1), 0 0 24px rgba(0, 0, 0, 0.8);
+  }
+  35%, 37%, 39% {
+    background: #e8ede8;
+    border-color: rgba(57, 255, 20, 0.25);
+    box-shadow: 0 0 30px rgba(255, 255, 255, 0.5), 0 0 60px rgba(57, 255, 20, 0.2);
+  }
+  41%, 43% {
+    background: #ffffff;
+    border-color: rgba(57, 255, 20, 0.4);
+    box-shadow: 0 0 50px rgba(255, 255, 255, 0.75), 0 0 100px rgba(57, 255, 20, 0.35);
+  }
+  45% {
+    background: #000000;
+    border-color: rgba(255, 255, 255, 0.06);
+    box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 1), 0 0 24px rgba(0, 0, 0, 0.8);
+  }
+}
+
 @keyframes reveal-title {
   0%, 32%, 52%, 100% {
     color: #000000;
+    opacity: 0;
     text-shadow: none;
-    filter: brightness(1);
   }
-  35%, 37%, 39% {
+  35%, 37%, 39%, 41%, 43% {
     color: #000000;
-    text-shadow: 0 0 20px #ffffff, 0 0 40px #ffffff, 0 0 80px #39ff14, 0 0 120px #39ff14aa;
-    filter: brightness(1.2);
-  }
-  41%, 43% {
-    color: #000000;
-    text-shadow: 0 0 30px #ffffff, 0 0 60px #ffffff, 0 0 100px #39ff14, 0 0 160px #39ff14cc;
-    filter: brightness(1.4);
+    opacity: 1;
+    text-shadow: none;
   }
   45% {
     color: #000000;
+    opacity: 0;
     text-shadow: none;
-    filter: brightness(1);
   }
 }
 
 @keyframes reveal-subtitle {
   0%, 34%, 54%, 100% {
     color: #000000;
+    opacity: 0;
     text-shadow: none;
-    filter: brightness(1);
   }
-  37%, 39% {
+  37%, 39%, 42%, 44% {
     color: #000000;
-    text-shadow: 0 0 12px #39ff14, 0 0 24px #39ff14aa, 0 0 40px #ffffff;
-    filter: brightness(1.2);
-  }
-  42%, 44% {
-    color: #000000;
-    text-shadow: 0 0 16px #ffffff, 0 0 32px #39ff14, 0 0 48px #39ff14aa;
-    filter: brightness(1.3);
+    opacity: 1;
+    text-shadow: none;
   }
   46% {
     color: #000000;
+    opacity: 0;
     text-shadow: none;
-    filter: brightness(1);
   }
 }
 
@@ -253,4 +267,11 @@
   background-image: radial-gradient(2px 2px at 80px 110px, #ffffff, transparent), radial-gradient(2px 2px at 120px 50px, #ffffff, transparent), radial-gradient(2px 2px at 30px 90px, #ffffff, transparent);
   background-size: 300px 300px;
   animation: twinkle 5s infinite ease-in-out 2s;
+}
+
+html.watch-mode,
+html.watch-mode body {
+  height: 100%;
+  overflow: hidden;
+  background: #000;
 }
