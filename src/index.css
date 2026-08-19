@@ -94,17 +94,14 @@
 }
 
 .header {
-  height: 250px;
+  min-height: 220px;
   background: transparent;
-  overflow: hidden;
+  overflow: visible;
 }
 
-.header-title-panel {
-  background: #000000;
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  border-radius: 14px;
-  padding: 1.25rem 1.5rem 1.1rem;
-  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 1), 0 0 24px rgba(0, 0, 0, 0.8);
+.header-title-panel,
+.header-title-reveal {
+  background: transparent;
   position: relative;
   z-index: 15;
 }
@@ -112,6 +109,8 @@
 .lightning-bg {
   position: absolute;
   inset: 0;
+  z-index: 0;
+  pointer-events: none;
   opacity: 0;
   animation: flash 8.5s infinite;
 }
@@ -143,14 +142,14 @@
 }
 
 .lightning-reveal-title {
-  color: #000000;
-  text-shadow: none;
+  color: #ffffff;
+  text-shadow: 0 0 12px #39ff1466;
   opacity: 1;
   animation: reveal-title 8.5s infinite;
 }
 
 .lightning-reveal-subtitle {
-  color: #000000;
+  color: #c8c8c8;
   text-shadow: none;
   opacity: 1;
   animation: reveal-subtitle 8.5s infinite;
@@ -188,45 +187,45 @@
 
 @keyframes reveal-title {
   0%, 32%, 52%, 100% {
-    color: #000000;
-    text-shadow: none;
+    color: #ffffff;
+    text-shadow: 0 0 12px #39ff1466;
     filter: brightness(1);
   }
   35%, 37%, 39% {
-    color: #000000;
+    color: #ffffff;
     text-shadow: 0 0 20px #ffffff, 0 0 40px #ffffff, 0 0 80px #39ff14, 0 0 120px #39ff14aa;
     filter: brightness(1.2);
   }
   41%, 43% {
-    color: #000000;
+    color: #ffffff;
     text-shadow: 0 0 30px #ffffff, 0 0 60px #ffffff, 0 0 100px #39ff14, 0 0 160px #39ff14cc;
     filter: brightness(1.4);
   }
   45% {
-    color: #000000;
-    text-shadow: none;
+    color: #ffffff;
+    text-shadow: 0 0 12px #39ff1466;
     filter: brightness(1);
   }
 }
 
 @keyframes reveal-subtitle {
   0%, 34%, 54%, 100% {
-    color: #000000;
+    color: #c8c8c8;
     text-shadow: none;
     filter: brightness(1);
   }
   37%, 39% {
-    color: #000000;
+    color: #ffffff;
     text-shadow: 0 0 12px #39ff14, 0 0 24px #39ff14aa, 0 0 40px #ffffff;
     filter: brightness(1.2);
   }
   42%, 44% {
-    color: #000000;
+    color: #ffffff;
     text-shadow: 0 0 16px #ffffff, 0 0 32px #39ff14, 0 0 48px #39ff14aa;
     filter: brightness(1.3);
   }
   46% {
-    color: #000000;
+    color: #c8c8c8;
     text-shadow: none;
     filter: brightness(1);
   }
