@@ -1,4 +1,4 @@
-import { GREEN, YELLOW, WHITE, ARMY, ARMY_CYAN } from './clockConstants';
+import { GREEN, YELLOW, WHITE, ARMY_CYAN } from './clockConstants';
 
 function Hand({ rotation, tipY, tailY, color, width }) {
   return (
@@ -30,8 +30,6 @@ export default function ClockHands({ time, source = 'all' }) {
   const regular = source === 'all' || source === 'regular' || source === 'youneek12';
   const army = source === 'all' || source === 'army' || source === 'youneek12';
   const youneek = source === 'all' || source === 'youneek';
-  const mergedDayHand = youneek && army;
-  const dayColor = mergedDayHand ? WHITE : youneek ? GREEN : ARMY;
   const armyShared = army && (youneek || source === 'youneek12' || source === 'all');
   const armyColor = armyShared ? WHITE : ARMY_CYAN;
 
@@ -45,13 +43,13 @@ export default function ClockHands({ time, source = 'all' }) {
       )}
 
       {(youneek || army) && (
-        <TaperedHand rotation={time.unitRotation} tipY={22} tailY={226} color={dayColor} width="5" />
+        <TaperedHand rotation={time.unitRotation} tipY={22} tailY={226} color={YELLOW} width="5" />
       )}
 
       {youneek && (
         <>
           <Hand rotation={time.minuteRotation} tipY={70} tailY={222} color={GREEN} width="2.4" />
-          <Hand rotation={time.secondRotation} tipY={108} tailY={216} color={YELLOW} width="1.8" />
+          <Hand rotation={time.secondRotation} tipY={108} tailY={216} color={GREEN} width="1.8" />
         </>
       )}
 
