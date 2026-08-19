@@ -29,3 +29,10 @@ dist-ssr
 
 .env
 .vite
+.wrangler
+.dev.vars*
+
+# Xcode
+xcuserdata/
+*.xcuserstate
+DerivedData/

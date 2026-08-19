@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { useAuth } from '@/lib/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -8,6 +9,7 @@ import { useState, useEffect } from 'react';
 import { Switch } from '@/components/ui/switch';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import StarsBackground from '@/components/younEEK/StarsBackground';
+import { CLOCK_SOURCES, WATCH_DISPLAYS, readClockSource, readWatchDisplay, writeClockSource, writeWatchDisplay } from '@/lib/clockPrefs';
 
 export default function Settings() {
   const { user, setEmail } = useAuth();
@@ -17,12 +19,23 @@ export default function Settings() {
   const [freqEnabled, setFreqEnabled] = useState(() => localStorage.getItem('hourlyFreqEnabled') === 'true');
   const [freqHz, setFreqHz] = useState(() => localStorage.getItem('hourlyFreqHz') || '432');
   const [freqDuration, setFreqDuration] = useState(() => localStorage.getItem('hourlyFreqDuration') || '5');
+  const [clockSource, setClockSource] = useState(readClockSource);
+  const [watchDisplay, setWatchDisplay] = useState(readWatchDisplay);
 
   useEffect(() => {
     localStorage.setItem('hourlyFreqEnabled', freqEnabled);
     localStorage.setItem('hourlyFreqHz', freqHz);
     localStorage.setItem('hourlyFreqDuration', freqDuration);
   }, [freqEnabled, freqHz, freqDuration]);
+
+  useEffect(() => {
+    const sync = () => {
+      setClockSource(readClockSource());
+      setWatchDisplay(readWatchDisplay());
+    };
+    window.addEventListener('clock-prefs-updated', sync);
+    return () => window.removeEventListener('clock-prefs-updated', sync);
+  }, []);
 
   const handleSaveEmail = () => {
     setEmail(emailInput.trim());
@@ -125,6 +138,45 @@ export default function Settings() {
           </div>
 
 
+
+          <div className="border-b border-white/10 pb-6">
+            <h2 className="text-xl font-semibold mb-4 text-white">Apple Watch</h2>
+            <p className="text-sm text-white/50 mb-3">
+              Safari on Apple Watch cannot install this site. Use the native watchOS app in
+              {' '}<span className="text-white/80">native/YouNeeKTime</span>, or open the compact watch face below.
+            </p>
+            <div className="space-y-4 mb-4">
+              <div>
+                <p className="text-sm text-white/50 mb-2">Watch display</p>
+                <Select value={watchDisplay} onValueChange={(id) => { setWatchDisplay(id); writeWatchDisplay(id); }}>
+                  <SelectTrigger className="w-full sm:w-[240px] bg-white/5 border-white/20 text-white">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {WATCH_DISPLAYS.map((item) => (
+                      <SelectItem key={item.id} value={item.id}>{item.label}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              <div>
+                <p className="text-sm text-white/50 mb-2">Clock time (face, decimal, and haptics)</p>
+                <Select value={clockSource} onValueChange={(id) => { setClockSource(id); writeClockSource(id); }}>
+                  <SelectTrigger className="w-full sm:w-[240px] bg-white/5 border-white/20 text-white">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {CLOCK_SOURCES.map((item) => (
+                      <SelectItem key={item.id} value={item.id}>{item.label}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+            <Button asChild variant="outline" className="border-white/20 text-white hover:bg-white/10">
+              <Link to="/watch">Open Watch Face</Link>
+            </Button>
+          </div>
 
           <div className="border-b border-white/10 pb-6">
             <h2 className="text-xl font-semibold mb-4 text-white">Hourly Frequency</h2>

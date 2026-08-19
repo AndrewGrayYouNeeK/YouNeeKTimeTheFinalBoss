@@ -1,12 +1,12 @@
-import { hapticTrigger } from 'ios-haptics';
+import { hapticTrigger as iosHapticTrigger } from 'ios-haptics';
+import { PULSE } from '@/lib/hapticPattern';
 
-export { hapticTrigger };
-
-function isAndroid() {
-  return typeof navigator !== 'undefined' && /Android/i.test(navigator.userAgent);
+export function hapticTrigger(element) {
+  if (!element || element.querySelector('input[switch]')) return;
+  iosHapticTrigger(element);
 }
 
-function isIOS() {
+export function isIOS() {
   if (typeof navigator === 'undefined') return false;
   return (
     /iPhone|iPad|iPod/i.test(navigator.userAgent) ||
@@ -14,69 +14,133 @@ function isIOS() {
   );
 }
 
-/** iOS Safari checkbox-switch trick (works on iOS 17.4–26.4). */
-export function iosSwitchTap() {
-  if (!isIOS()) return;
-  try {
-    const label = document.createElement('label');
-    label.setAttribute('aria-hidden', 'true');
-    label.style.cssText =
-      'position:fixed;top:0;left:0;width:100%;height:100%;opacity:0;pointer-events:none;';
-    const input = document.createElement('input');
-    input.type = 'checkbox';
-    input.setAttribute('switch', '');
-    Object.assign(input.style, {
-      position: 'absolute',
-      top: '0',
-      left: '0',
-      width: '100%',
-      height: '100%',
-      opacity: '0',
-      margin: '0',
-    });
-    label.appendChild(input);
-    document.body.appendChild(label);
-    label.click();
-    document.body.removeChild(label);
-  } catch {
-    // Haptics are optional — never break the app
+function canVibrate() {
+  return typeof navigator !== 'undefined' && typeof navigator.vibrate === 'function';
+}
+
+let audioCtx = null;
+let buzzGen = 0;
+
+function getAudioCtx() {
+  if (audioCtx) return audioCtx;
+  const Ctx = window.AudioContext || window.webkitAudioContext;
+  if (!Ctx) return null;
+  audioCtx = new Ctx();
+  return audioCtx;
+}
+
+export function unlockHaptics() {
+  const ctx = getAudioCtx();
+  if (ctx?.state === 'suspended') {
+    ctx.resume().catch(() => {});
+  }
+  if (canVibrate()) {
+    try { navigator.vibrate(10); } catch { /* ignore */ }
   }
 }
 
-function androidVibrate(pattern) {
-  if (isAndroid() && typeof navigator.vibrate === 'function') {
-    navigator.vibrate(pattern);
-    return true;
-  }
-  return false;
+function onMs(kind) {
+  if (kind === 'hour') return PULSE.hourOn;
+  if (kind === 'tenth') return PULSE.tenthOn;
+  return PULSE.onesOn;
 }
 
-/** Light double pulse — YouNeeK minutes / heartbeat */
+function gapMs(kind) {
+  if (kind === 'hour') return PULSE.hourGap;
+  if (kind === 'tenth') return PULSE.tenthGap;
+  return PULSE.onesGap;
+}
+
+function buzzAt(ctx, start, dur, freq, gainValue) {
+  const osc = ctx.createOscillator();
+  const filter = ctx.createBiquadFilter();
+  const g = ctx.createGain();
+  osc.type = 'square';
+  osc.frequency.value = freq;
+  filter.type = 'lowpass';
+  filter.frequency.value = 180;
+  g.gain.setValueAtTime(0.0001, start);
+  g.gain.exponentialRampToValueAtTime(gainValue, start + 0.01);
+  g.gain.exponentialRampToValueAtTime(0.0001, start + Math.max(0.02, dur - 0.01));
+  osc.connect(filter);
+  filter.connect(g);
+  g.connect(ctx.destination);
+  osc.start(start);
+  osc.stop(start + dur + 0.03);
+}
+
+function scheduleAudioBuzzes(steps) {
+  const ctx = getAudioCtx();
+  if (!ctx) return 0;
+  if (ctx.state === 'suspended') ctx.resume().catch(() => {});
+  const gen = buzzGen;
+  let t = ctx.currentTime + 0.03;
+  for (const step of steps) {
+    if (gen !== buzzGen) break;
+    if (step.kind === 'pause') {
+      t += step.ms / 1000;
+      continue;
+    }
+    const dur = onMs(step.kind) / 1000;
+    const freq = step.kind === 'hour' ? 52 : step.kind === 'tenth' ? 88 : 120;
+    const gain = step.kind === 'hour' ? 0.45 : 0.32;
+    buzzAt(ctx, t, dur, freq, gain);
+    t += dur + gapMs(step.kind) / 1000;
+  }
+  return Math.max(0, (t - ctx.currentTime) * 1000);
+}
+
+export function playHapticSteps(steps, vibratePattern) {
+  unlockHaptics();
+  let vibrated = false;
+  if (vibratePattern?.length && canVibrate()) {
+    try {
+      vibrated = navigator.vibrate(vibratePattern) !== false;
+    } catch {
+      vibrated = false;
+    }
+  }
+  const audioMs = scheduleAudioBuzzes(steps);
+  const vibeMs = vibratePattern?.length ? vibratePattern.reduce((a, b) => a + b, 0) : 0;
+  return Math.max(audioMs, vibeMs);
+}
+
 export function triggerFaint() {
-  if (!androidVibrate([50, 100, 80])) {
-    iosSwitchTap();
-    setTimeout(iosSwitchTap, 200);
-  }
+  playHapticSteps([{ kind: 'tenth' }], [50, 100, 80]);
 }
 
-/** Strong double pulse — YouNeeK hours / digit counts */
 export function triggerStrong() {
-  if (!androidVibrate([80, 100, 120])) {
-    iosSwitchTap();
-    setTimeout(iosSwitchTap, 120);
-    setTimeout(iosSwitchTap, 240);
-  }
+  playHapticSteps([{ kind: 'hour' }], [80, 100, 120]);
 }
 
-/** Single tap */
 export function triggerSingle() {
-  if (!androidVibrate(50)) iosSwitchTap();
+  playHapticSteps([{ kind: 'ones' }], [50]);
 }
 
-/** Rapid double tap — lightning flashes */
 export function triggerConfirm() {
-  if (!androidVibrate([50, 70, 50])) {
-    iosSwitchTap();
-    setTimeout(iosSwitchTap, 120);
+  playHapticSteps([{ kind: 'tenth' }, { kind: 'tenth' }], [50, 70, 50]);
+}
+
+export function stopHaptics() {
+  buzzGen += 1;
+  if (canVibrate()) {
+    try { navigator.vibrate(0); } catch { /* ignore */ }
   }
+  if (audioCtx) {
+    const ctx = audioCtx;
+    audioCtx = null;
+    ctx.close().catch(() => {});
+  }
+}
+
+export function bindIosHapticButton(element, onActivate) {
+  if (!element || !isIOS()) return;
+  hapticTrigger(element);
+  const sw = element.querySelector('input[switch]');
+  if (!sw || sw.dataset.hapticBound === '1') return;
+  sw.dataset.hapticBound = '1';
+  sw.addEventListener('click', (event) => {
+    event.stopPropagation();
+    onActivate();
+  });
 }
