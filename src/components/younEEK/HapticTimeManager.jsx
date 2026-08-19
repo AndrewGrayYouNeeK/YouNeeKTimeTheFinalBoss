@@ -3,14 +3,12 @@ import { Activity, Smartphone, Hand } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
   unlockHaptics,
-  triggerHourLong,
-  triggerTenth,
-  triggerOnes,
-  playVibratePattern,
+  playHapticSteps,
   stopHaptics,
   isIOS,
+  bindIosHapticButton,
 } from '@/lib/haptics';
-import { buildTimeTellingSteps, stepsToVibratePattern, PULSE, isQuarterMinute } from '@/lib/hapticPattern';
+import { buildTimeTellingSteps, stepsToVibratePattern, isQuarterMinute } from '@/lib/hapticPattern';
 import { requestWakeLock, releaseWakeLock } from '@/lib/wakeLock';
 import {
   CLOCK_SOURCES,
@@ -35,6 +33,8 @@ export default function HapticTimeManager({ time }) {
   const timeRef = useRef(time);
   const sourceRef = useRef(clockSource);
   const lastQuarterKeyRef = useRef('');
+  const toggleRef = useRef(() => {});
+  const feelRef = useRef(() => {});
 
   useEffect(() => {
     timeRef.current = time;
@@ -90,7 +90,7 @@ export default function HapticTimeManager({ time }) {
     };
   }, [enabled]);
 
-  const tellTime = async (currentTime) => {
+  const tellTime = (currentTime) => {
     if (isPlayingRef.current || !enabledRef.current) return;
     setIsPlayingTime(true);
     isPlayingRef.current = true;
@@ -98,37 +98,14 @@ export default function HapticTimeManager({ time }) {
     const { hours, minutes } = getHapticDigits(currentTime, sourceRef.current);
     const steps = buildTimeTellingSteps(hours, minutes);
     const pattern = stepsToVibratePattern(steps);
+    const duration = playHapticSteps(steps.length ? steps : [{ kind: 'ones' }], pattern.length ? pattern : [40]);
 
-    if (!isIOS() && playVibratePattern(pattern)) {
-      const total = pattern.reduce((sum, n) => sum + n, 0);
-      await sleep(total);
+    sleep(duration + 80).then(() => {
       if (enabledRef.current) {
         setIsPlayingTime(false);
         isPlayingRef.current = false;
       }
-      return;
-    }
-
-    for (const step of steps) {
-      if (!enabledRef.current) break;
-      if (step.kind === 'pause') {
-        await sleep(step.ms);
-        continue;
-      }
-      if (step.kind === 'hour') {
-        triggerHourLong();
-        await sleep(PULSE.hourOn + PULSE.hourGap);
-      } else if (step.kind === 'tenth') {
-        triggerTenth();
-        await sleep(PULSE.tenthOn + PULSE.tenthGap);
-      } else {
-        triggerOnes();
-        await sleep(PULSE.onesOn + PULSE.onesGap);
-      }
-    }
-
-    setIsPlayingTime(false);
-    isPlayingRef.current = false;
+    });
   };
 
   useEffect(() => {
@@ -141,7 +118,7 @@ export default function HapticTimeManager({ time }) {
     if (!isPlayingRef.current) tellTime(time);
   }, [time.units, time.minutes, time.armyHours, time.armyMinutes, time.hours12, time.regularMinutes, clockSource, enabled]);
 
-  const handleToggle = (event) => {
+  const handleToggle = () => {
     unlockHaptics();
     const newState = !enabled;
     enabledRef.current = newState;
@@ -155,7 +132,6 @@ export default function HapticTimeManager({ time }) {
       setIsPlayingTime(false);
       isPlayingRef.current = false;
     }
-    event?.currentTarget?.blur?.();
   };
 
   const handleFeelNow = () => {
@@ -164,42 +140,25 @@ export default function HapticTimeManager({ time }) {
     tellTime(timeRef.current);
   };
 
-  const SwitchHit = ({ onActivate, disabled }) => (
-    <input
-      type="checkbox"
-      aria-hidden="true"
-      tabIndex={-1}
-      disabled={disabled}
-      className="absolute inset-0 z-10 h-full w-full cursor-pointer opacity-0"
-      style={{ clipPath: 'inset(0 round 999px)', WebkitTapHighlightColor: 'transparent', touchAction: 'manipulation' }}
-      ref={(el) => {
-        if (el) el.setAttribute('switch', '');
-      }}
-      onClick={(e) => {
-        e.stopPropagation();
-        if (!disabled) onActivate(e);
-      }}
-    />
-  );
+  toggleRef.current = handleToggle;
+  feelRef.current = handleFeelNow;
 
   return (
     <div className="flex flex-col items-center justify-center w-full mt-2">
-      <div className="relative inline-flex">
-        <Button
-          variant="outline"
-          className={`relative gap-2 rounded-full transition-colors border-2 ${
-            enabled
-              ? 'bg-[#39ff14]/10 text-[#39ff14] border-[#39ff14]/60 hover:bg-[#39ff14]/20 hover:text-[#39ff14]'
-              : 'bg-transparent text-white/50 border-white/20 hover:text-white hover:border-white/40'
-          }`}
-          onPointerDown={unlockHaptics}
-          onClick={handleToggle}
-        >
-          {enabled ? <Activity className="w-4 h-4 animate-pulse" /> : <Smartphone className="w-4 h-4" />}
-          {enabled ? 'Haptic Pocket Mode: ON' : 'Haptic Pocket Mode: OFF'}
-        </Button>
-        <SwitchHit onActivate={handleToggle} />
-      </div>
+      <Button
+        ref={(el) => bindIosHapticButton(el, () => toggleRef.current())}
+        variant="outline"
+        className={`relative gap-2 rounded-full transition-colors border-2 ${
+          enabled
+            ? 'bg-[#39ff14]/10 text-[#39ff14] border-[#39ff14]/60 hover:bg-[#39ff14]/20 hover:text-[#39ff14]'
+            : 'bg-transparent text-white/50 border-white/20 hover:text-white hover:border-white/40'
+        }`}
+        onPointerDown={unlockHaptics}
+        onClick={isIOS() ? undefined : handleToggle}
+      >
+        {enabled ? <Activity className="w-4 h-4 animate-pulse" /> : <Smartphone className="w-4 h-4" />}
+        {enabled ? 'Haptic Pocket Mode: ON' : 'Haptic Pocket Mode: OFF'}
+      </Button>
 
       {enabled && (
         <div className="mt-4 text-center space-y-3 max-w-xs">
@@ -208,7 +167,7 @@ export default function HapticTimeManager({ time }) {
               {isPlayingTime ? 'Playing time…' : `Active — tells ${sourceLabel(clockSource)} every 15 min`}
             </p>
             <p className="text-[9px] text-white/40 font-mono tracking-wide leading-relaxed">
-              {wakeLockOn ? 'Screen kept awake' : 'Keep screen on in pocket'}
+              {wakeLockOn ? 'Screen kept awake' : 'Keep screen on in pocket · ring/silent off for iPhone buzz'}
             </p>
           </div>
 
@@ -229,20 +188,18 @@ export default function HapticTimeManager({ time }) {
             </SelectContent>
           </Select>
 
-          <div className="relative inline-flex">
-            <Button
-              variant="outline"
-              size="sm"
-              disabled={isPlayingTime}
-              onPointerDown={unlockHaptics}
-              onClick={handleFeelNow}
-              className="gap-2 rounded-full border-[#39ff14]/30 text-[#39ff14]/80 hover:bg-[#39ff14]/10 hover:text-[#39ff14] text-[10px] font-mono uppercase tracking-widest"
-            >
-              <Hand className="w-3.5 h-3.5" />
-              Feel Time Now
-            </Button>
-            <SwitchHit onActivate={handleFeelNow} disabled={isPlayingTime} />
-          </div>
+          <Button
+            ref={(el) => bindIosHapticButton(el, () => feelRef.current())}
+            variant="outline"
+            size="sm"
+            disabled={isPlayingTime}
+            onPointerDown={unlockHaptics}
+            onClick={isIOS() ? undefined : handleFeelNow}
+            className="gap-2 rounded-full border-[#39ff14]/30 text-[#39ff14]/80 hover:bg-[#39ff14]/10 hover:text-[#39ff14] text-[10px] font-mono uppercase tracking-widest"
+          >
+            <Hand className="w-3.5 h-3.5" />
+            Feel Time Now
+          </Button>
 
           <div className="rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-left space-y-1.5">
             <p className="text-[9px] text-white/50 font-mono uppercase tracking-widest">How to read by feel</p>

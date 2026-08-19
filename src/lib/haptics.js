@@ -6,11 +6,7 @@ export function hapticTrigger(element) {
   iosHapticTrigger(element);
 }
 
-function isAndroid() {
-  return typeof navigator !== 'undefined' && /Android/i.test(navigator.userAgent);
-}
-
-function isIOS() {
+export function isIOS() {
   if (typeof navigator === 'undefined') return false;
   return (
     /iPhone|iPad|iPod/i.test(navigator.userAgent) ||
@@ -22,50 +18,8 @@ function canVibrate() {
   return typeof navigator !== 'undefined' && typeof navigator.vibrate === 'function';
 }
 
-let iosHapticNode = null;
 let audioCtx = null;
-
-function ensureIosHapticNode() {
-  if (iosHapticNode?.input?.isConnected) return iosHapticNode;
-
-  const label = document.createElement('label');
-  label.setAttribute('aria-hidden', 'true');
-  label.htmlFor = 'younEEK-ios-haptic';
-  label.style.cssText = 'position:fixed;top:0;left:0;width:1px;height:1px;overflow:hidden;opacity:0;pointer-events:none;';
-
-  const input = document.createElement('input');
-  input.id = 'younEEK-ios-haptic';
-  input.type = 'checkbox';
-  input.setAttribute('switch', '');
-  input.tabIndex = -1;
-  Object.assign(input.style, {
-    position: 'absolute',
-    top: '0',
-    left: '0',
-    width: '1px',
-    height: '1px',
-    margin: '0',
-    opacity: '0',
-  });
-
-  label.appendChild(input);
-  document.body.appendChild(label);
-  iosHapticNode = { label, input };
-  return iosHapticNode;
-}
-
-function iosSwitchTap() {
-  if (!isIOS()) return;
-  try {
-    const { label, input } = ensureIosHapticNode();
-    input.checked = !input.checked;
-    input.dispatchEvent(new Event('input', { bubbles: true }));
-    label.click();
-    input.click();
-  } catch {
-    // Haptics are optional
-  }
-}
+let buzzGen = 0;
 
 function getAudioCtx() {
   if (audioCtx) return audioCtx;
@@ -75,119 +29,118 @@ function getAudioCtx() {
   return audioCtx;
 }
 
-/** Must run inside a tap so iOS Safari unlocks audio + switch haptics. */
 export function unlockHaptics() {
-  ensureIosHapticNode();
-  iosSwitchTap();
   const ctx = getAudioCtx();
-  if (ctx?.state === 'suspended') ctx.resume();
+  if (ctx?.state === 'suspended') {
+    ctx.resume().catch(() => {});
+  }
+  if (canVibrate()) {
+    try { navigator.vibrate(10); } catch { /* ignore */ }
+  }
 }
 
-function rumble(ms) {
-  if (!isIOS()) return;
-  const ctx = getAudioCtx();
-  if (!ctx || ctx.state === 'suspended') return;
+function onMs(kind) {
+  if (kind === 'hour') return PULSE.hourOn;
+  if (kind === 'tenth') return PULSE.tenthOn;
+  return PULSE.onesOn;
+}
+
+function gapMs(kind) {
+  if (kind === 'hour') return PULSE.hourGap;
+  if (kind === 'tenth') return PULSE.tenthGap;
+  return PULSE.onesGap;
+}
+
+function buzzAt(ctx, start, dur, freq, gainValue) {
   const osc = ctx.createOscillator();
-  const gain = ctx.createGain();
+  const filter = ctx.createBiquadFilter();
+  const g = ctx.createGain();
   osc.type = 'square';
-  osc.frequency.value = 72;
-  gain.gain.value = 0.12;
-  osc.connect(gain);
-  gain.connect(ctx.destination);
-  const now = ctx.currentTime;
-  osc.start(now);
-  gain.gain.setValueAtTime(0.12, now);
-  gain.gain.exponentialRampToValueAtTime(0.001, now + ms / 1000);
-  osc.stop(now + ms / 1000 + 0.02);
+  osc.frequency.value = freq;
+  filter.type = 'lowpass';
+  filter.frequency.value = 180;
+  g.gain.setValueAtTime(0.0001, start);
+  g.gain.exponentialRampToValueAtTime(gainValue, start + 0.01);
+  g.gain.exponentialRampToValueAtTime(0.0001, start + Math.max(0.02, dur - 0.01));
+  osc.connect(filter);
+  filter.connect(g);
+  g.connect(ctx.destination);
+  osc.start(start);
+  osc.stop(start + dur + 0.03);
 }
 
-function vibrateOr(pattern) {
-  if (canVibrate() && (isAndroid() || !isIOS())) {
+function scheduleAudioBuzzes(steps) {
+  const ctx = getAudioCtx();
+  if (!ctx) return 0;
+  if (ctx.state === 'suspended') ctx.resume().catch(() => {});
+  const gen = buzzGen;
+  let t = ctx.currentTime + 0.03;
+  for (const step of steps) {
+    if (gen !== buzzGen) break;
+    if (step.kind === 'pause') {
+      t += step.ms / 1000;
+      continue;
+    }
+    const dur = onMs(step.kind) / 1000;
+    const freq = step.kind === 'hour' ? 52 : step.kind === 'tenth' ? 88 : 120;
+    const gain = step.kind === 'hour' ? 0.45 : 0.32;
+    buzzAt(ctx, t, dur, freq, gain);
+    t += dur + gapMs(step.kind) / 1000;
+  }
+  return Math.max(0, (t - ctx.currentTime) * 1000);
+}
+
+export function playHapticSteps(steps, vibratePattern) {
+  unlockHaptics();
+  let vibrated = false;
+  if (vibratePattern?.length && canVibrate()) {
     try {
-      navigator.vibrate(pattern);
-      return true;
+      vibrated = navigator.vibrate(vibratePattern) !== false;
     } catch {
-      return false;
+      vibrated = false;
     }
   }
-  return false;
-}
-
-function iosLongBuzz(ms) {
-  const taps = Math.max(1, Math.round(ms / 45));
-  rumble(ms);
-  for (let i = 0; i < taps; i += 1) {
-    setTimeout(iosSwitchTap, i * 45);
-  }
-}
-
-export function triggerHourLong() {
-  if (!vibrateOr(PULSE.hourOn)) iosLongBuzz(PULSE.hourOn);
-}
-
-export function triggerTenth() {
-  if (!vibrateOr(PULSE.tenthOn)) {
-    rumble(PULSE.tenthOn);
-    iosSwitchTap();
-  }
-}
-
-export function triggerOnes() {
-  if (!vibrateOr(PULSE.onesOn)) {
-    rumble(PULSE.onesOn);
-    iosSwitchTap();
-  }
+  const audioMs = scheduleAudioBuzzes(steps);
+  const vibeMs = vibratePattern?.length ? vibratePattern.reduce((a, b) => a + b, 0) : 0;
+  return Math.max(audioMs, vibeMs);
 }
 
 export function triggerFaint() {
-  if (!vibrateOr([50, 100, 80])) {
-    rumble(50);
-    iosSwitchTap();
-    setTimeout(iosSwitchTap, 200);
-  }
+  playHapticSteps([{ kind: 'tenth' }], [50, 100, 80]);
 }
 
 export function triggerStrong() {
-  if (!vibrateOr([80, 100, 120])) {
-    rumble(120);
-    iosSwitchTap();
-    setTimeout(iosSwitchTap, 120);
-    setTimeout(iosSwitchTap, 240);
-  }
+  playHapticSteps([{ kind: 'hour' }], [80, 100, 120]);
 }
 
 export function triggerSingle() {
-  if (!vibrateOr(50)) {
-    rumble(50);
-    iosSwitchTap();
-  }
+  playHapticSteps([{ kind: 'ones' }], [50]);
 }
 
 export function triggerConfirm() {
-  if (!vibrateOr([50, 70, 50])) {
-    rumble(50);
-    iosSwitchTap();
-    setTimeout(iosSwitchTap, 120);
-  }
-}
-
-export function playVibratePattern(pattern) {
-  if (!pattern?.length) return false;
-  if (canVibrate() && (isAndroid() || !isIOS())) {
-    try {
-      navigator.vibrate(pattern);
-      return true;
-    } catch {
-      return false;
-    }
-  }
-  return false;
+  playHapticSteps([{ kind: 'tenth' }, { kind: 'tenth' }], [50, 70, 50]);
 }
 
 export function stopHaptics() {
+  buzzGen += 1;
   if (canVibrate()) {
     try { navigator.vibrate(0); } catch { /* ignore */ }
   }
+  if (audioCtx) {
+    const ctx = audioCtx;
+    audioCtx = null;
+    ctx.close().catch(() => {});
+  }
 }
 
-export { isIOS };
+export function bindIosHapticButton(element, onActivate) {
+  if (!element || !isIOS()) return;
+  hapticTrigger(element);
+  const sw = element.querySelector('input[switch]');
+  if (!sw || sw.dataset.hapticBound === '1') return;
+  sw.dataset.hapticBound = '1';
+  sw.addEventListener('click', (event) => {
+    event.stopPropagation();
+    onActivate();
+  });
+}
