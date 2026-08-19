@@ -74,28 +74,25 @@ export default function ClockHeader({ now, time }) {
         <path className="bolt bolt-3 branch" d="M 960 110 L 990 125 L 1010 150" filter="url(#bolt-glow)"/>
       </svg>
 
-      <div className="relative z-10 flex w-full flex-col items-center px-2">
-        <div className="header-title-reveal header-title-panel w-full max-w-lg">
-          <p className="font-mono text-3xl sm:text-4xl uppercase tracking-[0.12em] font-bold lightning-reveal-title text-center leading-tight">
+      <div className="relative z-10 w-full px-2 text-center">
+        <div className="header-title-panel mx-auto w-full max-w-lg">
+          <p className="lightning-reveal-title font-mono text-3xl sm:text-4xl md:text-5xl font-bold uppercase tracking-[0.16em] leading-tight">
             YouNeeK Time
           </p>
-          <p className="mt-2 font-mono text-[10px] sm:text-xs uppercase tracking-[0.18em] font-bold lightning-reveal-subtitle text-center">
+          <p className="lightning-reveal-subtitle mt-3 font-mono text-[10px] sm:text-xs font-bold uppercase tracking-[0.22em]">
             by Andrew Gray
           </p>
         </div>
 
-        <div className="mt-6 w-full max-w-sm space-y-2 font-mono text-[11px] uppercase tracking-widest">
-          <div className="flex items-center justify-between gap-3 text-white/70">
-            <span>Regular Time</span>
-            <span>{standardTime}</span>
+        <div className="mt-6 flex flex-col items-center gap-1 font-mono text-[11px] uppercase tracking-[0.14em]">
+          <div className="text-white/40">
+            Regular Time <span className="mx-1">•</span> {standardTime}
           </div>
-          <div className="flex items-center justify-between gap-3 text-[#1f990a]" style={{ textShadow: '0 0 8px #1f990a99' }}>
-            <span>YouNeeK Time</span>
-            <span>{army12Str}</span>
+          <div className="text-[#1f990a]" style={{ textShadow: '0 0 8px #1f990a99' }}>
+            YouNeeK Time <span className="mx-1">•</span> {army12Str}
           </div>
-          <div className="flex items-center justify-between gap-3 text-[#2dd900]" style={{ textShadow: '0 0 8px #2dd90099' }}>
-            <span>Army YouNeeK Time</span>
-            <span>{armyStr}</span>
+          <div className="text-[#2dd900]" style={{ textShadow: '0 0 8px #2dd90099' }}>
+            Army YouNeeK Time <span className="mx-1">•</span> {armyStr}
           </div>
         </div>
       </div>

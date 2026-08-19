@@ -94,14 +94,15 @@
 }
 
 .header {
-  min-height: 220px;
   background: transparent;
   overflow: visible;
 }
 
-.header-title-panel,
-.header-title-reveal {
+.header-title-panel {
   background: transparent;
+  border: none;
+  box-shadow: none;
+  padding: 0;
   position: relative;
   z-index: 15;
 }
