@@ -1,70 +1,75 @@
-import { GREEN, RED, YELLOW } from './clockConstants';
+import { GREEN, HAND_RED, HAND_BLUE, HAND_PURPLE } from './clockConstants';
 
-export default function ClockHands({ unitRotation, minuteRotation, secondRotation }) {
+function Hand({ rotation, tipY, tailY, color, width }) {
+  return (
+    <g transform={`rotate(${rotation}, 200, 200)`}>
+      <line
+        x1="200" y1={tailY}
+        x2="200" y2={tipY}
+        stroke={color} strokeWidth={width} strokeLinecap="round"
+        style={{ filter: `drop-shadow(0 0 5px ${color})` }}
+      />
+    </g>
+  );
+}
+
+function TaperedHand({ rotation, tipY, tailY, color, width }) {
+  const half = width / 2;
+  return (
+    <g transform={`rotate(${rotation}, 200, 200)`}>
+      <polygon
+        points={`${200 - half},${tailY} ${200 + half},${tailY} ${200 + half * 0.28},${tipY} ${200 - half * 0.28},${tipY}`}
+        fill={color}
+        style={{ filter: `drop-shadow(0 0 6px ${color})` }}
+      />
+    </g>
+  );
+}
+
+export default function ClockHands({ time, source = 'all' }) {
+  const regular = source === 'all' || source === 'regular' || source === 'youneek12';
+  const army = source === 'all' || source === 'army' || source === 'youneek12';
+  const youneek = source === 'all' || source === 'youneek';
+  const hourShared = youneek && army;
+  const armyShared = army && (youneek || source === 'youneek12' || source === 'all');
+
   return (
     <svg viewBox="0 0 400 400" className="absolute inset-0 h-full w-full" style={{ overflow: 'visible' }}>
-      {/* ── Green hour hand ── 
-          Tip ends just below the inner red tick ring (r≈160).
-          Symmetrical: tail goes 12% past center, tip at 38% from center.
-          So total length spans center ±, drawn as a line through center.
-          Hand tip: top at r=118 from center (below red ring start ~162)
-          Hand tail: r=30 past center opposite side */}
-      <g transform={`rotate(${unitRotation}, 200, 200)`}>
-        {/* tail (short counterweight below center) */}
-        <line
-          x1="200" y1="200"
-          x2="200" y2="230"
-          stroke={GREEN} strokeWidth="3.5" strokeLinecap="round"
-          style={{ filter: `drop-shadow(0 0 6px ${GREEN})` }}
-        />
-        {/* main hand pointing up — tip stops right below small green ticks */}
-        <line
-          x1="200" y1="200"
-          x2="200" y2="18"
-          stroke={GREEN} strokeWidth="3.5" strokeLinecap="round"
-          style={{ filter: `drop-shadow(0 0 6px ${GREEN})` }}
-        />
-      </g>
+      {regular && (
+        <>
+          <Hand rotation={time.regularMinuteRotation} tipY={48} tailY={220} color={HAND_RED} width="2.2" />
+          <Hand rotation={time.regularSecondRotation} tipY={28} tailY={214} color={HAND_RED} width="1.1" />
+        </>
+      )}
 
-      {/* ── Red minute hand ── 
-          Reaches into inner red tick area. Tip at r=148 (y=52).
-          Tail at r=22 below center. Same thickness as hour hand. */}
-      <g transform={`rotate(${minuteRotation}, 200, 200)`}>
-        <line
-          x1="200" y1="200"
-          x2="200" y2="230"
-          stroke={RED} strokeWidth="3.5" strokeLinecap="round"
-          style={{ filter: `drop-shadow(0 0 6px ${RED})` }}
-        />
-        <line
-          x1="200" y1="200"
-          x2="200" y2="52"
-          stroke={RED} strokeWidth="3.5" strokeLinecap="round"
-          style={{ filter: `drop-shadow(0 0 6px ${RED})` }}
-        />
-      </g>
+      {(youneek || army) && (
+        <TaperedHand rotation={time.unitRotation} tipY={22} tailY={226} color={hourShared ? HAND_PURPLE : youneek ? HAND_BLUE : HAND_RED} width="5" />
+      )}
 
-      {/* ── Second hand ── solid yellow */}
-      <g transform={`rotate(${secondRotation}, 200, 200)`}>
-        {/* tail */}
-        <line
-          x1="200" y1="200"
-          x2="200" y2="218"
-          stroke={YELLOW} strokeWidth="3" strokeLinecap="round"
-          style={{ filter: `drop-shadow(0 0 4px ${YELLOW})` }}
-        />
-        {/* main */}
-        <line
-          x1="200" y1="200"
-          x2="200" y2="100"
-          stroke={YELLOW} strokeWidth="3" strokeLinecap="round"
-          style={{ filter: `drop-shadow(0 0 4px ${YELLOW})` }}
-        />
-      </g>
+      {youneek && (
+        <>
+          <Hand rotation={time.minuteRotation} tipY={70} tailY={222} color={HAND_BLUE} width="2.4" />
+          <Hand rotation={time.secondRotation} tipY={108} tailY={216} color={HAND_BLUE} width="1.8" />
+        </>
+      )}
 
-      {/* ── Center dot — solid bright yellow ── */}
-      <circle cx="200" cy="200" r="5" fill={YELLOW}
-        style={{ filter: `drop-shadow(0 0 8px ${YELLOW}) drop-shadow(0 0 4px ${YELLOW})` }} />
+      {army && (
+        <>
+          <Hand rotation={time.armyMinuteRotation} tipY={56} tailY={214} color={armyShared ? HAND_PURPLE : HAND_BLUE} width="2" />
+          <Hand rotation={time.armySecondRotation} tipY={36} tailY={210} color={armyShared ? HAND_PURPLE : HAND_BLUE} width="1" />
+        </>
+      )}
+
+      <circle
+        cx="200"
+        cy="200"
+        r="7"
+        fill="none"
+        stroke={GREEN}
+        strokeWidth="3"
+        style={{ filter: `drop-shadow(0 0 6px ${GREEN})` }}
+      />
+      <circle cx="200" cy="200" r="2.4" fill="#050505" />
     </svg>
   );
 }

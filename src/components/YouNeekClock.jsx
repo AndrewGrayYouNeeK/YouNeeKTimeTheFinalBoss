@@ -1,7 +1,8 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { getDecimalTime } from '@/lib/decimalTime';
 import ClockHeader from '@/components/younEEK/ClockHeader';
 import DigitalTimeDisplay from '@/components/younEEK/DigitalTimeDisplay';
+import ClockTimeLegend from '@/components/younEEK/ClockTimeLegend';
 import ClockDial from '@/components/younEEK/ClockDial';
 import DayProgressBar from '@/components/younEEK/DayProgressBar';
 import HapticTimeManager from '@/components/younEEK/HapticTimeManager';
@@ -13,7 +14,8 @@ export default function YouNeekClock() {
   const [now, setNow] = useState(() => new Date());
   const time = getDecimalTime(now);
   const [isGlitching, setIsGlitching] = useState(false);
-  const [lastHour, setLastHour] = useState(now.getHours());
+  const hour = now.getHours();
+  const skipGlitch = useRef(true);
 
   useEffect(() => {
     const id = window.setInterval(() => setNow(new Date()), 16);
@@ -21,19 +23,19 @@ export default function YouNeekClock() {
   }, []);
 
   useEffect(() => {
-    const currentHour = now.getHours();
-    if (currentHour !== lastHour) {
-      setLastHour(currentHour);
-      setIsGlitching(true);
-      const glitchTimer = setTimeout(() => setIsGlitching(false), 3000);
-      return () => clearTimeout(glitchTimer);
+    if (skipGlitch.current) {
+      skipGlitch.current = false;
+      return;
     }
-  }, [now, lastHour]);
+    setIsGlitching(true);
+    const glitchTimer = setTimeout(() => setIsGlitching(false), 3000);
+    return () => clearTimeout(glitchTimer);
+  }, [hour]);
 
   return (
     <div className={`mx-auto flex min-h-screen w-full max-w-[36rem] flex-col items-center gap-8 px-4 py-8 sm:gap-9 sm:py-10 transition-colors duration-100 ${isGlitching ? 'bg-black' : 'bg-transparent'}`}>
       <div className={`w-full transition-opacity duration-100 ${isGlitching ? 'opacity-0' : ''}`}>
-        <ClockHeader now={now} time={time} />
+        <ClockHeader />
       </div>
       <div className={`w-full transition-opacity duration-100 ${isGlitching ? 'opacity-0' : ''}`}>
         <DigitalTimeDisplay time={time} />
@@ -42,7 +44,8 @@ export default function YouNeekClock() {
         <HapticTimeManager time={time} />
         <FrequencyManager time={time} />
       </div>
-      <div className={`w-full ${isGlitching ? 'animate-glitch' : ''}`}>
+      <div className={`w-full overflow-visible ${isGlitching ? 'animate-glitch' : ''}`}>
+        <ClockTimeLegend now={now} time={time} />
         <ClockDial time={time} isGlitching={isGlitching} />
       </div>
 

@@ -31,51 +31,51 @@ export default function ClockLabels() {
   return (
     <svg viewBox="0 0 400 400" className="absolute inset-0 h-full w-full pointer-events-none">
       {outerLabels.map((item) => {
-        const p = polarPoint(170, item.angle);
+        const p = polarPoint(166, item.angle);
         return (
           <text
             key={item.label}
-            x={p.x} y={p.y}
+            x={p.x}
+            y={p.y}
             textAnchor="middle"
             dominantBaseline="middle"
             fill={GREEN}
-            fontSize="12"
-            fontFamily="monospace"
+            fontSize="13.5"
+            fontFamily="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace"
             fontWeight="700"
-            style={{ filter: `drop-shadow(0 0 4px ${GREEN}99)` }}
+            style={{ filter: `drop-shadow(0 0 5px ${GREEN}aa)` }}
           >
             {item.label}
           </text>
         );
       })}
 
-      {/* Red zero at 12 o'clock */}
       <text
-        x="200" y="60"
+        x="200"
+        y="58"
         textAnchor="middle"
         dominantBaseline="middle"
         fill={RED}
-        fontSize="10"
-        fontFamily="monospace"
+        fontSize="11"
+        fontFamily="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace"
         fontWeight="700"
-        style={{ filter: `drop-shadow(0 0 3px ${RED}88)` }}
       >
         0
       </text>
 
       {innerLabels.map((item) => {
-        const p = polarPoint(140, item.angle);
+        const p = polarPoint(132, item.angle);
         return (
           <text
             key={item.label}
-            x={p.x} y={p.y}
+            x={p.x}
+            y={p.y}
             textAnchor="middle"
             dominantBaseline="middle"
             fill={RED}
-            fontSize="10"
-            fontFamily="monospace"
+            fontSize="10.5"
+            fontFamily="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace"
             fontWeight="700"
-            style={{ filter: `drop-shadow(0 0 3px ${RED}88)` }}
           >
             {item.label}
           </text>

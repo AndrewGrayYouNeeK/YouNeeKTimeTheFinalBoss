@@ -313,3 +313,10 @@
   background-size: 300px 300px;
   animation: twinkle 5s infinite ease-in-out 2s;
 }
+
+html.watch-mode,
+html.watch-mode body {
+  height: 100%;
+  overflow: hidden;
+  background: #000;
+}
