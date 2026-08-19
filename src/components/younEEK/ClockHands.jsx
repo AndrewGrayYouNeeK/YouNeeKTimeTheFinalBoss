@@ -30,15 +30,15 @@ export default function ClockHands({ time, source = 'all' }) {
   const regular = source === 'all' || source === 'regular' || source === 'youneek12';
   const army = source === 'all' || source === 'army' || source === 'youneek12';
   const youneek = source === 'all' || source === 'youneek';
+  const mergedDayHand = youneek && army;
   const youneekColor = mergedDayHand ? YOUNEEK_ARMY_HOUR : GREEN;
 
   return (
     <svg viewBox="0 0 400 400" className="absolute inset-0 h-full w-full" style={{ overflow: 'visible' }}>
       {regular && (
         <>
-          <Hand rotation={time.regularHourRotation} tipY={86} tailY={216} color={WHITE} width="3.2" />
-          <Hand rotation={time.regularMinuteRotation} tipY={48} tailY={220} color="#c8c8c8" width="2" />
-          <Hand rotation={time.regularSecondRotation} tipY={28} tailY={214} color="#9a9a9a" width="1" />
+          <Hand rotation={time.regularMinuteRotation} tipY={48} tailY={220} color={WHITE} width="2.2" />
+          <Hand rotation={time.regularSecondRotation} tipY={28} tailY={214} color={WHITE} width="1.1" />
         </>
       )}
 
