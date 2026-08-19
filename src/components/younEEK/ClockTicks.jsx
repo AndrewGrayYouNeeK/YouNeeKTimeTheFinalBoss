@@ -3,7 +3,7 @@ import { GREEN, RED, RING_GRAY } from './clockConstants';
 const OUTER_TICKS = Array.from({ length: 24 }, (_, i) => {
   const angle = (i / 24) * Math.PI * 2 - Math.PI / 2;
   const isMajor = i % 3 === 0;
-  const outerR = 196;
+  const outerR = 199;
   const innerR = isMajor ? 178 : 188;
   return {
     x1: 200 + Math.cos(angle) * outerR,
