@@ -6,26 +6,37 @@ import {
 } from '@haptics/core';
 
 export const HAPTIC_PATTERNS = {
-  tickMinute: [{ duration: 35, intensity: 0.4 }],
-  tickHour: [{ duration: 70, intensity: 0.95 }],
+  tickMinute: [{ duration: 40, intensity: 0.45 }],
+  tickHour: [{ duration: 80, intensity: 0.95 }],
+  tickSecond: [{ duration: 30, intensity: 0.35 }],
   tickZero: [
-    { duration: 40, intensity: 0.5 },
-    { delay: 90, duration: 40, intensity: 0.5 },
+    { duration: 45, intensity: 0.5 },
+    { delay: 220, duration: 45, intensity: 0.5 },
   ],
-  heartbeat: [{ duration: 28, intensity: 0.35 }],
+  heartbeat: [{ duration: 30, intensity: 0.35 }],
   timeStart: [
-    { duration: 75, intensity: 1 },
-    { delay: 160, duration: 75, intensity: 1 },
-    { delay: 160, duration: 75, intensity: 1 },
+    { duration: 80, intensity: 1 },
+    { delay: 400, duration: 80, intensity: 1 },
+    { delay: 400, duration: 80, intensity: 1 },
   ],
   timeEnd: [
-    { duration: 35, intensity: 0.4 },
-    { delay: 130, duration: 35, intensity: 0.4 },
+    { duration: 40, intensity: 0.4 },
+    { delay: 280, duration: 40, intensity: 0.4 },
+  ],
+  handGreen: [{ duration: 100, intensity: 0.9 }],
+  handRed: [
+    { duration: 55, intensity: 0.65 },
+    { delay: 280, duration: 55, intensity: 0.65 },
+  ],
+  handYellow: [
+    { duration: 38, intensity: 0.45 },
+    { delay: 220, duration: 38, intensity: 0.45 },
+    { delay: 220, duration: 38, intensity: 0.45 },
   ],
   single: [{ duration: 45, intensity: 0.65 }],
   confirm: [
     { duration: 45, intensity: 0.65 },
-    { delay: 65, duration: 45, intensity: 0.65 },
+    { delay: 100, duration: 45, intensity: 0.65 },
   ],
 };
 
@@ -47,6 +58,10 @@ export function triggerTickHour() {
   firePattern('tickHour');
 }
 
+export function triggerTickSecond() {
+  firePattern('tickSecond');
+}
+
 export function triggerTickZero() {
   firePattern('tickZero');
 }
@@ -61,6 +76,18 @@ export function triggerTimeStart() {
 
 export function triggerTimeEnd() {
   firePattern('timeEnd');
+}
+
+export function triggerHandGreen() {
+  firePattern('handGreen');
+}
+
+export function triggerHandRed() {
+  firePattern('handRed');
+}
+
+export function triggerHandYellow() {
+  firePattern('handYellow');
 }
 
 export function triggerSingle() {

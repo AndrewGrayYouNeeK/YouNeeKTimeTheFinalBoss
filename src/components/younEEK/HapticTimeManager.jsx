@@ -4,14 +4,23 @@ import { Button } from '@/components/ui/button';
 import {
   triggerTickMinute,
   triggerTickHour,
+  triggerTickSecond,
   triggerTickZero,
   triggerHeartbeat,
   triggerTimeStart,
   triggerTimeEnd,
+  triggerHandGreen,
+  triggerHandRed,
+  triggerHandYellow,
 } from '@/lib/haptics';
 import { requestWakeLock, releaseWakeLock } from '@/lib/wakeLock';
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+const HAND_GAP_MS = 1000;
+const GROUP_GAP_MS = 2400;
+const DIGIT_GAP = { unit: 950, minute: 750, second: 620 };
+
 const STORAGE_KEY = 'hapticPocketMode';
 
 export default function HapticTimeManager({ time }) {
@@ -63,17 +72,24 @@ export default function HapticTimeManager({ time }) {
     };
   }, [enabled]);
 
-  const playDigit = async (digit, isHour) => {
+  const playDigit = async (digit, hand) => {
+    const tick =
+      hand === 'unit'
+        ? triggerTickHour
+        : hand === 'minute'
+          ? triggerTickMinute
+          : triggerTickSecond;
+
     if (digit === 0) {
       triggerTickZero();
-      await sleep(500);
+      await sleep(1100);
       return;
     }
 
     for (let i = 0; i < digit; i++) {
       if (!enabledRef.current) return;
-      isHour ? triggerTickHour() : triggerTickMinute();
-      await sleep(isHour ? 480 : 280);
+      tick();
+      await sleep(DIGIT_GAP[hand]);
     }
   };
 
@@ -82,32 +98,39 @@ export default function HapticTimeManager({ time }) {
     setIsPlayingTime(true);
     isPlayingRef.current = true;
 
-    const hours = currentTime.units;
-    const minutes = currentTime.minutes;
+    const { units, minutes, seconds } = currentTime;
 
     triggerTimeStart();
-    await sleep(900);
+    await sleep(1600);
 
-    const hTens = Math.floor(hours / 10);
-    const hOnes = hours % 10;
-
-    await playDigit(hTens, true);
-    await sleep(700);
+    triggerHandGreen();
+    await sleep(HAND_GAP_MS);
+    await playDigit(Math.floor(units / 10), 'unit');
+    await sleep(1200);
     if (!enabledRef.current) { setIsPlayingTime(false); isPlayingRef.current = false; return; }
-    await playDigit(hOnes, true);
+    await playDigit(units % 10, 'unit');
 
-    await sleep(1400);
+    await sleep(GROUP_GAP_MS);
     if (!enabledRef.current) { setIsPlayingTime(false); isPlayingRef.current = false; return; }
 
-    const mTens = Math.floor(minutes / 10);
-    const mOnes = minutes % 10;
-
-    await playDigit(mTens, false);
-    await sleep(600);
+    triggerHandRed();
+    await sleep(HAND_GAP_MS);
+    await playDigit(Math.floor(minutes / 10), 'minute');
+    await sleep(1000);
     if (!enabledRef.current) { setIsPlayingTime(false); isPlayingRef.current = false; return; }
-    await playDigit(mOnes, false);
+    await playDigit(minutes % 10, 'minute');
 
-    await sleep(600);
+    await sleep(GROUP_GAP_MS);
+    if (!enabledRef.current) { setIsPlayingTime(false); isPlayingRef.current = false; return; }
+
+    triggerHandYellow();
+    await sleep(HAND_GAP_MS);
+    await playDigit(Math.floor(seconds / 10), 'second');
+    await sleep(1000);
+    if (!enabledRef.current) { setIsPlayingTime(false); isPlayingRef.current = false; return; }
+    await playDigit(seconds % 10, 'second');
+
+    await sleep(1200);
     triggerTimeEnd();
 
     setIsPlayingTime(false);
@@ -141,10 +164,9 @@ export default function HapticTimeManager({ time }) {
     setEnabled(newState);
 
     if (newState) {
-      triggerTimeStart();
       setTimeout(() => {
         if (enabledRef.current) tellTime(timeRef.current);
-      }, 1500);
+      }, 800);
     } else {
       setIsPlayingTime(false);
       isPlayingRef.current = false;
@@ -153,7 +175,7 @@ export default function HapticTimeManager({ time }) {
 
   const handleFeelNow = () => {
     if (!enabled) return;
-    setTimeout(() => tellTime(timeRef.current), 400);
+    tellTime(timeRef.current);
   };
 
   return (
@@ -197,10 +219,13 @@ export default function HapticTimeManager({ time }) {
           <div className="rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-left space-y-1.5">
             <p className="text-[9px] text-white/50 font-mono uppercase tracking-widest">How to read by feel</p>
             <p className="text-[9px] text-white/35 font-mono leading-relaxed">
-              <span className="text-[#39ff14]/60">Long</span> ticks = YouNeeK hour digits (tens, then ones)
+              <span className="text-[#39ff14]/60">1 long</span> = green hand (YouNeeK hour) · then tens + ones ticks
             </p>
             <p className="text-[9px] text-white/35 font-mono leading-relaxed">
-              <span className="text-white/50">Short</span> ticks = minute digits (tens, then ones)
+              <span className="text-[#ff3333]/70">2 medium</span> = red hand (minute) · then tens + ones ticks
+            </p>
+            <p className="text-[9px] text-white/35 font-mono leading-relaxed">
+              <span className="text-[#ffd700]/70">3 short</span> = yellow hand (second) · then tens + ones ticks
             </p>
             <p className="text-[9px] text-white/35 font-mono leading-relaxed">
               Double tick = zero · One soft tick each minute
