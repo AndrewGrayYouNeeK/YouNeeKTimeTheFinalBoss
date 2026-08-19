@@ -19,14 +19,14 @@ const INNER_TICKS = Array.from({ length: 100 }, (_, i) => {
   const angle = (i / 100) * Math.PI * 2 - Math.PI / 2;
   const isMajor = i % 10 === 0;
   const isMid = i % 5 === 0;
-  const innerR = isMajor ? 146 : isMid ? 151 : 153;
+  const innerR = isMajor ? 146 : isMid ? 148 : 154;
   const outerR = 160;
   return {
     x1: 200 + Math.cos(angle) * innerR,
     y1: 200 + Math.sin(angle) * innerR,
     x2: 200 + Math.cos(angle) * outerR,
     y2: 200 + Math.sin(angle) * outerR,
-    strokeWidth: isMajor ? 2 : isMid ? 1.1 : 0.55,
+    strokeWidth: isMajor ? 2 : isMid ? 1.5 : 0.5,
     key: `inner-${i}`,
   };
 });
@@ -36,7 +36,7 @@ export default function ClockTicks() {
     <svg viewBox="0 0 400 400" className="absolute inset-0 h-full w-full z-20 pointer-events-none">
       <circle cx="200" cy="200" r="199" stroke={RING_GRAY} strokeWidth="2.2" fill="none" />
 
-      <circle cx="200" cy="200" r="160" stroke={RING_GRAY} strokeWidth="1.6" fill="none" />
+      <circle cx="200" cy="200" r="160" stroke={RING_GRAY} strokeWidth="0.7" fill="none" />
 
       {OUTER_TICKS.map((t) => (
         <line
