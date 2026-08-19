@@ -1,4 +1,4 @@
-import { GREEN, YELLOW, WHITE, ARMY, ARMY_CYAN, YOUNEEK_ARMY_HOUR } from './clockConstants';
+import { GREEN, YELLOW, WHITE, ARMY, ARMY_CYAN } from './clockConstants';
 
 function Hand({ rotation, tipY, tailY, color, width }) {
   return (
@@ -31,7 +31,9 @@ export default function ClockHands({ time, source = 'all' }) {
   const army = source === 'all' || source === 'army' || source === 'youneek12';
   const youneek = source === 'all' || source === 'youneek';
   const mergedDayHand = youneek && army;
-  const youneekColor = mergedDayHand ? YOUNEEK_ARMY_HOUR : GREEN;
+  const dayColor = mergedDayHand ? WHITE : youneek ? GREEN : ARMY;
+  const armyShared = army && (youneek || source === 'youneek12' || source === 'all');
+  const armyColor = armyShared ? WHITE : ARMY_CYAN;
 
   return (
     <svg viewBox="0 0 400 400" className="absolute inset-0 h-full w-full" style={{ overflow: 'visible' }}>
@@ -42,25 +44,21 @@ export default function ClockHands({ time, source = 'all' }) {
         </>
       )}
 
-      {mergedDayHand ? (
-        <TaperedHand rotation={time.unitRotation} tipY={22} tailY={226} color={youneekColor} width="5" />
-      ) : youneek ? (
-        <TaperedHand rotation={time.unitRotation} tipY={22} tailY={226} color={youneekColor} width="5" />
-      ) : army ? (
-        <TaperedHand rotation={time.armyHourRotation} tipY={22} tailY={226} color={ARMY} width="5" />
-      ) : null}
+      {(youneek || army) && (
+        <TaperedHand rotation={time.unitRotation} tipY={22} tailY={226} color={dayColor} width="5" />
+      )}
 
       {youneek && (
         <>
-          <Hand rotation={time.minuteRotation} tipY={70} tailY={222} color={youneekColor} width="2.4" />
+          <Hand rotation={time.minuteRotation} tipY={70} tailY={222} color={GREEN} width="2.4" />
           <Hand rotation={time.secondRotation} tipY={108} tailY={216} color={YELLOW} width="1.8" />
         </>
       )}
 
       {army && (
         <>
-          <Hand rotation={time.armyMinuteRotation} tipY={56} tailY={214} color={ARMY_CYAN} width="2" />
-          <Hand rotation={time.armySecondRotation} tipY={36} tailY={210} color="#67e8f9" width="1" />
+          <Hand rotation={time.armyMinuteRotation} tipY={56} tailY={214} color={armyColor} width="2" />
+          <Hand rotation={time.armySecondRotation} tipY={36} tailY={210} color={armyColor} width="1" />
         </>
       )}
 
