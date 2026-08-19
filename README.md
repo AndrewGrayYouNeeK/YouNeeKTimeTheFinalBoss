@@ -42,7 +42,18 @@ The live moon phase is computed on-device with [`suncalc`](https://github.com/mo
 
 The domain is a **Cloudflare Worker custom domain** on `youneektimethefinalboss`. Cloudflare creates those DNS records itself. Do **not** add GitHub Pages A records (`185.199.*`) — Cloudflare will ask you to delete them so the Worker can bind the hostname.
 
-Production deploys when `main` builds with `wrangler deploy`. Pull requests only upload a preview version; they do not change the live site until you merge or promote that version in **Workers & Pages → youneektimethefinalboss → Deployments**.
+**Hello world on youneektime.com** means the Worker still has the dashboard starter script. A GitHub build that only *uploads a version* does not replace it.
+
+Do this once in Cloudflare (this is the actual live switch):
+
+1. Open **Workers & Pages → youneektimethefinalboss → Deployments**.
+2. Open the newest Version (the one from the Git connect / `wrangler versions upload`).
+3. Click **Promote** → **Production** at 100%.
+
+After that, either:
+
+- Set the Worker **Settings → Builds** production command to `npm run deploy` (not `wrangler versions upload`), **or**
+- Add GitHub secrets `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID`. Pushes to `main` then run **Deploy Cloudflare Worker** (`wrangler deploy`).
 
 ## Built By
 
