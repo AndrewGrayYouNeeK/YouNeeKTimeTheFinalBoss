@@ -99,97 +99,70 @@
   overflow: hidden;
 }
 
-.header-title-panel {
-  background: #000000;
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  border-radius: 14px;
-  padding: 1.25rem 1.5rem 1.1rem;
-  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 1), 0 0 24px rgba(0, 0, 0, 0.8);
+.header-title-reveal {
   position: relative;
   z-index: 15;
-  animation: panel-flash 8.5s ease-in-out infinite;
+  padding: 1.25rem 1.5rem 1.1rem;
 }
 
-.lightning-backdrop {
-  position: fixed;
+.header-rain-trickle {
+  position: absolute;
   inset: 0;
-  z-index: 1;
   pointer-events: none;
   overflow: hidden;
+  border-radius: 14px;
+  mix-blend-mode: screen;
+  opacity: 0.55;
 }
 
-.lightning-bg {
+.header-rain-trickle::before,
+.header-rain-trickle::after {
+  content: '';
   position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-}
-
-.lightning-sky-flash {
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(
-    ellipse 120% 80% at 50% 0%,
-    rgba(57, 255, 20, 0.14) 0%,
-    rgba(74, 222, 128, 0.06) 35%,
-    transparent 70%
+  left: -10%;
+  width: 120%;
+  height: 140%;
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(158, 255, 224, 0.03) 18%,
+    rgba(158, 255, 224, 0.18) 28%,
+    rgba(200, 255, 240, 0.35) 34%,
+    rgba(158, 255, 224, 0.12) 42%,
+    transparent 58%
   );
-  opacity: 0;
-  animation: sky-flash 8.5s ease-in-out infinite;
+  animation: rain-trickle 2.8s linear infinite;
+}
+
+.header-rain-trickle::after {
+  left: 20%;
+  width: 60%;
+  animation-delay: 1.1s;
+  animation-duration: 3.4s;
+  opacity: 0.7;
 }
 
 .lightning-reveal-title {
-  color: #000000;
+  color: #050505;
   text-shadow: none;
-  opacity: 0;
-  animation: reveal-title 8.5s ease-in-out infinite;
+  opacity: 0.04;
+  animation: reveal-title 8s ease-in-out infinite;
 }
 
 .lightning-reveal-subtitle {
-  color: #000000;
+  color: #050505;
   text-shadow: none;
-  opacity: 0;
-  animation: reveal-subtitle 8.5s ease-in-out infinite;
-}
-
-.bolt {
-  fill: none;
-  stroke: #ffffff;
-  stroke-width: 5;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  opacity: 0;
-}
-
-.bolt-1 {
-  stroke: #4ade80;
-  animation: strike1 8.5s ease-in-out infinite;
-}
-
-.bolt-2 {
-  stroke: #e8ffe8;
-  stroke-width: 4.5;
-  animation: strike2 8.5s ease-in-out infinite;
-}
-
-.bolt-3 {
-  stroke: #22d3ee;
-  animation: strike3 8.5s ease-in-out infinite;
-}
-
-.bolt.branch {
-  stroke-width: 2.5;
+  opacity: 0.04;
+  animation: reveal-subtitle 8s ease-in-out infinite;
 }
 
 .animate-lightning-flash {
   animation: lightning-flash 8s ease-in-out infinite;
 }
 
-@keyframes sky-flash {
-  0%, 32%, 52%, 100% { opacity: 0; }
-  35%, 37%, 39% { opacity: 0.3; }
-  41%, 43% { opacity: 0.5; }
-  45% { opacity: 0; }
+@keyframes rain-trickle {
+  0% { transform: translateY(-65%); }
+  100% { transform: translateY(85%); }
 }
 
 @keyframes lightning-flash {
@@ -206,84 +179,48 @@
   100% { transform: translateY(120vh) translateX(-40px); }
 }
 
-@keyframes strike1 {
-  0%, 100% { opacity: 0; }
-  7%, 9% { opacity: 1; }
-  8% { opacity: 0.4; }
-  11%, 100% { opacity: 0; }
-}
-
-@keyframes strike2 {
-  0%, 100% { opacity: 0; }
-  35%, 37%, 39% { opacity: 1; }
-  38% { opacity: 0.5; }
-  41%, 43% { opacity: 1; }
-  44% { opacity: 0.3; }
-  46%, 100% { opacity: 0; }
-}
-
-@keyframes strike3 {
-  0%, 100% { opacity: 0; }
-  61%, 63% { opacity: 1; }
-  62% { opacity: 0.4; }
-  65%, 100% { opacity: 0; }
-}
-
-@keyframes panel-flash {
-  0%, 32%, 52%, 100% {
-    background: #000000;
-    border-color: rgba(255, 255, 255, 0.06);
-    box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 1), 0 0 24px rgba(0, 0, 0, 0.8);
-  }
-  35%, 37%, 39% {
-    background: #e8ede8;
-    border-color: rgba(57, 255, 20, 0.25);
-    box-shadow: 0 0 30px rgba(255, 255, 255, 0.5), 0 0 60px rgba(57, 255, 20, 0.2);
-  }
-  41%, 43% {
-    background: #ffffff;
-    border-color: rgba(57, 255, 20, 0.4);
-    box-shadow: 0 0 50px rgba(255, 255, 255, 0.75), 0 0 100px rgba(57, 255, 20, 0.35);
-  }
-  45% {
-    background: #000000;
-    border-color: rgba(255, 255, 255, 0.06);
-    box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 1), 0 0 24px rgba(0, 0, 0, 0.8);
-  }
-}
-
 @keyframes reveal-title {
-  0%, 32%, 52%, 100% {
-    color: #000000;
-    opacity: 0;
+  0%, 89%, 96%, 100% {
+    color: #050505;
+    opacity: 0.04;
     text-shadow: none;
   }
-  35%, 37%, 39%, 41%, 43% {
+  91%, 93%, 95% {
     color: #000000;
     opacity: 1;
     text-shadow: none;
   }
-  45% {
+  92% {
     color: #000000;
-    opacity: 0;
+    opacity: 0.35;
+    text-shadow: none;
+  }
+  94% {
+    color: #000000;
+    opacity: 0.15;
     text-shadow: none;
   }
 }
 
 @keyframes reveal-subtitle {
-  0%, 34%, 54%, 100% {
-    color: #000000;
-    opacity: 0;
+  0%, 89%, 96%, 100% {
+    color: #050505;
+    opacity: 0.04;
     text-shadow: none;
   }
-  37%, 39%, 42%, 44% {
+  91%, 93%, 95% {
     color: #000000;
     opacity: 1;
     text-shadow: none;
   }
-  46% {
+  92% {
     color: #000000;
-    opacity: 0;
+    opacity: 0.35;
+    text-shadow: none;
+  }
+  94% {
+    color: #000000;
+    opacity: 0.15;
     text-shadow: none;
   }
 }

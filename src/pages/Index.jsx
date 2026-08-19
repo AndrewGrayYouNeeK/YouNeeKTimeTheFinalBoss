@@ -1,6 +1,5 @@
 import YouNeekClock from '@/components/YouNeekClock';
 import StarsBackground from '@/components/younEEK/StarsBackground';
-import LightningBackdrop from '@/components/younEEK/LightningBackdrop';
 import RainOverlay from '@/components/landing/RainOverlay';
 import LightningFlash from '@/components/landing/LightningFlash';
 import PullToRefresh from '@/components/PullToRefresh';
@@ -14,7 +13,6 @@ export default function Index() {
   return (
     <div className="min-h-screen relative text-white" style={{ background: 'transparent' }}>
       <StarsBackground />
-      <LightningBackdrop />
       <RainOverlay />
       <LightningFlash />
       <PullToRefresh onRefresh={handleRefresh}>
