@@ -40,32 +40,20 @@ The live moon phase is computed on-device with [`suncalc`](https://github.com/mo
 
 **https://youneektime.com**
 
-The app deploys automatically to GitHub Pages on every push to `main`.
+The domain is a **Cloudflare Worker custom domain** on `youneektimethefinalboss`. Cloudflare creates those DNS records itself. Do **not** add GitHub Pages A records (`185.199.*`) — Cloudflare will ask you to delete them so the Worker can bind the hostname.
 
-### Custom domain (Cloudflare DNS → GitHub Pages)
+**Hello world on youneektime.com** means the Worker still has the dashboard starter script. A GitHub build that only *uploads a version* does not replace it.
 
-The domain `youneektime.com` is managed in Cloudflare. Add these DNS records in
-**Cloudflare → youneektime.com → DNS → Records**:
+Do this once in Cloudflare (this is the actual live switch):
 
-| Type | Name | Content | Proxy |
-|------|------|---------|-------|
-| A | `@` | `185.199.108.153` | DNS only (grey cloud) |
-| A | `@` | `185.199.109.153` | DNS only |
-| A | `@` | `185.199.110.153` | DNS only |
-| A | `@` | `185.199.111.153` | DNS only |
-| CNAME | `www` | `andrewgrayyouneek.github.io` | DNS only |
+1. Open **Workers & Pages → youneektimethefinalboss → Deployments**.
+2. Open the newest Version (the one from the Git connect / `wrangler versions upload`).
+3. Click **Promote** → **Production** at 100%.
 
-Keep records **DNS only** (grey cloud, not proxied) while GitHub provisions its
-SSL certificate. You can try enabling the Cloudflare proxy later, but DNS-only is
-the most reliable setup with GitHub Pages.
+After that, either:
 
-Then in the repo **Settings → Pages**:
-
-1. Set **Build and deployment** source to **GitHub Actions**
-2. Under **Custom domain**, enter `youneektime.com`
-3. After DNS propagates, enable **Enforce HTTPS**
-
-The `public/CNAME` file in this repo keeps the domain configured across deploys.
+- Set the Worker **Settings → Builds** production command to `npm run deploy` (not `wrangler versions upload`), **or**
+- Add GitHub secrets `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID`. Pushes to `main` then run **Deploy Cloudflare Worker** (`wrangler deploy`).
 
 ## Built By
 

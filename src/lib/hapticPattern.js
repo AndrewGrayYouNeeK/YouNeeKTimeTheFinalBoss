@@ -9,23 +9,22 @@ export const PULSE = {
 };
 
 export function buildTimeTellingSteps(units, minutes) {
-  const hTens = Math.floor(units / 10);
-  const hOnes = units % 10;
-  const mTens = Math.floor(minutes / 10);
-  const mOnes = minutes % 10;
-
+  const groups = [
+    [Math.floor(units / 10), 'hour'],
+    [units % 10, 'hour'],
+    [Math.floor(minutes / 10), 'tenth'],
+    [minutes % 10, 'ones'],
+  ];
   const steps = [];
-  const pushGroup = (count, kind) => {
+  let started = false;
+  for (const [count, kind] of groups) {
+    if (count === 0) continue;
+    if (started) steps.push({ kind: 'pause', ms: PULSE.groupGap });
+    started = true;
     for (let i = 0; i < count; i += 1) {
       steps.push({ kind });
     }
-    steps.push({ kind: 'pause', ms: PULSE.groupGap });
-  };
-
-  pushGroup(hTens, 'hour');
-  pushGroup(hOnes, 'hour');
-  pushGroup(mTens, 'tenth');
-  pushGroup(mOnes, 'ones');
+  }
   return steps;
 }
 
