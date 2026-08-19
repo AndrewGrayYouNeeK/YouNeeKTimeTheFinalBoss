@@ -7,7 +7,7 @@ import { GREEN, RING_GRAY } from './clockConstants';
 
 const DEFAULT_CENTER_IMAGE = '/clock-face-default.jpg';
 
-export default function ClockDial({ time, isGlitching, source = 'youneek' }) {
+export default function ClockDial({ time, isGlitching, source = 'all' }) {
   const [centerImage, setCenterImage] = useState(
     localStorage.getItem('clockFaceUrl') || DEFAULT_CENTER_IMAGE
   );
