@@ -142,7 +142,7 @@
   color: #000000;
   text-shadow: none;
   opacity: 0;
-  animation: reveal-title 8.5s infinite;
+  animation: reveal-title 8.5s ease-in-out infinite;
 }
 
 .lightning-reveal-subtitle {
@@ -204,13 +204,6 @@
 @keyframes rain-fall {
   0% { transform: translateY(-20vh) translateX(0); }
   100% { transform: translateY(120vh) translateX(-40px); }
-}
-
-@keyframes flash {
-  0%, 32%, 52%, 100% { opacity: 0; }
-  35%, 37%, 39% { opacity: 0.5; }
-  41%, 43% { opacity: 0.7; }
-  45% { opacity: 0; }
 }
 
 @keyframes strike1 {
