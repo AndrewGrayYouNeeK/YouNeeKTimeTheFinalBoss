@@ -27,7 +27,7 @@ export default function ClockHeader({ now, time }) {
           <div className="font-mono text-[11px] uppercase tracking-[0.18em] text-[#1f990a] text-center" style={{ textShadow: '0 0 8px #1f990a99' }}>•</div>
           <div className="font-mono text-[11px] uppercase tracking-[0.18em] text-[#1f990a] text-left" style={{ textShadow: '0 0 8px #1f990a99' }}>{army12Str}</div>
 
-          <div className="font-mono text-[11px] uppercase tracking-[0.18em] text-[#2dd900] text-right" style={{ textShadow: '0 0 8px #2dd90099' }}>Pineal Army Time</div>
+          <div className="font-mono text-[11px] uppercase tracking-[0.18em] text-[#2dd900] text-right" style={{ textShadow: '0 0 8px #2dd90099' }}>Army YouNeeK Time</div>
           <div className="font-mono text-[11px] uppercase tracking-[0.18em] text-[#2dd900] text-center" style={{ textShadow: '0 0 8px #2dd90099' }}>•</div>
           <div className="font-mono text-[11px] uppercase tracking-[0.18em] text-[#2dd900] text-left" style={{ textShadow: '0 0 8px #2dd90099' }}>{armyStr}</div>
         </div>

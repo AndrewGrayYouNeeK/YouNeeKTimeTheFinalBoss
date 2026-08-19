@@ -71,7 +71,7 @@ struct WatchSettings: View {
                     Text("YouNeeK Digital").tag("youneek")
                     Text("YouNeeK Time").tag("youneek12")
                     Text("Regular Time").tag("regular")
-                    Text("Pineal Army Time").tag("army")
+                    Text("Army YouNeeK Time").tag("army")
                 }
             }
         }
