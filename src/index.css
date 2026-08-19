@@ -94,23 +94,25 @@
 }
 
 .header {
-  height: 160px;
   background: transparent;
-  overflow: hidden;
+  overflow: visible;
 }
 
 .header-title-reveal {
+  background: transparent;
+  border: none;
+  box-shadow: none;
   position: relative;
   z-index: 15;
-  padding: 1.25rem 1.5rem 1.1rem;
+  padding: 0;
 }
 
 .header-rain-trickle {
   position: absolute;
   inset: 0;
+  z-index: 0;
   pointer-events: none;
   overflow: hidden;
-  border-radius: 14px;
   mix-blend-mode: screen;
   opacity: 0.55;
 }
@@ -143,16 +145,16 @@
 }
 
 .lightning-reveal-title {
-  color: #050505;
-  text-shadow: none;
-  opacity: 0.04;
+  color: #ffffff;
+  text-shadow: 0 0 12px #39ff1466;
+  opacity: 1;
   animation: reveal-title 8s ease-in-out infinite;
 }
 
 .lightning-reveal-subtitle {
-  color: #050505;
+  color: #c8c8c8;
   text-shadow: none;
-  opacity: 0.04;
+  opacity: 1;
   animation: reveal-subtitle 8s ease-in-out infinite;
 }
 
@@ -181,46 +183,46 @@
 
 @keyframes reveal-title {
   0%, 89%, 96%, 100% {
-    color: #050505;
-    opacity: 0.04;
-    text-shadow: none;
+    color: #ffffff;
+    opacity: 1;
+    text-shadow: 0 0 12px #39ff1466;
   }
   91%, 93%, 95% {
-    color: #000000;
+    color: #ffffff;
     opacity: 1;
-    text-shadow: none;
+    text-shadow: 0 0 20px #ffffff, 0 0 40px #ffffff, 0 0 80px #39ff14;
   }
   92% {
-    color: #000000;
-    opacity: 0.35;
-    text-shadow: none;
+    color: #ffffff;
+    opacity: 0.85;
+    text-shadow: 0 0 12px #39ff1466;
   }
   94% {
-    color: #000000;
-    opacity: 0.15;
-    text-shadow: none;
+    color: #ffffff;
+    opacity: 0.7;
+    text-shadow: 0 0 12px #39ff1466;
   }
 }
 
 @keyframes reveal-subtitle {
   0%, 89%, 96%, 100% {
-    color: #050505;
-    opacity: 0.04;
-    text-shadow: none;
-  }
-  91%, 93%, 95% {
-    color: #000000;
+    color: #c8c8c8;
     opacity: 1;
     text-shadow: none;
   }
+  91%, 93%, 95% {
+    color: #ffffff;
+    opacity: 1;
+    text-shadow: 0 0 12px #39ff14, 0 0 24px #39ff14aa;
+  }
   92% {
-    color: #000000;
-    opacity: 0.35;
+    color: #c8c8c8;
+    opacity: 0.85;
     text-shadow: none;
   }
   94% {
-    color: #000000;
-    opacity: 0.15;
+    color: #c8c8c8;
+    opacity: 0.7;
     text-shadow: none;
   }
 }
