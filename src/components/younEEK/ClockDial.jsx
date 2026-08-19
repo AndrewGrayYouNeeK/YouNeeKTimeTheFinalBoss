@@ -3,7 +3,6 @@ import { motion } from 'framer-motion';
 import ClockTicks from './ClockTicks';
 import ClockLabels from './ClockLabels';
 import ClockHands from './ClockHands';
-import { RING_GRAY } from './clockConstants';
 
 const DEFAULT_CENTER_IMAGE = '/clock-face-default.jpg';
 

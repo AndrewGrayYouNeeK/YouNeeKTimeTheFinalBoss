@@ -42,7 +42,7 @@ export default function YouNeekClock() {
         <HapticTimeManager time={time} />
         <FrequencyManager time={time} />
       </div>
-      <div className={`w-full ${isGlitching ? 'animate-glitch' : ''}`}>
+      <div className={`w-full overflow-visible ${isGlitching ? 'animate-glitch' : ''}`}>
         <ClockDial time={time} isGlitching={isGlitching} />
       </div>
 
