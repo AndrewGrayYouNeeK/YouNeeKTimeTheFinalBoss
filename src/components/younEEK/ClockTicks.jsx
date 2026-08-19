@@ -36,17 +36,7 @@ export default function ClockTicks() {
     <svg viewBox="0 0 400 400" className="absolute inset-0 h-full w-full z-20 pointer-events-none">
       <circle cx="200" cy="200" r="199" stroke={RING_GRAY} strokeWidth="2.2" fill="none" />
 
-      <circle cx="200" cy="200" r="172" stroke="#050505" strokeWidth="24" fill="none" />
-
-      <circle
-        cx="200"
-        cy="200"
-        r="196"
-        stroke={GREEN}
-        strokeWidth="1"
-        fill="none"
-        style={{ filter: `drop-shadow(0 0 5px ${GREEN}88)` }}
-      />
+      <circle cx="200" cy="200" r="160" stroke={RING_GRAY} strokeWidth="1.6" fill="none" />
 
       {OUTER_TICKS.map((t) => (
         <line

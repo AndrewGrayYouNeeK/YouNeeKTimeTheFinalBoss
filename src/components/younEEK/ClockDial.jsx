@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import ClockTicks from './ClockTicks';
 import ClockLabels from './ClockLabels';
 import ClockHands from './ClockHands';
-import { GREEN, RING_GRAY } from './clockConstants';
+import { RING_GRAY } from './clockConstants';
 
 const DEFAULT_CENTER_IMAGE = '/clock-face-default.jpg';
 
@@ -22,9 +22,9 @@ export default function ClockDial({ time, isGlitching, source = 'all' }) {
 
   return (
     <motion.div
-      animate={{ scale: [1, 1.012, 1] }}
+      animate={{ scale: [1, 1.018, 1] }}
       transition={{ duration: 8.64, repeat: Infinity, ease: 'easeInOut' }}
-      className="relative aspect-square w-full max-w-[32rem] rounded-full bg-black"
+      className="relative aspect-square w-full max-w-[32rem] overflow-visible rounded-full bg-black"
     >
       {centerImage && (
         <div
@@ -51,13 +51,6 @@ export default function ClockDial({ time, isGlitching, source = 'all' }) {
         <ClockHands time={time} source={source} />
       </div>
 
-      <div
-        className="absolute inset-0 rounded-full pointer-events-none z-40"
-        style={{
-          border: `1.5px solid ${RING_GRAY}`,
-          boxShadow: `0 0 10px ${GREEN}22, inset 0 0 18px rgba(0,0,0,0.85)`,
-        }}
-      />
     </motion.div>
   );
 }
