@@ -15,4 +15,6 @@ export function mixHex(a, b) {
   return `#${hex((r1 + r2) / 2)}${hex((g1 + g2) / 2)}${hex((b1 + b2) / 2)}`;
 }
 
-export const YOUNEEK_ARMY_HOUR = mixHex(GREEN, ARMY);
+export const HAND_RED = '#ff2a2a';
+export const HAND_BLUE = '#2a6dff';
+export const HAND_PURPLE = mixHex(HAND_RED, HAND_BLUE);
