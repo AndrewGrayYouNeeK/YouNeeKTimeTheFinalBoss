@@ -10,6 +10,6 @@ Apple Watch cannot run the Vite website. This folder is a native **iOS + watchOS
 4. Plug in iPhone + Apple Watch (or pick a Watch simulator).
 5. Scheme **YouNeeKTime Watch App** → Run.
 
-The watch app is independent (`WKRunsIndependentlyOfCompanionApp`). Swipe between **Clock Face**, **Decimal Clock**, and **Settings**. Settings pick Regular / YouNeeK Time / Pineal Army / YouNeeK Digital for the digits, analog hands, and (on the phone) haptic telling.
+The watch app is independent (`WKRunsIndependentlyOfCompanionApp`). Swipe between **Clock Face**, **Decimal Clock**, and **Settings**. Settings pick Regular / YouNeeK Time / Army YouNeeK / YouNeeK Digital for the digits, analog hands, and (on the phone) haptic telling.
 
 Bundle IDs: `com.youneek.time`, `com.youneek.time.watchkitapp`, `com.youneek.time.watchkitapp.widgets`.

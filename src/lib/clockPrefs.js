@@ -2,7 +2,7 @@ export const CLOCK_SOURCES = [
   { id: 'youneek', label: 'YouNeeK Digital' },
   { id: 'youneek12', label: 'YouNeeK Time' },
   { id: 'regular', label: 'Regular Time' },
-  { id: 'army', label: 'Pineal Army Time' },
+  { id: 'army', label: 'Army YouNeeK Time' },
 ];
 
 export const WATCH_DISPLAYS = [

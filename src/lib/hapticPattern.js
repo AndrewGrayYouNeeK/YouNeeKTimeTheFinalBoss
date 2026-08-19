@@ -1,11 +1,11 @@
 export const PULSE = {
-  hourOn: 900,
-  hourGap: 380,
-  tenthOn: 90,
-  tenthGap: 320,
-  onesOn: 45,
-  onesGap: 70,
-  groupGap: 900,
+  hourOn: 1500,
+  hourGap: 650,
+  tenthOn: 400,
+  tenthGap: 550,
+  onesOn: 200,
+  onesGap: 320,
+  groupGap: 1400,
 };
 
 export function buildTimeTellingSteps(units, minutes) {

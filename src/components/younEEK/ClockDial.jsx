@@ -3,7 +3,6 @@ import { motion } from 'framer-motion';
 import ClockTicks from './ClockTicks';
 import ClockLabels from './ClockLabels';
 import ClockHands from './ClockHands';
-import { GREEN } from './clockConstants';
 
 const DEFAULT_CENTER_IMAGE = '/clock-face-default.jpg';
 
@@ -24,12 +23,11 @@ export default function ClockDial({ time, isGlitching, source = 'all' }) {
     <motion.div
       animate={{ scale: [1, 1.018, 1] }}
       transition={{ duration: 8.64, repeat: Infinity, ease: 'easeInOut' }}
-      className="relative aspect-square w-full max-w-[32rem]"
+      className="relative aspect-square w-full max-w-[32rem] overflow-visible rounded-full bg-black"
     >
-      {/* Volcano center image — sits inside the red dashed ring */}
       {centerImage && (
         <div
-          className="absolute inset-[12%] rounded-full overflow-hidden z-10"
+          className="absolute inset-[14%] rounded-full overflow-hidden z-10"
           style={{ pointerEvents: 'none' }}
         >
           <img
@@ -37,10 +35,11 @@ export default function ClockDial({ time, isGlitching, source = 'all' }) {
             alt="YouNeek volcano"
             className="w-full h-full object-cover"
             style={{
-              opacity: isGlitching ? 0 : 1,
+              opacity: isGlitching ? 0 : 0.92,
               transition: 'opacity 0.05s',
             }}
           />
+          <div className="absolute inset-0 rounded-full bg-black/25" />
         </div>
       )}
 
@@ -51,14 +50,6 @@ export default function ClockDial({ time, isGlitching, source = 'all' }) {
         <ClockHands time={time} source={source} />
       </div>
 
-      {/* Outer neon green bezel */}
-      <div
-        className="absolute inset-0 rounded-full pointer-events-none z-40"
-        style={{
-          border: `1px solid ${GREEN}`,
-          boxShadow: `0 0 8px ${GREEN}66, inset 0 0 12px ${GREEN}22`,
-        }}
-      />
     </motion.div>
   );
 }
