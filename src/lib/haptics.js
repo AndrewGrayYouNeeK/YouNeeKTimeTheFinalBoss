@@ -1,6 +1,6 @@
 import { hapticTrigger as iosHapticTrigger } from 'ios-haptics';
+import { PULSE } from '@/lib/hapticPattern';
 
-/** Attach iOS switch overlay once per element (safe for React ref callbacks). */
 export function hapticTrigger(element) {
   if (!element || element.querySelector('input[switch]')) return;
   iosHapticTrigger(element);
@@ -18,25 +18,23 @@ function isIOS() {
   );
 }
 
-function supportsTouchHaptics() {
-  return (
-    typeof window !== 'undefined' &&
-    typeof window.matchMedia === 'function' &&
-    window.matchMedia('(pointer: coarse)').matches
-  );
+function canVibrate() {
+  return typeof navigator !== 'undefined' && typeof navigator.vibrate === 'function';
 }
 
-/** Persistent hidden iOS switch used for programmatic pulses. */
 let iosHapticNode = null;
+let audioCtx = null;
 
 function ensureIosHapticNode() {
-  if (iosHapticNode) return iosHapticNode;
+  if (iosHapticNode?.input?.isConnected) return iosHapticNode;
 
   const label = document.createElement('label');
   label.setAttribute('aria-hidden', 'true');
-  label.style.cssText = 'position:fixed;top:0;left:0;width:1px;height:1px;overflow:hidden;opacity:0;';
+  label.htmlFor = 'younEEK-ios-haptic';
+  label.style.cssText = 'position:fixed;top:0;left:0;width:1px;height:1px;overflow:hidden;opacity:0;pointer-events:none;';
 
   const input = document.createElement('input');
+  input.id = 'younEEK-ios-haptic';
   input.type = 'checkbox';
   input.setAttribute('switch', '');
   input.tabIndex = -1;
@@ -48,10 +46,7 @@ function ensureIosHapticNode() {
     height: '1px',
     margin: '0',
     opacity: '0',
-    clipPath: 'inset(0 round 999px)',
-    touchAction: 'manipulation',
   });
-  input.style.setProperty('-webkit-tap-highlight-color', 'transparent');
 
   label.appendChild(input);
   document.body.appendChild(label);
@@ -59,51 +54,140 @@ function ensureIosHapticNode() {
   return iosHapticNode;
 }
 
-/** iOS Safari checkbox-switch trick (works on iOS 17.4–26.4). */
-export function iosSwitchTap() {
-  if (!isIOS() || !supportsTouchHaptics()) return;
+function iosSwitchTap() {
+  if (!isIOS()) return;
   try {
-    const { label } = ensureIosHapticNode();
+    const { label, input } = ensureIosHapticNode();
+    input.checked = !input.checked;
+    input.dispatchEvent(new Event('input', { bubbles: true }));
     label.click();
+    input.click();
   } catch {
-    // Haptics are optional — never break the app
+    // Haptics are optional
   }
 }
 
-function androidVibrate(pattern) {
-  if (isAndroid() && typeof navigator.vibrate === 'function') {
-    navigator.vibrate(pattern);
-    return true;
+function getAudioCtx() {
+  if (audioCtx) return audioCtx;
+  const Ctx = window.AudioContext || window.webkitAudioContext;
+  if (!Ctx) return null;
+  audioCtx = new Ctx();
+  return audioCtx;
+}
+
+/** Must run inside a tap so iOS Safari unlocks audio + switch haptics. */
+export function unlockHaptics() {
+  ensureIosHapticNode();
+  iosSwitchTap();
+  const ctx = getAudioCtx();
+  if (ctx?.state === 'suspended') ctx.resume();
+}
+
+function rumble(ms) {
+  if (!isIOS()) return;
+  const ctx = getAudioCtx();
+  if (!ctx || ctx.state === 'suspended') return;
+  const osc = ctx.createOscillator();
+  const gain = ctx.createGain();
+  osc.type = 'square';
+  osc.frequency.value = 72;
+  gain.gain.value = 0.12;
+  osc.connect(gain);
+  gain.connect(ctx.destination);
+  const now = ctx.currentTime;
+  osc.start(now);
+  gain.gain.setValueAtTime(0.12, now);
+  gain.gain.exponentialRampToValueAtTime(0.001, now + ms / 1000);
+  osc.stop(now + ms / 1000 + 0.02);
+}
+
+function vibrateOr(pattern) {
+  if (canVibrate() && (isAndroid() || !isIOS())) {
+    try {
+      navigator.vibrate(pattern);
+      return true;
+    } catch {
+      return false;
+    }
   }
   return false;
 }
 
-/** Light double pulse — YouNeeK minutes / heartbeat */
+function iosLongBuzz(ms) {
+  const taps = Math.max(1, Math.round(ms / 45));
+  rumble(ms);
+  for (let i = 0; i < taps; i += 1) {
+    setTimeout(iosSwitchTap, i * 45);
+  }
+}
+
+export function triggerHourLong() {
+  if (!vibrateOr(PULSE.hourOn)) iosLongBuzz(PULSE.hourOn);
+}
+
+export function triggerTenth() {
+  if (!vibrateOr(PULSE.tenthOn)) {
+    rumble(PULSE.tenthOn);
+    iosSwitchTap();
+  }
+}
+
+export function triggerOnes() {
+  if (!vibrateOr(PULSE.onesOn)) {
+    rumble(PULSE.onesOn);
+    iosSwitchTap();
+  }
+}
+
 export function triggerFaint() {
-  if (!androidVibrate([50, 100, 80])) {
+  if (!vibrateOr([50, 100, 80])) {
+    rumble(50);
     iosSwitchTap();
     setTimeout(iosSwitchTap, 200);
   }
 }
 
-/** Strong double pulse — YouNeeK hours / digit counts */
 export function triggerStrong() {
-  if (!androidVibrate([80, 100, 120])) {
+  if (!vibrateOr([80, 100, 120])) {
+    rumble(120);
     iosSwitchTap();
     setTimeout(iosSwitchTap, 120);
     setTimeout(iosSwitchTap, 240);
   }
 }
 
-/** Single tap */
 export function triggerSingle() {
-  if (!androidVibrate(50)) iosSwitchTap();
+  if (!vibrateOr(50)) {
+    rumble(50);
+    iosSwitchTap();
+  }
 }
 
-/** Rapid double tap — lightning flashes */
 export function triggerConfirm() {
-  if (!androidVibrate([50, 70, 50])) {
+  if (!vibrateOr([50, 70, 50])) {
+    rumble(50);
     iosSwitchTap();
     setTimeout(iosSwitchTap, 120);
   }
 }
+
+export function playVibratePattern(pattern) {
+  if (!pattern?.length) return false;
+  if (canVibrate() && (isAndroid() || !isIOS())) {
+    try {
+      navigator.vibrate(pattern);
+      return true;
+    } catch {
+      return false;
+    }
+  }
+  return false;
+}
+
+export function stopHaptics() {
+  if (canVibrate()) {
+    try { navigator.vibrate(0); } catch { /* ignore */ }
+  }
+}
+
+export { isIOS };

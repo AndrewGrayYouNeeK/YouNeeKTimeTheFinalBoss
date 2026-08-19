@@ -19,6 +19,7 @@ export default function Header() {
         <h1 className="font-mono text-sm uppercase tracking-[0.3em] text-[#00ff88]/70 flex-1">
           {location.pathname === '/widget' && 'Widget'}
           {location.pathname === '/settings' && 'Settings'}
+          {location.pathname === '/watch' && 'Watch'}
         </h1>
       </div>
     </div>

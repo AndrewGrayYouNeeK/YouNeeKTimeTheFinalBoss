@@ -12,6 +12,7 @@ YouNeeK Time is a clean, dark-themed clock application with a custom YouNeeK des
 - **Widget Mode** — Compact embed-ready version for dashboards or home screens
 - **Settings** — Configure display preferences and time zones
 - **Dark Theme** — Deep black background with green accent glow
+- **Apple Watch** — Native watchOS app + watch-face complications in `native/YouNeeKTime` (compact web face at `/watch`)
 
 ## Running Locally
 
@@ -23,6 +24,12 @@ npm run dev
 ```
 
 Then open http://localhost:5173.
+
+## Apple Watch
+
+WatchOS cannot load this React app. Open `native/YouNeeKTime/YouNeeKTime.xcodeproj` in Xcode, sign the three targets, and run **YouNeeKTime Watch App** on a Watch or simulator. See `native/YouNeeKTime/README.md`.
+
+A compact browser face lives at `/watch` (for tiny viewports, not a real Watch install).
 
 The app is **fully local** — it runs entirely in your browser with no backend, no
 account, and no environment variables. All preferences (custom clock face, hourly
