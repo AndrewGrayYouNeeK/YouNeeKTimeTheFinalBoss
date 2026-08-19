@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { getDecimalTime } from '@/lib/decimalTime';
 import ClockHeader from '@/components/younEEK/ClockHeader';
 import DigitalTimeDisplay from '@/components/younEEK/DigitalTimeDisplay';
