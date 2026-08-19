@@ -1,8 +1,6 @@
 import { Toaster } from "@/components/ui/toaster"
 import { QueryClientProvider } from '@tanstack/react-query'
 import { queryClientInstance } from '@/lib/query-client'
-import { HapticsProvider } from '@haptics/react'
-import { HAPTIC_PATTERNS } from '@/lib/haptics'
 import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-router-dom';
 import PageNotFound from './lib/PageNotFound';
 import { AuthProvider } from '@/lib/AuthContext';
@@ -57,12 +55,10 @@ function App() {
   return (
     <AuthProvider>
       <QueryClientProvider client={queryClientInstance}>
-        <HapticsProvider patterns={HAPTIC_PATTERNS}>
-          <Router>
-            <AuthenticatedApp />
-            <Toaster />
-          </Router>
-        </HapticsProvider>
+        <Router>
+          <AuthenticatedApp />
+          <Toaster />
+        </Router>
       </QueryClientProvider>
     </AuthProvider>
   )

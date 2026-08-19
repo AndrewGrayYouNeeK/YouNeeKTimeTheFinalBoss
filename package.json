@@ -12,7 +12,6 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@haptics/react": "^2.1.0",
     "@hello-pangea/dnd": "^17.0.0",
     "@hookform/resolvers": "^4.1.2",
     "@radix-ui/react-accordion": "^1.2.3",
@@ -54,6 +53,7 @@
     "framer-motion": "^11.16.4",
     "html2canvas": "^1.4.1",
     "input-otp": "^1.4.2",
+    "ios-haptics": "^3.1.1",
     "jspdf": "^4.0.0",
     "lodash": "^4.17.21",
     "lucide-react": "^0.475.0",
