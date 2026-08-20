@@ -6,6 +6,7 @@ const polarPoint = (radius, angleDeg) => {
 };
 
 const outerLabels = [
+  { label: '00', angle: 0 },
   { label: '03', angle: 45 },
   { label: '06', angle: 90 },
   { label: '09', angle: 135 },

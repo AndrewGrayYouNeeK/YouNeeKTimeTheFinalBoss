@@ -1,9 +1,8 @@
+import { createPortal } from 'react-dom';
+
 export default function LightningFlash() {
-  return (
-    <div
-      className="fixed inset-0 bg-white opacity-0 pointer-events-none z-[65] animate-lightning-flash"
-      style={{ mixBlendMode: 'screen' }}
-      aria-hidden="true"
-    />
+  return createPortal(
+    <div className="lightning-sky-flash" aria-hidden="true" />,
+    document.body
   );
 }
