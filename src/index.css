@@ -94,19 +94,24 @@
 }
 
 .header {
-  height: 250px;
+  height: min(42vh, 440px);
   background: transparent;
 }
 
 .header-lettering {
   position: fixed;
-  top: 2rem;
+  top: 0;
   left: 0;
   right: 0;
+  height: min(42vh, 440px);
   z-index: 70;
   pointer-events: none;
   text-align: center;
-  padding: 0 0.5rem;
+  padding: 0 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 .lightning-reveal-title {
