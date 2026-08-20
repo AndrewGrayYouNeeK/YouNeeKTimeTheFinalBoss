@@ -11,25 +11,25 @@ function sleep(ms) {
 }
 
 export default function LightningFlash() {
-  const [opacity, setOpacity] = useState(0);
+  const [lit, setLitState] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
 
-    const setLit = (on, nextOpacity = 0) => {
-      setOpacity(nextOpacity);
+    const setLit = (on) => {
+      setLitState(on);
       document.documentElement.classList.toggle(LIT, on);
     };
 
     const strike = async () => {
-      const bursts = 1 + Math.floor(Math.random() * 3);
+      const bursts = 2 + Math.floor(Math.random() * 2);
       for (let i = 0; i < bursts; i++) {
         if (cancelled) return;
-        setLit(true, i === bursts - 1 ? rand(0.7, 1) : rand(0.35, 0.7));
-        await sleep(rand(35, 70));
+        setLit(true);
+        await sleep(i === bursts - 1 ? rand(90, 160) : rand(50, 90));
         if (cancelled) return;
-        setLit(false, 0);
-        if (i < bursts - 1) await sleep(rand(30, 90));
+        setLit(false);
+        if (i < bursts - 1) await sleep(rand(40, 100));
       }
     };
 
@@ -50,5 +50,10 @@ export default function LightningFlash() {
     };
   }, []);
 
-  return <div className="lightning-sky-flash" style={{ opacity }} aria-hidden="true" />;
+  return (
+    <div
+      className={`lightning-sky-flash${lit ? ' is-lit' : ''}`}
+      aria-hidden="true"
+    />
+  );
 }

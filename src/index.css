@@ -132,6 +132,10 @@ html.lightning-lit .lightning-reveal-subtitle {
   opacity: 0;
 }
 
+.lightning-sky-flash.is-lit {
+  opacity: 0.82;
+}
+
 @keyframes rain-fall {
   from { transform: translateY(-120px); }
   to { transform: translateY(110vh); }
