@@ -96,7 +96,17 @@
 .header {
   height: 250px;
   background: transparent;
-  overflow: hidden;
+}
+
+.header-lettering {
+  position: fixed;
+  top: 2rem;
+  left: 0;
+  right: 0;
+  z-index: 60;
+  pointer-events: none;
+  text-align: center;
+  padding: 0 0.5rem;
 }
 
 .lightning-reveal-title {
@@ -129,8 +139,10 @@
 }
 
 .lightning-sky-flash {
-  position: absolute;
+  position: fixed;
   inset: 0;
+  z-index: 50;
+  pointer-events: none;
   background: #ffffff;
   opacity: 0;
   animation: sky-flash 8.5s ease-in-out infinite;
@@ -172,8 +184,8 @@
 
 @keyframes sky-flash {
   0%, 32%, 52%, 100% { opacity: 0; }
-  35%, 37%, 39% { opacity: 0.55; }
-  41%, 43% { opacity: 0.92; }
+  35%, 37%, 39% { opacity: 0.75; }
+  41%, 43% { opacity: 1; }
   45% { opacity: 0; }
 }
 

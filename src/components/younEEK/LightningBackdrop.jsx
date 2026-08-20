@@ -79,7 +79,6 @@ export default function LightningBackdrop() {
         <path className="bolt bolt-3 branch" d="M1025 340 L990 370 L980 420" filter="url(#bolt-glow-cyan)" />
       </svg>
 
-      <div className="lightning-sky-flash" />
     </div>
   );
 }
