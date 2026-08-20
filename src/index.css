@@ -94,17 +94,14 @@
 }
 
 .header {
+  position: relative;
   height: min(42vh, 440px);
   background: transparent;
 }
 
 .header-lettering {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: min(42vh, 440px);
-  z-index: 70;
+  position: absolute;
+  inset: 0;
   pointer-events: none;
   text-align: center;
   padding: 0 1rem;
@@ -114,76 +111,30 @@
   justify-content: center;
 }
 
-.lightning-reveal-title {
-  color: #000000;
-  text-shadow: none;
-  opacity: 0;
-  animation: reveal-title 8.5s ease-in-out infinite;
-}
-
+.lightning-reveal-title,
 .lightning-reveal-subtitle {
   color: #000000;
   text-shadow: none;
   opacity: 0;
-  animation: reveal-subtitle 8.5s ease-in-out infinite;
+}
+
+html.lightning-lit .lightning-reveal-title,
+html.lightning-lit .lightning-reveal-subtitle {
+  opacity: 1;
 }
 
 .lightning-sky-flash {
   position: fixed;
   inset: 0;
-  z-index: 50;
+  z-index: 1;
   pointer-events: none;
   background: #ffffff;
   opacity: 0;
-  animation: sky-flash 8.5s ease-in-out infinite;
 }
 
 @keyframes rain-fall {
   from { transform: translateY(-120px); }
   to { transform: translateY(110vh); }
-}
-
-@keyframes sky-flash {
-  0%, 32%, 52%, 100% { opacity: 0; }
-  35%, 37%, 39% { opacity: 0.75; }
-  41%, 43% { opacity: 1; }
-  45% { opacity: 0; }
-}
-
-@keyframes reveal-title {
-  0%, 32%, 52%, 100% {
-    color: #000000;
-    opacity: 0;
-    text-shadow: none;
-  }
-  35%, 37%, 39%, 41%, 43% {
-    color: #000000;
-    opacity: 1;
-    text-shadow: none;
-  }
-  45% {
-    color: #000000;
-    opacity: 0;
-    text-shadow: none;
-  }
-}
-
-@keyframes reveal-subtitle {
-  0%, 34%, 54%, 100% {
-    color: #000000;
-    opacity: 0;
-    text-shadow: none;
-  }
-  37%, 39%, 42%, 44% {
-    color: #000000;
-    opacity: 1;
-    text-shadow: none;
-  }
-  46% {
-    color: #000000;
-    opacity: 0;
-    text-shadow: none;
-  }
 }
 
 @keyframes twinkle {
