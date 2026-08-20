@@ -113,18 +113,18 @@
   color: #000000;
   text-shadow: none;
   opacity: 0;
-  animation: reveal-title 8s ease-in-out infinite;
+  animation: reveal-title 8s steps(1, end) infinite;
 }
 
 .lightning-reveal-subtitle {
   color: #000000;
   text-shadow: none;
   opacity: 0;
-  animation: reveal-subtitle 8s ease-in-out infinite;
+  animation: reveal-subtitle 8s steps(1, end) infinite;
 }
 
 .animate-lightning-flash {
-  animation: lightning-flash 8s ease-in-out infinite;
+  animation: lightning-flash 8s steps(1, end) infinite;
 }
 
 @keyframes rain-fall {
