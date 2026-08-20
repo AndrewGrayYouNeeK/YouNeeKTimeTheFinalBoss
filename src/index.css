@@ -113,14 +113,14 @@
   color: #000000;
   text-shadow: none;
   opacity: 0;
-  animation: reveal-title 8.5s linear infinite;
+  animation: reveal-title 8.5s steps(1, end) infinite;
 }
 
 .lightning-reveal-subtitle {
   color: #000000;
   text-shadow: none;
   opacity: 0;
-  animation: reveal-subtitle 8.5s linear infinite;
+  animation: reveal-subtitle 8.5s steps(1, end) infinite;
 }
 
 .lightning-sky-flash {
@@ -130,7 +130,7 @@
   pointer-events: none;
   background: #ffffff;
   opacity: 0;
-  animation: sky-flash 8.5s linear infinite;
+  animation: sky-flash 8.5s steps(1, end) infinite;
 }
 
 @keyframes rain-fall {
@@ -139,44 +139,44 @@
 }
 
 @keyframes sky-flash {
-  0%, 89%, 96%, 100% { opacity: 0; }
-  91% { opacity: 0.75; }
-  92% { opacity: 0.2; }
-  93%, 95% { opacity: 1; }
+  0%, 92%, 92.35%, 92.85%, 93.2%, 100% { opacity: 0; }
+  92.15% { opacity: 0.7; }
+  92.5% { opacity: 1; }
+  93% { opacity: 0.55; }
 }
 
 @keyframes reveal-title {
-  0%, 89%, 96%, 100% {
+  0%, 92%, 92.35%, 92.85%, 93.2%, 100% {
     color: #000000;
     opacity: 0;
     text-shadow: none;
   }
-  91%, 93%, 95% {
+  92.15% {
     color: #000000;
     opacity: 1;
     text-shadow: none;
   }
-  92% {
-    color: #000000;
-    opacity: 0.85;
-    text-shadow: none;
-  }
-}
-
-@keyframes reveal-subtitle {
-  0%, 90%, 97%, 100% {
-    color: #000000;
-    opacity: 0;
-    text-shadow: none;
-  }
-  92%, 94%, 96% {
+  92.5% {
     color: #000000;
     opacity: 1;
     text-shadow: none;
   }
   93% {
     color: #000000;
-    opacity: 0.85;
+    opacity: 1;
+    text-shadow: none;
+  }
+}
+
+@keyframes reveal-subtitle {
+  0%, 92%, 92.35%, 92.85%, 93.2%, 100% {
+    color: #000000;
+    opacity: 0;
+    text-shadow: none;
+  }
+  92.15%, 92.5%, 93% {
+    color: #000000;
+    opacity: 1;
     text-shadow: none;
   }
 }
