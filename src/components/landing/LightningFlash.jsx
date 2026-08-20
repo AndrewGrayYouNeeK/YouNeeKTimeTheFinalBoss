@@ -34,8 +34,10 @@ export default function LightningFlash() {
     };
 
     const loop = async () => {
+      await sleep(rand(400, 1600));
+      if (!cancelled) await strike();
       while (!cancelled) {
-        await sleep(rand(2500, 11000));
+        await sleep(rand(1800, 8000));
         if (cancelled) return;
         await strike();
       }
