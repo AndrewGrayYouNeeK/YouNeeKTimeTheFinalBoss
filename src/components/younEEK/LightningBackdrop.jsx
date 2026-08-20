@@ -28,19 +28,6 @@ export default function LightningBackdrop() {
 
   return (
     <div ref={layerRef} className="lightning-backdrop" aria-hidden="true">
-      <div className="radar-scope-wrap">
-        <svg className="radar-scope" viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid slice">
-          <circle cx="600" cy="360" r="320" fill="none" stroke="#1e40af" strokeWidth="2" opacity="0.35" />
-          <circle cx="600" cy="360" r="220" fill="none" stroke="#1e40af" strokeWidth="2" opacity="0.45" />
-          <circle cx="600" cy="360" r="120" fill="none" stroke="#1e40af" strokeWidth="2" opacity="0.55" />
-          <line x1="600" y1="40" x2="600" y2="720" stroke="#1e40af" strokeWidth="1.5" opacity="0.25" />
-          <line x1="80" y1="360" x2="1120" y2="360" stroke="#1e40af" strokeWidth="1.5" opacity="0.25" />
-          <path d="M600 360 L920 240 A320 320 0 0 0 600 40 Z" fill="#22d3ee" opacity="0.06" />
-          <path d="M600 360 L920 240" stroke="#22d3ee" strokeWidth="2.5" opacity="0.35" />
-          <circle cx="600" cy="360" r="10" fill="#22d3ee" opacity="0.7" />
-        </svg>
-      </div>
-
       <svg className="lightning-bg" viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid slice">
         <defs>
           <filter id="bolt-glow-phosphor" x="-50%" y="-50%" width="200%" height="200%">
