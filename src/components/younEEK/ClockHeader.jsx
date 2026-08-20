@@ -2,10 +2,10 @@ import { createPortal } from 'react-dom';
 
 const lettering = (
   <div className="header-lettering">
-    <p className="font-mono text-6xl sm:text-8xl md:text-9xl uppercase tracking-[0.18em] sm:tracking-[0.22em] font-bold lightning-reveal-title leading-none">
+    <p className="font-mono w-full text-[clamp(2.75rem,11vw,9.5rem)] uppercase tracking-[0.08em] sm:tracking-[0.12em] font-black lightning-reveal-title leading-[0.9]">
       YouNeeK Time
     </p>
-    <p className="mt-5 font-mono text-sm sm:text-base uppercase tracking-[0.35em] sm:tracking-[0.4em] font-bold lightning-reveal-subtitle">
+    <p className="mt-6 font-mono text-base sm:text-xl uppercase tracking-[0.4em] sm:tracking-[0.5em] font-bold lightning-reveal-subtitle">
       by Andrew Gray
     </p>
   </div>

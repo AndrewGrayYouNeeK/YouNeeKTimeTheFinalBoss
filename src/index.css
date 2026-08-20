@@ -94,7 +94,7 @@
 }
 
 .header {
-  height: 320px;
+  height: min(42vh, 440px);
   background: transparent;
 }
 
@@ -103,11 +103,11 @@
   top: 0;
   left: 0;
   right: 0;
-  height: 320px;
+  height: min(42vh, 440px);
   z-index: 70;
   pointer-events: none;
   text-align: center;
-  padding: 1.5rem 0.75rem 0;
+  padding: 0 1rem;
   display: flex;
   flex-direction: column;
   align-items: center;
