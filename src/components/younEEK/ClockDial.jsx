@@ -28,7 +28,7 @@ export default function ClockDial({ time, isGlitching, source = 'all' }) {
     >
       {centerImage && (
         <div
-          className="absolute inset-[12%] rounded-full overflow-hidden z-10"
+          className="absolute inset-[19%] rounded-full overflow-hidden z-10"
           style={{ pointerEvents: 'none' }}
         >
           <img

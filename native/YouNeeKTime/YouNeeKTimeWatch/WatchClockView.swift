@@ -141,15 +141,30 @@ private func drawDial(canvas context: GraphicsContext, size: CGSize, time: Decim
         context.stroke(tick, with: .color(green), style: StrokeStyle(lineWidth: (isMajor ? 2.5 : 1) * scale, lineCap: .round))
     }
 
+    for i in 0..<8 {
+        let angle = (Double(i) / 8) * .pi * 2 - .pi / 2
+        let r = 178.0 * scale
+        let dot = Path(ellipseIn: CGRect(x: c.x + cos(angle) * r - 3.2 * scale, y: c.y + sin(angle) * r - 3.2 * scale, width: 6.4 * scale, height: 6.4 * scale))
+        context.fill(dot, with: .color(green))
+    }
+
     for i in 0..<100 {
         let angle = (Double(i) / 100) * .pi * 2 - .pi / 2
         let isMajor = i % 10 == 0
-        let innerR = isMajor ? 150.0 : 156.0
+        let isMid = i % 5 == 0
+        let innerR = isMajor ? 150.0 : isMid ? 153.0 : 156.0
         let outerR = 162.0
         var tick = Path()
         tick.move(to: CGPoint(x: c.x + cos(angle) * innerR * scale, y: c.y + sin(angle) * innerR * scale))
         tick.addLine(to: CGPoint(x: c.x + cos(angle) * outerR * scale, y: c.y + sin(angle) * outerR * scale))
-        context.stroke(tick, with: .color(red), style: StrokeStyle(lineWidth: (isMajor ? 2.2 : 0.8) * scale, lineCap: .round))
+        context.stroke(tick, with: .color(red), style: StrokeStyle(lineWidth: (isMajor ? 2.2 : isMid ? 1.4 : 0.8) * scale, lineCap: .round))
+    }
+
+    for i in 0..<10 {
+        let angle = (Double(i) / 10) * .pi * 2 - .pi / 2
+        let r = 146.0 * scale
+        let dot = Path(ellipseIn: CGRect(x: c.x + cos(angle) * r - 2.4 * scale, y: c.y + sin(angle) * r - 2.4 * scale, width: 4.8 * scale, height: 4.8 * scale))
+        context.fill(dot, with: .color(red))
     }
 
     func hand(rotation: Double, tipY: CGFloat, tailY: CGFloat, color: Color, width: CGFloat) {

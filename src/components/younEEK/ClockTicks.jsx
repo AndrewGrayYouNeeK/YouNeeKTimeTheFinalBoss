@@ -1,5 +1,10 @@
 import { GREEN, RED } from './clockConstants';
 
+const polar = (r, i, n) => {
+  const angle = (i / n) * Math.PI * 2 - Math.PI / 2;
+  return { cx: 200 + Math.cos(angle) * r, cy: 200 + Math.sin(angle) * r };
+};
+
 const OUTER_TICKS = Array.from({ length: 24 }, (_, i) => {
   const angle = (i / 24) * Math.PI * 2 - Math.PI / 2;
   const isMajor = i % 3 === 0;
@@ -30,6 +35,16 @@ const INNER_TICKS = Array.from({ length: 100 }, (_, i) => {
     key: `inner-${i}`,
   };
 });
+
+const OUTER_DOTS = Array.from({ length: 8 }, (_, i) => ({
+  ...polar(178, i, 8),
+  key: `odot-${i}`,
+}));
+
+const INNER_DOTS = Array.from({ length: 10 }, (_, i) => ({
+  ...polar(146, i, 10),
+  key: `idot-${i}`,
+}));
 
 export default function ClockTicks() {
   return (
@@ -71,6 +86,17 @@ export default function ClockTicks() {
         />
       ))}
 
+      {OUTER_DOTS.map((d) => (
+        <circle
+          key={d.key}
+          cx={d.cx}
+          cy={d.cy}
+          r="3.2"
+          fill={GREEN}
+          style={{ filter: `drop-shadow(0 0 4px ${GREEN})` }}
+        />
+      ))}
+
       {INNER_TICKS.map((t) => (
         <line
           key={t.key}
@@ -83,6 +109,17 @@ export default function ClockTicks() {
           strokeLinecap="round"
           style={{ filter: `drop-shadow(0 0 2px ${RED}66)` }}
           opacity={t.strokeWidth < 1 ? 0.8 : 1}
+        />
+      ))}
+
+      {INNER_DOTS.map((d) => (
+        <circle
+          key={d.key}
+          cx={d.cx}
+          cy={d.cy}
+          r="2.4"
+          fill={RED}
+          style={{ filter: `drop-shadow(0 0 3px ${RED}aa)` }}
         />
       ))}
     </svg>
