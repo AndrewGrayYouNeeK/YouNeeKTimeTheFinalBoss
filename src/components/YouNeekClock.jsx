@@ -4,22 +4,35 @@ import ClockHeader from '@/components/younEEK/ClockHeader';
 import DigitalTimeDisplay from '@/components/younEEK/DigitalTimeDisplay';
 import ClockTimeLegend from '@/components/younEEK/ClockTimeLegend';
 import ClockDial from '@/components/younEEK/ClockDial';
+import ClockTypeSelect from '@/components/younEEK/ClockTypeSelect';
 import DayProgressBar from '@/components/younEEK/DayProgressBar';
 import HapticTimeManager from '@/components/younEEK/HapticTimeManager';
 import FrequencyManager from '@/components/younEEK/FrequencyManager';
 import LiveMoonPhaseCard from '@/components/younEEK/LiveMoonPhaseCard';
 import AboutSection from '@/components/younEEK/AboutSection';
+import { PREFS_EVENT, readClockSource } from '@/lib/clockPrefs';
 
 export default function YouNeekClock() {
   const [now, setNow] = useState(() => new Date());
   const time = getDecimalTime(now);
   const [isGlitching, setIsGlitching] = useState(false);
+  const [source, setSource] = useState(readClockSource);
   const hour = now.getHours();
   const skipGlitch = useRef(true);
 
   useEffect(() => {
     const id = window.setInterval(() => setNow(new Date()), 16);
     return () => window.clearInterval(id);
+  }, []);
+
+  useEffect(() => {
+    const sync = () => setSource(readClockSource());
+    window.addEventListener(PREFS_EVENT, sync);
+    window.addEventListener('storage', sync);
+    return () => {
+      window.removeEventListener(PREFS_EVENT, sync);
+      window.removeEventListener('storage', sync);
+    };
   }, []);
 
   useEffect(() => {
@@ -38,15 +51,19 @@ export default function YouNeekClock() {
         <ClockHeader />
       </div>
       <div className={`w-full transition-opacity duration-100 ${isGlitching ? 'opacity-0' : ''}`}>
-        <DigitalTimeDisplay time={time} />
+        <DigitalTimeDisplay time={time} source={source} />
       </div>
       <div className={`w-full transition-opacity duration-100 ${isGlitching ? 'opacity-0' : ''}`}>
         <HapticTimeManager time={time} />
         <FrequencyManager time={time} />
       </div>
       <div className={`w-full overflow-visible ${isGlitching ? 'animate-glitch' : ''}`}>
-        <ClockTimeLegend now={now} time={time} />
-        <ClockDial time={time} isGlitching={isGlitching} />
+        <div className="mb-4">
+          <p className="mb-2 text-center font-mono text-[10px] uppercase tracking-widest text-white/40">Clock type</p>
+          <ClockTypeSelect value={source} />
+        </div>
+        <ClockTimeLegend now={now} time={time} source={source} />
+        <ClockDial time={time} isGlitching={isGlitching} source={source} />
       </div>
 
       <div className={`w-full transition-opacity duration-100 ${isGlitching ? 'opacity-0' : ''}`}>

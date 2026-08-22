@@ -61,14 +61,31 @@ export function formatDigital(time, source = 'youneek') {
   return `${pad(hours)}${sep}${pad(minutes)}`;
 }
 
-export function showsRegularHands(source) {
-  return source === 'all' || source === 'regular' || source === 'youneek12';
-}
-
-export function showsArmyHands(source) {
-  return source === 'all' || source === 'army' || source === 'youneek12';
-}
-
-export function showsYouneekHands(source) {
-  return source === 'all' || source === 'youneek';
+export function getHandRotations(time, source = 'youneek') {
+  if (source === 'regular') {
+    return {
+      hour: time.regularHourRotation,
+      minute: time.regularMinuteRotation,
+      second: time.regularSecondRotation,
+    };
+  }
+  if (source === 'army') {
+    return {
+      hour: time.armyHourRotation,
+      minute: time.armyMinuteRotation,
+      second: time.armySecondRotation,
+    };
+  }
+  if (source === 'youneek12') {
+    return {
+      hour: time.regularHourRotation,
+      minute: time.armyMinuteRotation,
+      second: time.armySecondRotation,
+    };
+  }
+  return {
+    hour: time.unitRotation,
+    minute: time.minuteRotation,
+    second: time.secondRotation,
+  };
 }

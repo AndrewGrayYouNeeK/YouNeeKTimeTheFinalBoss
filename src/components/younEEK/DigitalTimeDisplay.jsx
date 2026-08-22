@@ -1,8 +1,6 @@
-const GREEN = '#39ff14';
+import { formatDigital } from '@/lib/clockPrefs';
 
-function pad(value) {
-  return String(value).padStart(2, '0');
-}
+const GREEN = '#39ff14';
 
 function DigitCard({ digit }) {
   return (
@@ -19,20 +17,21 @@ function DigitCard({ digit }) {
   );
 }
 
-export default function DigitalTimeDisplay({ time }) {
-  const digits = [...pad(time.units), ...pad(time.minutes)];
+export default function DigitalTimeDisplay({ time, source = 'youneek' }) {
+  const chars = [...formatDigital(time, source)];
 
   return (
     <div className="w-full text-center">
       <div className="flex items-center justify-center gap-2 sm:gap-3">
-        <DigitCard digit={digits[0]} />
-        <DigitCard digit={digits[1]} />
-        <div className="px-1 font-mono text-5xl sm:text-6xl"
-          style={{ color: GREEN, textShadow: `0 0 10px ${GREEN}` }}>•</div>
-        <DigitCard digit={digits[2]} />
-        <DigitCard digit={digits[3]} />
+        {chars.map((ch, i) => (
+          ch === '•' || ch === ':'
+            ? (
+              <div key={`${ch}-${i}`} className="px-1 font-mono text-5xl sm:text-6xl"
+                style={{ color: GREEN, textShadow: `0 0 10px ${GREEN}` }}>{ch}</div>
+            )
+            : <DigitCard key={`${ch}-${i}`} digit={ch} />
+        ))}
       </div>
-      {/* Removed "Hours / 100" label per request */}
     </div>
   );
 }

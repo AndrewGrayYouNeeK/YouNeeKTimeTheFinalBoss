@@ -7,7 +7,7 @@ import { GREEN } from './clockConstants';
 
 const DEFAULT_CENTER_IMAGE = '/clock-face-default.jpg';
 
-export default function ClockDial({ time, isGlitching, source = 'all' }) {
+export default function ClockDial({ time, isGlitching, source = 'youneek' }) {
   const [centerImage, setCenterImage] = useState(
     localStorage.getItem('clockFaceUrl') || DEFAULT_CENTER_IMAGE
   );
@@ -22,8 +22,8 @@ export default function ClockDial({ time, isGlitching, source = 'all' }) {
 
   return (
     <motion.div
-      animate={{ scale: [1, 1.018, 1] }}
-      transition={{ duration: 8.64, repeat: Infinity, ease: 'easeInOut' }}
+      animate={{ scale: [1, 1.036, 1] }}
+      transition={{ duration: 4.2, repeat: Infinity, ease: 'easeInOut' }}
       className="relative aspect-square w-full max-w-[32rem] overflow-visible"
     >
       {centerImage && (
@@ -51,7 +51,7 @@ export default function ClockDial({ time, isGlitching, source = 'all' }) {
       </div>
 
       <div
-        className="absolute inset-0 rounded-full pointer-events-none z-40"
+        className="clock-heartbeat absolute inset-0 rounded-full pointer-events-none z-40"
         style={{
           border: `1px solid ${GREEN}`,
           boxShadow: `0 0 8px ${GREEN}66, inset 0 0 12px ${GREEN}22`,
