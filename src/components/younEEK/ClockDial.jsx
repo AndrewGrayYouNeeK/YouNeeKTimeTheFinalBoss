@@ -22,13 +22,13 @@ export default function ClockDial({ time, isGlitching, source = 'youneek' }) {
 
   return (
     <motion.div
-      animate={{ scale: [1, 1.036, 1] }}
-      transition={{ duration: 4.2, repeat: Infinity, ease: 'easeInOut' }}
+      animate={{ scale: [1, 1.04, 1] }}
+      transition={{ duration: 8.64, repeat: Infinity, ease: 'easeInOut' }}
       className="relative aspect-square w-full max-w-[32rem] overflow-visible"
     >
       {centerImage && (
         <div
-          className="absolute inset-[19%] rounded-full overflow-hidden z-10"
+          className="absolute inset-[12%] rounded-full overflow-hidden z-10"
           style={{ pointerEvents: 'none' }}
         >
           <img
@@ -57,6 +57,15 @@ export default function ClockDial({ time, isGlitching, source = 'youneek' }) {
           boxShadow: `0 0 8px ${GREEN}66, inset 0 0 12px ${GREEN}22`,
         }}
       />
+      <svg viewBox="0 0 400 400" className="clock-heartbeat-heart pointer-events-none absolute inset-0 z-50 h-full w-full">
+        <path
+          d="M200 318 C196 308 176 294 164 306 C154 316 158 332 200 354 C242 332 246 316 236 306 C224 294 204 308 200 318 Z"
+          fill="#ff2a2a"
+          stroke={GREEN}
+          strokeWidth="1.2"
+          style={{ filter: 'drop-shadow(0 0 8px #ff2a2a)' }}
+        />
+      </svg>
     </motion.div>
   );
 }

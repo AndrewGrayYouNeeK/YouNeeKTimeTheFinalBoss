@@ -169,6 +169,11 @@ html.lightning-lit .lightning-reveal-subtitle {
   animation: clock-heartbeat 1.15s ease-in-out infinite;
 }
 
+.clock-heartbeat-heart {
+  animation: clock-heartbeat 1.15s ease-in-out infinite;
+  transform-origin: 200px 330px;
+}
+
 .star-layer-1 {
   background-image: radial-gradient(1px 1px at 20px 30px, #ffffff, transparent), radial-gradient(1px 1px at 40px 70px, #ffffff, transparent), radial-gradient(1px 1px at 50px 160px, #ffffff, transparent), radial-gradient(1px 1px at 90px 40px, #ffffff, transparent), radial-gradient(1px 1px at 130px 80px, #ffffff, transparent), radial-gradient(1px 1px at 160px 120px, #ffffff, transparent);
   background-size: 200px 200px;
