@@ -160,6 +160,28 @@ export default function HapticTimeManager({ time }) {
         {enabled ? 'Haptic Pocket Mode: ON' : 'Haptic Pocket Mode: OFF'}
       </Button>
 
+      <div className="mt-4 text-center space-y-3 max-w-xs">
+        <p className="text-[10px] text-white/45 font-mono tracking-widest uppercase">
+          Haptics tell this time every 15 min
+        </p>
+        <Select
+          value={clockSource}
+          onValueChange={(id) => {
+            setClockSource(id);
+            writeClockSource(id);
+          }}
+        >
+          <SelectTrigger className="w-full bg-black/40 border-[#39ff14]/30 text-[#39ff14] text-[10px] font-mono uppercase tracking-widest">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            {CLOCK_SOURCES.map((item) => (
+              <SelectItem key={item.id} value={item.id}>{item.label}</SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
+
       {enabled && (
         <div className="mt-4 text-center space-y-3 max-w-xs">
           <div className="space-y-1">
@@ -170,23 +192,6 @@ export default function HapticTimeManager({ time }) {
               {wakeLockOn ? 'Screen kept awake' : 'Keep screen on in pocket · ring/silent off for iPhone buzz'}
             </p>
           </div>
-
-          <Select
-            value={clockSource}
-            onValueChange={(id) => {
-              setClockSource(id);
-              writeClockSource(id);
-            }}
-          >
-            <SelectTrigger className="w-full bg-black/40 border-[#39ff14]/30 text-[#39ff14] text-[10px] font-mono uppercase tracking-widest">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              {CLOCK_SOURCES.map((item) => (
-                <SelectItem key={item.id} value={item.id}>{item.label}</SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
 
           <Button
             ref={(el) => bindIosHapticButton(el, () => feelRef.current())}

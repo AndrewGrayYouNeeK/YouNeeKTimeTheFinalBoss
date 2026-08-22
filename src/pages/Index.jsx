@@ -2,6 +2,7 @@ import YouNeekClock from '@/components/YouNeekClock';
 import StarsBackground from '@/components/younEEK/StarsBackground';
 import LightningFlash from '@/components/landing/LightningFlash';
 import RainOverlay from '@/components/landing/RainOverlay';
+import SkyCraft from '@/components/younEEK/SkyCraft';
 import PullToRefresh from '@/components/PullToRefresh';
 
 export default function Index() {
@@ -15,6 +16,7 @@ export default function Index() {
       <StarsBackground />
       <LightningFlash />
       <RainOverlay />
+      <SkyCraft />
       <PullToRefresh onRefresh={handleRefresh}>
         <div className="relative z-10">
           <YouNeekClock />
