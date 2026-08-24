@@ -38,11 +38,11 @@ function FaceNumber({ x, y, color, size, children }) {
       dominantBaseline="middle"
       fill={color}
       stroke={color}
-      strokeWidth="0.4"
+      strokeWidth="0.6"
       fontSize={size}
       fontFamily="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace"
-      fontWeight="700"
-      style={{ paintOrder: 'stroke fill', filter: `drop-shadow(0 0 6px ${color})` }}
+      fontWeight="800"
+      style={{ fill: color, color, paintOrder: 'stroke fill', filter: `drop-shadow(0 0 8px ${color})` }}
     >
       {children}
     </text>
@@ -55,18 +55,18 @@ export default function ClockLabels() {
       {outerLabels.map((item) => {
         const p = polarPoint(170, item.angle);
         return (
-          <FaceNumber key={item.label} x={p.x} y={p.y} color={GREEN} size="12">
+          <FaceNumber key={item.label} x={p.x} y={p.y} color={GREEN} size="15">
             {item.label}
           </FaceNumber>
         );
       })}
 
-      <FaceNumber x="200" y="60" color={RED} size="10">0</FaceNumber>
+      <FaceNumber x="200" y="58" color={RED} size="13">0</FaceNumber>
 
       {innerLabels.map((item) => {
-        const p = polarPoint(138, item.angle);
+        const p = polarPoint(124, item.angle);
         return (
-          <FaceNumber key={item.label} x={p.x} y={p.y} color={RED} size="10">
+          <FaceNumber key={item.label} x={p.x} y={p.y} color={RED} size="13">
             {item.label}
           </FaceNumber>
         );
