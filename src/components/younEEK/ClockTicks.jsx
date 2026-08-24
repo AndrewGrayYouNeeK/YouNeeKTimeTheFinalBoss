@@ -1,9 +1,6 @@
-import { GREEN, RED } from './clockConstants';
+import { GREEN } from './clockConstants';
 
-const polar = (r, i, n) => {
-  const angle = (i / n) * Math.PI * 2 - Math.PI / 2;
-  return { cx: 200 + Math.cos(angle) * r, cy: 200 + Math.sin(angle) * r };
-};
+const RED = '#ff2222';
 
 const OUTER_TICKS = Array.from({ length: 24 }, (_, i) => {
   const angle = (i / 24) * Math.PI * 2 - Math.PI / 2;
@@ -23,28 +20,17 @@ const OUTER_TICKS = Array.from({ length: 24 }, (_, i) => {
 const INNER_TICKS = Array.from({ length: 100 }, (_, i) => {
   const angle = (i / 100) * Math.PI * 2 - Math.PI / 2;
   const isMajor = i % 10 === 0;
-  const isMid = i % 5 === 0;
-  const innerR = isMajor ? 150 : isMid ? 153 : 156;
+  const innerR = isMajor ? 150 : 156;
   const outerR = 162;
   return {
     x1: 200 + Math.cos(angle) * innerR,
     y1: 200 + Math.sin(angle) * innerR,
     x2: 200 + Math.cos(angle) * outerR,
     y2: 200 + Math.sin(angle) * outerR,
-    strokeWidth: isMajor ? 2.2 : isMid ? 1.4 : 0.8,
+    strokeWidth: isMajor ? 2.2 : 0.8,
     key: `inner-${i}`,
   };
 });
-
-const OUTER_DOTS = Array.from({ length: 8 }, (_, i) => ({
-  ...polar(178, i, 8),
-  key: `odot-${i}`,
-}));
-
-const INNER_DOTS = Array.from({ length: 10 }, (_, i) => ({
-  ...polar(146, i, 10),
-  key: `idot-${i}`,
-}));
 
 export default function ClockTicks() {
   return (
@@ -86,17 +72,6 @@ export default function ClockTicks() {
         />
       ))}
 
-      {OUTER_DOTS.map((d) => (
-        <circle
-          key={d.key}
-          cx={d.cx}
-          cy={d.cy}
-          r="3.2"
-          fill={GREEN}
-          style={{ filter: `drop-shadow(0 0 4px ${GREEN})` }}
-        />
-      ))}
-
       {INNER_TICKS.map((t) => (
         <line
           key={t.key}
@@ -108,18 +83,6 @@ export default function ClockTicks() {
           strokeWidth={t.strokeWidth}
           strokeLinecap="round"
           style={{ filter: `drop-shadow(0 0 2px ${RED}66)` }}
-          opacity={t.strokeWidth < 1 ? 0.8 : 1}
-        />
-      ))}
-
-      {INNER_DOTS.map((d) => (
-        <circle
-          key={d.key}
-          cx={d.cx}
-          cy={d.cy}
-          r="2.4"
-          fill={RED}
-          style={{ filter: `drop-shadow(0 0 3px ${RED}aa)` }}
         />
       ))}
     </svg>

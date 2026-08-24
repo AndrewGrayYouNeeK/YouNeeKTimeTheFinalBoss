@@ -1,24 +1,35 @@
-import { GREEN, HAND_RED, YELLOW } from './clockConstants';
-import { formatDigital, sourceLabel } from '@/lib/clockPrefs';
+import { GREEN, HAND_RED, HAND_BLUE, HAND_PURPLE } from './clockConstants';
 
 function pad(v) { return String(v).padStart(2, '0'); }
 
-export default function ClockTimeLegend({ now, time, source }) {
-  const seconds =
-    source === 'regular'
-      ? pad(now.getSeconds())
-      : source === 'youneek'
-        ? pad(time.seconds)
-        : pad(time.armySeconds);
+function Row({ color, label, value, active }) {
+  const style = {
+    color,
+    textShadow: `0 0 8px ${color}99`,
+    opacity: active ? 1 : 0.45,
+  };
+  return (
+    <>
+      <div className="font-mono text-[11px] uppercase tracking-[0.18em] text-right" style={style}>{label}</div>
+      <div className="font-mono text-[11px] uppercase tracking-[0.18em] text-center" style={style}>•</div>
+      <div className="font-mono text-[11px] uppercase tracking-[0.18em] text-left" style={style}>{value}</div>
+    </>
+  );
+}
+
+export default function ClockTimeLegend({ now, time, source = 'youneek' }) {
+  const standardTime = `${pad(time.hours12)}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
+  const armyStr = `${pad(time.armyHours)}:${pad(time.armyMinutes)}:${pad(time.armySeconds)}`;
+  const army12Str = `${pad(time.hours12)}:${pad(time.armyMinutes)}:${pad(time.armySeconds)}`;
+  const digitalStr = `${pad(time.units)}•${pad(time.minutes)}•${pad(time.seconds)}`;
 
   return (
     <div className="mb-3 flex justify-center">
-      <div className="font-mono text-[11px] uppercase tracking-[0.18em] text-center" style={{ color: GREEN, textShadow: `0 0 8px ${GREEN}99` }}>
-        {sourceLabel(source)}
-        <span className="mx-2" style={{ color: HAND_RED }}>•</span>
-        {formatDigital(time, source)}
-        <span className="mx-1" style={{ color: YELLOW }}>:</span>
-        <span style={{ color: YELLOW }}>{seconds}</span>
+      <div className="inline-grid grid-cols-[1fr_auto_1fr] gap-x-3 gap-y-1 items-center justify-center">
+        <Row color={GREEN} label="YouNeeK Digital" value={digitalStr} active={source === 'youneek'} />
+        <Row color={HAND_RED} label="Regular Time" value={standardTime} active={source === 'regular'} />
+        <Row color={HAND_BLUE} label="YouNeeK Time" value={army12Str} active={source === 'youneek12'} />
+        <Row color={HAND_PURPLE} label="Army YouNeeK Time" value={armyStr} active={source === 'army'} />
       </div>
     </div>
   );

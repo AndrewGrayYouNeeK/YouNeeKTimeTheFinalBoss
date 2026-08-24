@@ -15,28 +15,11 @@ export function isIOS() {
 }
 
 function canVibrate() {
-  return typeof navigator !== 'undefined' && typeof navigator.vibrate === 'function';
-}
-
-let audioCtx = null;
-let buzzGen = 0;
-
-function getAudioCtx() {
-  if (audioCtx) return audioCtx;
-  const Ctx = window.AudioContext || window.webkitAudioContext;
-  if (!Ctx) return null;
-  audioCtx = new Ctx();
-  return audioCtx;
-}
-
-export function unlockHaptics() {
-  const ctx = getAudioCtx();
-  if (ctx?.state === 'suspended') {
-    ctx.resume().catch(() => {});
-  }
-  if (canVibrate()) {
-    try { navigator.vibrate(10); } catch { /* ignore */ }
-  }
+  return (
+    !isIOS() &&
+    typeof navigator !== 'undefined' &&
+    typeof navigator.vibrate === 'function'
+  );
 }
 
 function onMs(kind) {
@@ -51,58 +34,105 @@ function gapMs(kind) {
   return PULSE.onesGap;
 }
 
-function buzzAt(ctx, start, dur, freq, gainValue) {
-  const osc = ctx.createOscillator();
-  const filter = ctx.createBiquadFilter();
-  const g = ctx.createGain();
-  osc.type = 'square';
-  osc.frequency.value = freq;
-  filter.type = 'lowpass';
-  filter.frequency.value = 180;
-  g.gain.setValueAtTime(0.0001, start);
-  g.gain.exponentialRampToValueAtTime(gainValue, start + 0.01);
-  g.gain.exponentialRampToValueAtTime(0.0001, start + Math.max(0.02, dur - 0.01));
-  osc.connect(filter);
-  filter.connect(g);
-  g.connect(ctx.destination);
-  osc.start(start);
-  osc.stop(start + dur + 0.03);
+let iosHapticNode = null;
+let pulseGen = 0;
+
+function ensureIosHapticNode() {
+  if (iosHapticNode) return iosHapticNode;
+  if (typeof document === 'undefined') return null;
+
+  const label = document.createElement('label');
+  label.setAttribute('aria-hidden', 'true');
+  label.style.cssText = 'position:fixed;left:0;bottom:0;width:44px;height:44px;overflow:hidden;opacity:0.01;pointer-events:none;z-index:-1;';
+
+  const input = document.createElement('input');
+  input.type = 'checkbox';
+  input.setAttribute('switch', '');
+  input.tabIndex = -1;
+  Object.assign(input.style, {
+    position: 'absolute',
+    inset: '0',
+    width: '44px',
+    height: '44px',
+    margin: '0',
+    opacity: '0.01',
+  });
+
+  label.appendChild(input);
+  document.body.appendChild(label);
+  iosHapticNode = { label, input };
+  return iosHapticNode;
 }
 
-function scheduleAudioBuzzes(steps) {
-  const ctx = getAudioCtx();
-  if (!ctx) return 0;
-  if (ctx.state === 'suspended') ctx.resume().catch(() => {});
-  const gen = buzzGen;
-  let t = ctx.currentTime + 0.03;
+function iosSwitchTap() {
+  if (!isIOS()) return;
+  try {
+    const node = ensureIosHapticNode();
+    if (!node) return;
+    node.input.checked = !node.input.checked;
+    node.label.click();
+  } catch {
+    /* ignore */
+  }
+}
+
+export function unlockHaptics() {
+  if (isIOS()) ensureIosHapticNode();
+  if (canVibrate()) {
+    try { navigator.vibrate(1); } catch { /* ignore */ }
+  }
+}
+
+function playIosSteps(steps) {
+  const gen = pulseGen;
+  let delay = 0;
+
+  const tap = (at) => {
+    const run = () => {
+      if (gen !== pulseGen) return;
+      iosSwitchTap();
+    };
+    if (at <= 0) run();
+    else window.setTimeout(run, at);
+  };
+
   for (const step of steps) {
-    if (gen !== buzzGen) break;
     if (step.kind === 'pause') {
-      t += step.ms / 1000;
+      delay += step.ms;
       continue;
     }
-    const dur = onMs(step.kind) / 1000;
-    const freq = step.kind === 'hour' ? 52 : step.kind === 'tenth' ? 88 : 120;
-    const gain = step.kind === 'hour' ? 0.45 : 0.32;
-    buzzAt(ctx, t, dur, freq, gain);
-    t += dur + gapMs(step.kind) / 1000;
+    const on = onMs(step.kind);
+    if (step.kind === 'hour') {
+      const n = Math.max(6, Math.round(on / 80));
+      for (let i = 0; i < n; i += 1) tap(delay + i * 80);
+    } else if (step.kind === 'tenth') {
+      tap(delay);
+      tap(delay + 70);
+    } else {
+      tap(delay);
+    }
+    delay += on + gapMs(step.kind);
   }
-  return Math.max(0, (t - ctx.currentTime) * 1000);
+
+  return delay;
 }
 
 export function playHapticSteps(steps, vibratePattern) {
   unlockHaptics();
-  let vibrated = false;
-  if (vibratePattern?.length && canVibrate()) {
+  pulseGen += 1;
+  const list = steps?.length ? steps : [{ kind: 'ones' }];
+
+  if (canVibrate()) {
+    const pattern = vibratePattern?.length ? vibratePattern : [40];
     try {
-      vibrated = navigator.vibrate(vibratePattern) !== false;
-    } catch {
-      vibrated = false;
-    }
+      navigator.vibrate(0);
+      navigator.vibrate(pattern);
+    } catch { /* ignore */ }
+    return pattern.reduce((a, b) => a + b, 0);
   }
-  const audioMs = scheduleAudioBuzzes(steps);
-  const vibeMs = vibratePattern?.length ? vibratePattern.reduce((a, b) => a + b, 0) : 0;
-  return Math.max(audioMs, vibeMs);
+
+  if (isIOS()) return playIosSteps(list);
+  return 0;
 }
 
 export function triggerFaint() {
@@ -122,14 +152,9 @@ export function triggerConfirm() {
 }
 
 export function stopHaptics() {
-  buzzGen += 1;
+  pulseGen += 1;
   if (canVibrate()) {
     try { navigator.vibrate(0); } catch { /* ignore */ }
-  }
-  if (audioCtx) {
-    const ctx = audioCtx;
-    audioCtx = null;
-    ctx.close().catch(() => {});
   }
 }
 

@@ -51,21 +51,12 @@ export default function ClockDial({ time, isGlitching, source = 'youneek' }) {
       </div>
 
       <div
-        className="clock-heartbeat absolute inset-0 rounded-full pointer-events-none z-40"
+        className="absolute inset-0 rounded-full pointer-events-none z-40"
         style={{
           border: `1px solid ${GREEN}`,
           boxShadow: `0 0 8px ${GREEN}66, inset 0 0 12px ${GREEN}22`,
         }}
       />
-      <svg viewBox="0 0 400 400" className="clock-heartbeat-heart pointer-events-none absolute inset-0 z-50 h-full w-full">
-        <path
-          d="M200 318 C196 308 176 294 164 306 C154 316 158 332 200 354 C242 332 246 316 236 306 C224 294 204 308 200 318 Z"
-          fill="#ff2a2a"
-          stroke={GREEN}
-          strokeWidth="1.2"
-          style={{ filter: 'drop-shadow(0 0 8px #ff2a2a)' }}
-        />
-      </svg>
     </motion.div>
   );
 }

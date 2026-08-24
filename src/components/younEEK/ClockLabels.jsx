@@ -6,7 +6,6 @@ const polarPoint = (radius, angleDeg) => {
 };
 
 const outerLabels = [
-  { label: '00', angle: 0 },
   { label: '03', angle: 45 },
   { label: '06', angle: 90 },
   { label: '09', angle: 135 },
@@ -32,7 +31,7 @@ export default function ClockLabels() {
   return (
     <svg viewBox="0 0 400 400" className="absolute inset-0 h-full w-full pointer-events-none">
       {outerLabels.map((item) => {
-        const p = polarPoint(166, item.angle);
+        const p = polarPoint(170, item.angle);
         return (
           <text
             key={item.label}
@@ -41,31 +40,18 @@ export default function ClockLabels() {
             textAnchor="middle"
             dominantBaseline="middle"
             fill={GREEN}
-            fontSize="13.5"
-            fontFamily="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace"
+            fontSize="12"
+            fontFamily="monospace"
             fontWeight="700"
-            style={{ filter: `drop-shadow(0 0 5px ${GREEN}aa)` }}
+            style={{ filter: `drop-shadow(0 0 4px ${GREEN}99)` }}
           >
             {item.label}
           </text>
         );
       })}
 
-      <text
-        x="200"
-        y="58"
-        textAnchor="middle"
-        dominantBaseline="middle"
-        fill={RED}
-        fontSize="11"
-        fontFamily="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace"
-        fontWeight="700"
-      >
-        0
-      </text>
-
       {innerLabels.map((item) => {
-        const p = polarPoint(132, item.angle);
+        const p = polarPoint(140, item.angle);
         return (
           <text
             key={item.label}
@@ -74,9 +60,10 @@ export default function ClockLabels() {
             textAnchor="middle"
             dominantBaseline="middle"
             fill={RED}
-            fontSize="10.5"
-            fontFamily="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace"
+            fontSize="10"
+            fontFamily="monospace"
             fontWeight="700"
+            style={{ filter: `drop-shadow(0 0 3px ${RED}88)` }}
           >
             {item.label}
           </text>
