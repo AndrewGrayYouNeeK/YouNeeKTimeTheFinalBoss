@@ -50,6 +50,20 @@ export default function ClockLabels() {
         );
       })}
 
+      <text
+        x="200"
+        y="60"
+        textAnchor="middle"
+        dominantBaseline="middle"
+        fill={RED}
+        fontSize="10"
+        fontFamily="monospace"
+        fontWeight="700"
+        style={{ filter: `drop-shadow(0 0 3px ${RED}88)` }}
+      >
+        0
+      </text>
+
       {innerLabels.map((item) => {
         const p = polarPoint(140, item.angle);
         return (
