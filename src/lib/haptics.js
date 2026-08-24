@@ -14,10 +14,6 @@ export function isIOS() {
   );
 }
 
-function isAndroid() {
-  return typeof navigator !== 'undefined' && /Android/i.test(navigator.userAgent);
-}
-
 function canVibrate() {
   return (
     !isIOS() &&
