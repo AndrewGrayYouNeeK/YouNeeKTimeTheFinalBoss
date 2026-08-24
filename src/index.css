@@ -146,34 +146,6 @@ html.lightning-lit .lightning-reveal-subtitle {
   50% { opacity: 1; }
 }
 
-@keyframes clock-heartbeat {
-  0%, 18%, 100% {
-    transform: scale(1);
-    box-shadow: 0 0 8px #39ff1466, inset 0 0 12px #39ff1422;
-  }
-  6% {
-    transform: scale(1.045);
-    box-shadow: 0 0 22px #39ff14aa, inset 0 0 18px #ff2a2a44;
-  }
-  11% {
-    transform: scale(1);
-    box-shadow: 0 0 8px #39ff1466, inset 0 0 12px #39ff1422;
-  }
-  16% {
-    transform: scale(1.06);
-    box-shadow: 0 0 28px #ff2a2a77, inset 0 0 20px #39ff1455;
-  }
-}
-
-.clock-heartbeat {
-  animation: clock-heartbeat 1.15s ease-in-out infinite;
-}
-
-.clock-heartbeat-heart {
-  animation: clock-heartbeat 1.15s ease-in-out infinite;
-  transform-origin: 200px 330px;
-}
-
 .star-layer-1 {
   background-image: radial-gradient(1px 1px at 20px 30px, #ffffff, transparent), radial-gradient(1px 1px at 40px 70px, #ffffff, transparent), radial-gradient(1px 1px at 50px 160px, #ffffff, transparent), radial-gradient(1px 1px at 90px 40px, #ffffff, transparent), radial-gradient(1px 1px at 130px 80px, #ffffff, transparent), radial-gradient(1px 1px at 160px 120px, #ffffff, transparent);
   background-size: 200px 200px;
