@@ -189,7 +189,7 @@ export default function HapticTimeManager({ time }) {
               {isPlayingTime ? 'Playing time…' : `Active — tells ${sourceLabel(clockSource)} every 15 min`}
             </p>
             <p className="text-[9px] text-white/40 font-mono tracking-wide leading-relaxed">
-              {wakeLockOn ? 'Screen kept awake' : 'Keep screen on in pocket · ring/silent off for iPhone buzz'}
+              {wakeLockOn ? 'Screen kept awake' : 'Keep the screen on in your pocket'}
             </p>
           </div>
 
