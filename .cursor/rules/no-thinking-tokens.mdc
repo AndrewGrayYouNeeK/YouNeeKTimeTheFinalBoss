@@ -1,0 +1,12 @@
+---
+description: Do not spend extra thinking or show internal reasoning
+alwaysApply: true
+---
+
+# No billed self-talk
+
+- Do not narrate internal reasoning, planning, or "thinking out loud" in replies.
+- Do not write chain-of-thought. Answer BOSS directly.
+- Skip extra analysis, extra tool calls, and extra drafts unless BOSS ordered the work.
+- Keep thinking to the minimum needed to follow the last instruction.
+- Token billing is controlled by Cursor, not this agent. This rule only forbids wasting tokens on self-talk and unused work.
