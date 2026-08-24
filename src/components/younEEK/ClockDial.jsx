@@ -26,13 +26,9 @@ export default function ClockDial({ time, isGlitching, source = 'youneek' }) {
       transition={{ duration: 8.64, repeat: Infinity, ease: 'easeInOut' }}
       className="relative aspect-square w-full max-w-[32rem] overflow-visible"
     >
-      <div
-        className="absolute rounded-full bg-black z-[9]"
-        style={{ inset: '23%', pointerEvents: 'none' }}
-      />
       {centerImage && (
         <div
-          className="absolute inset-[34%] rounded-full overflow-hidden z-10"
+          className="absolute inset-[38%] rounded-full overflow-hidden z-10"
           style={{ pointerEvents: 'none' }}
         >
           <img
