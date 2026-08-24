@@ -20,14 +20,15 @@ const OUTER_TICKS = Array.from({ length: 24 }, (_, i) => {
 const INNER_TICKS = Array.from({ length: 100 }, (_, i) => {
   const angle = (i / 100) * Math.PI * 2 - Math.PI / 2;
   const isMajor = i % 10 === 0;
-  const innerR = isMajor ? 150 : 156;
+  const isMid = i % 5 === 0;
+  const innerR = isMajor ? 148 : isMid ? 153 : 157;
   const outerR = 162;
   return {
     x1: 200 + Math.cos(angle) * innerR,
     y1: 200 + Math.sin(angle) * innerR,
     x2: 200 + Math.cos(angle) * outerR,
     y2: 200 + Math.sin(angle) * outerR,
-    strokeWidth: isMajor ? 2.2 : 0.8,
+    strokeWidth: isMajor ? 2.2 : isMid ? 1.4 : 0.8,
     key: `inner-${i}`,
   };
 });
@@ -35,18 +36,17 @@ const INNER_TICKS = Array.from({ length: 100 }, (_, i) => {
 export default function ClockTicks() {
   return (
     <svg viewBox="0 0 400 400" className="absolute inset-0 h-full w-full z-20 pointer-events-none">
-      <circle cx="200" cy="200" r="161" fill="#000" />
-      <circle cx="200" cy="200" r="172.5" stroke="black" strokeWidth="22" fill="none" />
+      <circle cx="200" cy="200" r="172.5" stroke="#000" strokeWidth="22" fill="none" />
 
       <circle
         cx="200"
         cy="200"
         r="162"
         stroke={RED}
-        strokeWidth="1"
+        strokeWidth="2"
         fill="none"
         strokeDasharray="4 5"
-        style={{ filter: `drop-shadow(0 0 3px ${RED}aa)` }}
+        style={{ filter: `drop-shadow(0 0 4px ${RED})` }}
       />
 
       <circle
@@ -54,9 +54,9 @@ export default function ClockTicks() {
         cy="200"
         r="199"
         stroke={GREEN}
-        strokeWidth="1.2"
+        strokeWidth="2.4"
         fill="none"
-        style={{ filter: `drop-shadow(0 0 4px ${GREEN})` }}
+        style={{ filter: `drop-shadow(0 0 6px ${GREEN})` }}
       />
 
       {OUTER_TICKS.map((t) => (
@@ -69,7 +69,7 @@ export default function ClockTicks() {
           stroke={GREEN}
           strokeWidth={t.strokeWidth}
           strokeLinecap="round"
-          style={{ filter: `drop-shadow(0 0 3px ${GREEN}88)` }}
+          style={{ filter: `drop-shadow(0 0 3px ${GREEN})` }}
         />
       ))}
 
@@ -83,7 +83,7 @@ export default function ClockTicks() {
           stroke={RED}
           strokeWidth={t.strokeWidth}
           strokeLinecap="round"
-          style={{ filter: `drop-shadow(0 0 2px ${RED}66)` }}
+          style={{ filter: `drop-shadow(0 0 2px ${RED})` }}
         />
       ))}
     </svg>

@@ -44,8 +44,8 @@ export default function ClockHands({ time, source = 'youneek' }) {
 
   return (
     <svg viewBox="0 0 400 400" className="absolute inset-0 h-full w-full" style={{ overflow: 'visible' }}>
-      <SwordHand rotation={hour} length={178} tail={28} color={GREEN} width="14" />
-      <SwordHand rotation={minute} length={146} tail={26} color={HAND_RED} width="9" />
+      <SwordHand rotation={hour} length={122} tail={32} color={GREEN} width="16" />
+      <SwordHand rotation={minute} length={164} tail={36} color={HAND_RED} width="10" />
       <SecondsHand rotation={second} />
       <circle
         cx="200"
