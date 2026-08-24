@@ -1,4 +1,6 @@
-import { GREEN, RED } from './clockConstants';
+import { GREEN } from './clockConstants';
+
+const RED = '#ff2222';
 
 const polarPoint = (radius, angleDeg) => {
   const angle = (angleDeg - 90) * (Math.PI / 180);
