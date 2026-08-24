@@ -24,11 +24,11 @@ export default function ClockDial({ time, isGlitching, source = 'youneek' }) {
     <motion.div
       animate={{ scale: [1, 1.018, 1] }}
       transition={{ duration: 8.64, repeat: Infinity, ease: 'easeInOut' }}
-      className="relative aspect-square w-full max-w-[32rem] overflow-visible"
+      className="relative aspect-square w-full max-w-[32rem]"
     >
       {centerImage && (
         <div
-          className="absolute inset-[38%] rounded-full overflow-hidden z-10"
+          className="absolute inset-[12%] rounded-full overflow-hidden z-10"
           style={{ pointerEvents: 'none' }}
         >
           <img

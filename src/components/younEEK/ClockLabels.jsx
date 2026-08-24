@@ -1,5 +1,4 @@
-import { GREEN } from './clockConstants';
-
+const GREEN = '#39ff14';
 const RED = '#ff2222';
 
 const polarPoint = (radius, angleDeg) => {
@@ -29,46 +28,60 @@ const innerLabels = [
   { label: '90', angle: 324 },
 ];
 
-function FaceNumber({ x, y, color, size, children }) {
-  return (
-    <text
-      x={x}
-      y={y}
-      textAnchor="middle"
-      dominantBaseline="middle"
-      fill={color}
-      stroke={color}
-      strokeWidth="0.6"
-      fontSize={size}
-      fontFamily="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace"
-      fontWeight="800"
-      style={{ fill: color, color, paintOrder: 'stroke fill', filter: `drop-shadow(0 0 8px ${color})` }}
-    >
-      {children}
-    </text>
-  );
-}
-
 export default function ClockLabels() {
   return (
     <svg viewBox="0 0 400 400" className="absolute inset-0 h-full w-full pointer-events-none">
       {outerLabels.map((item) => {
         const p = polarPoint(170, item.angle);
         return (
-          <FaceNumber key={item.label} x={p.x} y={p.y} color={GREEN} size="15">
+          <text
+            key={item.label}
+            x={p.x}
+            y={p.y}
+            textAnchor="middle"
+            dominantBaseline="middle"
+            fill={GREEN}
+            fontSize="12"
+            fontFamily="monospace"
+            fontWeight="700"
+            style={{ fill: GREEN, color: GREEN, filter: `drop-shadow(0 0 4px ${GREEN}99)` }}
+          >
             {item.label}
-          </FaceNumber>
+          </text>
         );
       })}
 
-      <FaceNumber x="200" y="58" color={RED} size="13">0</FaceNumber>
+      <text
+        x="200"
+        y="60"
+        textAnchor="middle"
+        dominantBaseline="middle"
+        fill={RED}
+        fontSize="10"
+        fontFamily="monospace"
+        fontWeight="700"
+        style={{ fill: RED, color: RED, filter: `drop-shadow(0 0 3px ${RED}88)` }}
+      >
+        0
+      </text>
 
       {innerLabels.map((item) => {
-        const p = polarPoint(124, item.angle);
+        const p = polarPoint(140, item.angle);
         return (
-          <FaceNumber key={item.label} x={p.x} y={p.y} color={RED} size="13">
+          <text
+            key={item.label}
+            x={p.x}
+            y={p.y}
+            textAnchor="middle"
+            dominantBaseline="middle"
+            fill={RED}
+            fontSize="10"
+            fontFamily="monospace"
+            fontWeight="700"
+            style={{ fill: RED, color: RED, filter: `drop-shadow(0 0 3px ${RED}88)` }}
+          >
             {item.label}
-          </FaceNumber>
+          </text>
         );
       })}
     </svg>
