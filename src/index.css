@@ -115,23 +115,6 @@
 .erupt-reveal-subtitle {
   opacity: 1;
   transition: opacity 0.05s linear, filter 0.05s linear;
-  animation: lava-flicker 4.5s ease-in-out infinite;
-}
-
-.erupt-reveal-subtitle {
-  animation-delay: 1.4s;
-}
-
-@keyframes lava-flicker {
-  0%, 100% {
-    filter: drop-shadow(0 0 8px #ff3b0066) drop-shadow(0 0 22px #ff550033) brightness(1);
-  }
-  45% {
-    filter: drop-shadow(0 0 13px #ff3b00aa) drop-shadow(0 0 34px #ff550055) brightness(1.1) saturate(1.1);
-  }
-  60% {
-    filter: drop-shadow(0 0 9px #ff3b0077) drop-shadow(0 0 24px #ff550040) brightness(1.03);
-  }
 }
 
 .lava-header-title,
@@ -142,7 +125,6 @@
   height: auto;
   object-fit: contain;
   pointer-events: none;
-  filter: drop-shadow(0 0 10px #ff3b0066);
 }
 
 .lava-header-title {
@@ -153,34 +135,6 @@
   margin-top: 0.35rem;
   max-width: min(70vw, 520px);
   max-height: min(10vh, 96px);
-}
-
-html.volcano-lit .erupt-reveal-title,
-html.volcano-lit .erupt-reveal-subtitle {
-  opacity: 1;
-  animation: none;
-  filter:
-    drop-shadow(0 0 8px #fff6)
-    drop-shadow(0 0 22px #ff6a00)
-    drop-shadow(0 0 48px #ff2200)
-    brightness(1.25)
-    saturate(1.35);
-}
-
-.volcano-sky-flash {
-  position: fixed;
-  inset: 0;
-  z-index: 5;
-  pointer-events: none;
-  background:
-    radial-gradient(ellipse at 50% 18%, #ffd19acc 0%, #ff7a28aa 22%, transparent 55%),
-    radial-gradient(ellipse at 50% 45%, #ff9a3add 0%, #ff3b00aa 30%, #4a000066 62%, transparent 80%);
-  opacity: 0;
-  transition: opacity 0.04s linear;
-}
-
-.volcano-sky-flash.is-lit {
-  opacity: 0.92;
 }
 
 .ash-flake {
@@ -215,26 +169,6 @@ html.volcano-lit .erupt-reveal-subtitle {
     transform: translate3d(var(--drift, -10px), 110vh, 0) scale(0.55);
     filter: brightness(0.55);
   }
-}
-
-.volcano-erupt-glow {
-  position: absolute;
-  inset: 0;
-  border-radius: 9999px;
-  pointer-events: none;
-  opacity: 0;
-  background: radial-gradient(circle at 50% 42%, #ffb347cc 0%, #ff450088 35%, transparent 70%);
-  box-shadow: inset 0 0 40px #ff6a0088, 0 0 50px #ff3b0066;
-  transition: opacity 0.05s linear;
-  z-index: 15;
-}
-
-html.volcano-lit .volcano-erupt-glow {
-  opacity: 1;
-}
-
-html.volcano-lit .volcano-erupt-img {
-  filter: brightness(1.55) saturate(1.4) contrast(1.1);
 }
 
 @keyframes twinkle {
