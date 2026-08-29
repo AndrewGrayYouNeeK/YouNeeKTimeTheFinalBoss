@@ -34,12 +34,13 @@ export default function ClockDial({ time, isGlitching, source = 'youneek' }) {
           <img
             src={centerImage}
             alt="YouNeek volcano"
-            className="w-full h-full object-cover"
+            className="volcano-erupt-img w-full h-full object-cover"
             style={{
               opacity: isGlitching ? 0 : 1,
-              transition: 'opacity 0.05s',
+              transition: 'opacity 0.05s, filter 0.05s',
             }}
           />
+          <div className="volcano-erupt-glow" aria-hidden="true" />
         </div>
       )}
 
