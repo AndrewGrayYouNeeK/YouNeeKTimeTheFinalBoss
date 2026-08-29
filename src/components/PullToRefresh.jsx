@@ -49,7 +49,7 @@ export default function PullToRefresh({ onRefresh, children }) {
           opacity: isPulling || refreshing ? 1 : 0
         }}
       >
-        <div className={`w-8 h-8 rounded-full border-2 border-white/20 border-t-[#39ff14] ${refreshing ? 'animate-spin' : ''}`} 
+        <div className={`w-8 h-8 rounded-full border-2 border-white/20 border-t-[#ff6a00] ${refreshing ? 'animate-spin' : ''}`} 
              style={{ transform: `rotate(${pullDistance * 2}deg)` }} />
       </div>
       <div 

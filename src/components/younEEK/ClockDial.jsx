@@ -32,6 +32,9 @@ export default function ClockDial({ time, isGlitching, source = 'youneek' }) {
       transition={{ duration: 8.64, repeat: Infinity, ease: 'easeInOut' }}
       className="relative aspect-square w-full max-w-[32rem]"
     >
+      {/* Opaque disc so falling ash and coals never show through the face */}
+      <div className="absolute inset-0 rounded-full bg-black z-0" aria-hidden="true" />
+
       {centerImage && (
         <div
           className="absolute inset-[12%] rounded-full overflow-hidden z-10"

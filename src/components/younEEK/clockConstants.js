@@ -9,6 +9,9 @@ export const RING_GRAY = '#4a4a4a';
 
 export const PURPLE = '#c026ff';
 export const BLUE = '#00b7ff';
+export const LAVA = '#ff6a00';
+export const LAVA_DEEP = '#ff3b00';
+export const GOLD = '#ffd700';
 
 export function mixHex(a, b, t = 0.5) {
   const n = (h) => [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16));
@@ -29,5 +32,6 @@ export function fadePurpleBlueMirror(frac) {
 }
 
 export const HAND_RED = '#ff2a2a';
+export const HAND_WHITE = '#e8ecf4';
 export const HAND_BLUE = BLUE;
 export const HAND_PURPLE = PURPLE;

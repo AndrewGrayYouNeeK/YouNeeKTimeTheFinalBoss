@@ -1,4 +1,4 @@
-import { GREEN, HAND_RED, HAND_BLUE, HAND_PURPLE } from './clockConstants';
+import { LAVA, GOLD, HAND_WHITE, HAND_RED } from './clockConstants';
 
 function pad(v) { return String(v).padStart(2, '0'); }
 
@@ -26,10 +26,10 @@ export default function ClockTimeLegend({ now, time, source = 'youneek' }) {
   return (
     <div className="mb-3 flex justify-center">
       <div className="inline-grid grid-cols-[1fr_auto_1fr] gap-x-3 gap-y-1 items-center justify-center">
-        <Row color={GREEN} label="YouNeeK Digital" value={digitalStr} active={source === 'youneek'} />
-        <Row color={HAND_RED} label="Regular Time" value={standardTime} active={source === 'regular'} />
-        <Row color={HAND_BLUE} label="YouNeeK Time" value={army12Str} active={source === 'youneek12'} />
-        <Row color={HAND_PURPLE} label="Army YouNeeK Time" value={armyStr} active={source === 'army'} />
+        <Row color={LAVA} label="YouNeeK Digital" value={digitalStr} active={source === 'youneek'} />
+        <Row color={HAND_WHITE} label="Regular Time" value={standardTime} active={source === 'regular'} />
+        <Row color={GOLD} label="YouNeeK Time" value={army12Str} active={source === 'youneek12'} />
+        <Row color={HAND_RED} label="Army YouNeeK Time" value={armyStr} active={source === 'army'} />
       </div>
     </div>
   );

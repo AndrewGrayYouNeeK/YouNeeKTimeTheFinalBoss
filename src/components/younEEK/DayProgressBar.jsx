@@ -1,4 +1,5 @@
-const GREEN = '#39ff14';
+const LAVA_DEEP = '#ff3b00';
+const GOLD = '#ffd700';
 
 function pad(value) { return String(value).padStart(2, '0'); }
 
@@ -11,8 +12,8 @@ export default function DayProgressBar({ time }) {
           className="h-full rounded-full transition-all"
           style={{
             width: `${time.progress * 100}%`,
-            background: GREEN,
-            boxShadow: `0 0 18px ${GREEN}ff`,
+            background: `linear-gradient(90deg, ${LAVA_DEEP}, ${GOLD})`,
+            boxShadow: `0 0 18px ${GOLD}cc, 0 0 10px ${LAVA_DEEP}88`,
           }}
         />
       </div>

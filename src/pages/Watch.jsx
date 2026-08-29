@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { getDecimalTime } from '@/lib/decimalTime';
 import ClockDial from '@/components/younEEK/ClockDial';
-import { GREEN } from '@/components/younEEK/clockConstants';
+import { LAVA } from '@/components/younEEK/clockConstants';
 import {
   formatDigital,
   readClockSource,
@@ -50,7 +50,7 @@ export default function Watch() {
         <div className="flex flex-col items-center gap-2 px-3">
           <div
             className="font-mono text-[2.6rem] font-semibold leading-none tracking-[0.08em]"
-            style={{ color: GREEN, textShadow: `0 0 16px ${GREEN}` }}
+            style={{ color: LAVA, textShadow: `0 0 16px ${LAVA}` }}
           >
             {formatDigital(time, source)}
           </div>
@@ -62,7 +62,7 @@ export default function Watch() {
         <div className="flex w-full max-w-[220px] flex-col items-center gap-0.5">
           <div
             className="font-mono text-[1.45rem] font-semibold leading-none tracking-[0.12em]"
-            style={{ color: GREEN, textShadow: `0 0 12px ${GREEN}` }}
+            style={{ color: LAVA, textShadow: `0 0 12px ${LAVA}` }}
           >
             {formatDigital(time, source)}
           </div>

@@ -132,9 +132,9 @@
 }
 
 .lava-header-subtitle {
-  margin-top: 0.35rem;
-  max-width: min(70vw, 520px);
-  max-height: min(10vh, 96px);
+  margin-top: 0.3rem;
+  max-width: min(48vw, 340px);
+  max-height: min(6.5vh, 58px);
 }
 
 .ash-flake {

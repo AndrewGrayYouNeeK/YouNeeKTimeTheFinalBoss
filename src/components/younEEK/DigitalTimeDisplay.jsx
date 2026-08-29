@@ -1,6 +1,6 @@
 import { formatDigital } from '@/lib/clockPrefs';
 
-const GREEN = '#39ff14';
+const GREEN = '#ff6a00';
 
 function DigitCard({ digit }) {
   return (

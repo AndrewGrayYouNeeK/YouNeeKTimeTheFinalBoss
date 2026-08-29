@@ -22,7 +22,7 @@ function Ufo() {
     <svg width="64" height="28" viewBox="0 0 64 28" fill="none">
       <ellipse cx="32" cy="16" rx="26" ry="7" fill="#8ea0b8" opacity="0.9" />
       <ellipse cx="32" cy="12" rx="12" ry="8" fill="#b8f0ff" opacity="0.75" />
-      <circle cx="18" cy="16" r="1.6" fill="#39ff14" />
+      <circle cx="18" cy="16" r="1.6" fill="#ffe600" />
       <circle cx="32" cy="17" r="1.6" fill="#ffff00" />
       <circle cx="46" cy="16" r="1.6" fill="#ff2a2a" />
     </svg>

@@ -31,7 +31,7 @@ export default function AshCoalOverlay() {
   );
 
   return (
-    <div className="ash-coal-overlay fixed inset-0 pointer-events-none overflow-hidden z-[2]">
+    <div className="ash-coal-overlay fixed inset-0 pointer-events-none overflow-hidden z-[1]">
       {ashes.map((a) => (
         <span
           key={a.id}
