@@ -113,8 +113,25 @@
 
 .erupt-reveal-title,
 .erupt-reveal-subtitle {
-  opacity: 0;
+  opacity: 1;
   transition: opacity 0.05s linear, filter 0.05s linear;
+  animation: lava-flicker 4.5s ease-in-out infinite;
+}
+
+.erupt-reveal-subtitle {
+  animation-delay: 1.4s;
+}
+
+@keyframes lava-flicker {
+  0%, 100% {
+    filter: drop-shadow(0 0 8px #ff3b0066) drop-shadow(0 0 22px #ff550033) brightness(1);
+  }
+  45% {
+    filter: drop-shadow(0 0 13px #ff3b00aa) drop-shadow(0 0 34px #ff550055) brightness(1.1) saturate(1.1);
+  }
+  60% {
+    filter: drop-shadow(0 0 9px #ff3b0077) drop-shadow(0 0 24px #ff550040) brightness(1.03);
+  }
 }
 
 .lava-header-title,
@@ -138,20 +155,10 @@
   max-height: min(10vh, 96px);
 }
 
-html.volcano-lit .header-lettering {
-  position: fixed;
-  inset: 0;
-  z-index: 60;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-  padding-top: min(10vh, 100px);
-}
-
 html.volcano-lit .erupt-reveal-title,
 html.volcano-lit .erupt-reveal-subtitle {
   opacity: 1;
+  animation: none;
   filter:
     drop-shadow(0 0 8px #fff6)
     drop-shadow(0 0 22px #ff6a00)

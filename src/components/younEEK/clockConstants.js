@@ -22,6 +22,12 @@ export function fadePurpleBlue(t) {
   return mixHex(PURPLE, BLUE, Math.min(1, Math.max(0, t)));
 }
 
+// Seamless around-the-dial fade: purple at top (frac 0), blue at bottom (frac 0.5), back to purple.
+export function fadePurpleBlueMirror(frac) {
+  const f = ((frac % 1) + 1) % 1;
+  return fadePurpleBlue(1 - Math.abs(1 - 2 * f));
+}
+
 export const HAND_RED = '#ff2a2a';
 export const HAND_BLUE = BLUE;
 export const HAND_PURPLE = PURPLE;

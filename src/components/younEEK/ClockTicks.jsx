@@ -1,8 +1,9 @@
-import { BLUE, PURPLE, fadePurpleBlue } from './clockConstants';
+import { BLUE, PURPLE, fadePurpleBlueMirror } from './clockConstants';
 
-const OUTER_TICKS = Array.from({ length: 24 }, (_, i) => {
-  const angle = (i / 24) * Math.PI * 2 - Math.PI / 2;
-  const isMajor = i % 3 === 0;
+// Outer ring: 0-100 units, majors every 10
+const OUTER_TICKS = Array.from({ length: 100 }, (_, i) => {
+  const angle = (i / 100) * Math.PI * 2 - Math.PI / 2;
+  const isMajor = i % 10 === 0;
   const outerR = 198;
   const innerR = isMajor ? 183 : 191;
   return {
@@ -10,24 +11,27 @@ const OUTER_TICKS = Array.from({ length: 24 }, (_, i) => {
     y1: 200 + Math.sin(angle) * outerR,
     x2: 200 + Math.cos(angle) * innerR,
     y2: 200 + Math.sin(angle) * innerR,
-    strokeWidth: isMajor ? 2.5 : 1,
-    color: fadePurpleBlue(i / 24),
+    strokeWidth: isMajor ? 4 : 1.4,
+    isMajor,
+    color: fadePurpleBlueMirror(i / 100),
     key: `outer-${i}`,
   };
 });
 
-const INNER_TICKS = Array.from({ length: 100 }, (_, i) => {
-  const angle = (i / 100) * Math.PI * 2 - Math.PI / 2;
-  const isMajor = i % 10 === 0;
-  const innerR = isMajor ? 150 : 156;
+// Inner ring: 0-24 hours, majors every 3
+const INNER_TICKS = Array.from({ length: 24 }, (_, i) => {
+  const angle = (i / 24) * Math.PI * 2 - Math.PI / 2;
+  const isMajor = i % 3 === 0;
+  const innerR = isMajor ? 149 : 155;
   const outerR = 162;
   return {
     x1: 200 + Math.cos(angle) * innerR,
     y1: 200 + Math.sin(angle) * innerR,
     x2: 200 + Math.cos(angle) * outerR,
     y2: 200 + Math.sin(angle) * outerR,
-    strokeWidth: isMajor ? 2.2 : 0.8,
-    color: fadePurpleBlue(1 - i / 100),
+    strokeWidth: isMajor ? 3.4 : 1.6,
+    isMajor,
+    color: fadePurpleBlueMirror(i / 24),
     key: `inner-${i}`,
   };
 });
@@ -36,7 +40,7 @@ export default function ClockTicks() {
   return (
     <svg viewBox="0 0 400 400" className="absolute inset-0 h-full w-full z-20 pointer-events-none">
       <defs>
-        <linearGradient id="ringFade" x1="0%" y1="0%" x2="100%" y2="100%">
+        <linearGradient id="ringFade" x1="0%" y1="0%" x2="0%" y2="100%">
           <stop offset="0%" stopColor={PURPLE} />
           <stop offset="100%" stopColor={BLUE} />
         </linearGradient>
@@ -60,9 +64,9 @@ export default function ClockTicks() {
         cy="200"
         r="199"
         stroke="url(#ringFade)"
-        strokeWidth="1.2"
+        strokeWidth="1.4"
         fill="none"
-        style={{ filter: `drop-shadow(0 0 4px ${BLUE})` }}
+        style={{ filter: `drop-shadow(0 0 5px ${BLUE}) drop-shadow(0 0 10px ${PURPLE}66)` }}
       />
 
       {OUTER_TICKS.map((t) => (
@@ -75,7 +79,11 @@ export default function ClockTicks() {
           stroke={t.color}
           strokeWidth={t.strokeWidth}
           strokeLinecap="round"
-          style={{ filter: `drop-shadow(0 0 3px ${t.color}88)` }}
+          style={{
+            filter: t.isMajor
+              ? `drop-shadow(0 0 4px ${t.color}) drop-shadow(0 0 9px ${t.color}aa)`
+              : `drop-shadow(0 0 3px ${t.color}88)`,
+          }}
         />
       ))}
 
@@ -89,7 +97,11 @@ export default function ClockTicks() {
           stroke={t.color}
           strokeWidth={t.strokeWidth}
           strokeLinecap="round"
-          style={{ filter: `drop-shadow(0 0 2px ${t.color}66)` }}
+          style={{
+            filter: t.isMajor
+              ? `drop-shadow(0 0 4px ${t.color}) drop-shadow(0 0 8px ${t.color}88)`
+              : `drop-shadow(0 0 2px ${t.color}66)`,
+          }}
         />
       ))}
     </svg>
