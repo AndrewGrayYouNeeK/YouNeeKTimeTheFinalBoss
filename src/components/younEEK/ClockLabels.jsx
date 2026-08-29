@@ -1,5 +1,4 @@
-const GREEN = '#39ff14';
-const RED = '#ff2222';
+import { fadePurpleBlue } from './clockConstants';
 
 const polarPoint = (radius, angleDeg) => {
   const angle = (angleDeg - 90) * (Math.PI / 180);
@@ -7,26 +6,32 @@ const polarPoint = (radius, angleDeg) => {
 };
 
 const outerLabels = [
-  { label: '03', angle: 45 },
-  { label: '06', angle: 90 },
-  { label: '09', angle: 135 },
-  { label: '12', angle: 180 },
-  { label: '15', angle: 225 },
-  { label: '18', angle: 270 },
-  { label: '21', angle: 315 },
+  ...Array.from({ length: 8 }, (_, i) => {
+    const value = i * 3;
+    return {
+      label: String(value),
+      angle: value * 15,
+      color: fadePurpleBlue(value / 24),
+      key: `o-${value}`,
+    };
+  }),
+  {
+    label: '24',
+    angle: 0,
+    color: fadePurpleBlue(0),
+    key: 'o-24',
+    offsetY: -12,
+  },
 ];
 
-const innerLabels = [
-  { label: '10', angle: 36 },
-  { label: '20', angle: 72 },
-  { label: '30', angle: 108 },
-  { label: '40', angle: 144 },
-  { label: '50', angle: 180 },
-  { label: '60', angle: 216 },
-  { label: '70', angle: 252 },
-  { label: '80', angle: 288 },
-  { label: '90', angle: 324 },
-];
+const innerLabels = Array.from({ length: 11 }, (_, i) => {
+  const value = i * 10;
+  return {
+    label: String(value),
+    angle: value * 3.6,
+    color: fadePurpleBlue(1 - value / 100),
+  };
+});
 
 export default function ClockLabels() {
   return (
@@ -35,50 +40,55 @@ export default function ClockLabels() {
         const p = polarPoint(170, item.angle);
         return (
           <text
-            key={item.label}
+            key={item.key}
             x={p.x}
-            y={p.y}
+            y={p.y + (item.offsetY || 0)}
             textAnchor="middle"
             dominantBaseline="middle"
-            fill={GREEN}
-            fontSize="12"
+            fill={item.color}
+            fontSize={item.label === '24' ? '9' : '12'}
             fontFamily="monospace"
             fontWeight="700"
-            style={{ fill: GREEN, color: GREEN, filter: `drop-shadow(0 0 4px ${GREEN}99)` }}
+            style={{ fill: item.color, filter: `drop-shadow(0 0 4px ${item.color}99)` }}
           >
             {item.label}
           </text>
         );
       })}
 
-      <text
-        x="200"
-        y="60"
-        textAnchor="middle"
-        dominantBaseline="middle"
-        fill={RED}
-        fontSize="10"
-        fontFamily="monospace"
-        fontWeight="700"
-        style={{ fill: RED, color: RED, filter: `drop-shadow(0 0 3px ${RED}88)` }}
-      >
-        0
-      </text>
-
       {innerLabels.map((item) => {
+        if (item.label === '100') {
+          const p = polarPoint(140, 0);
+          return (
+            <text
+              key="i-100"
+              x={p.x}
+              y={p.y - 12}
+              textAnchor="middle"
+              dominantBaseline="middle"
+              fill={item.color}
+              fontSize="9"
+              fontFamily="monospace"
+              fontWeight="700"
+              style={{ fill: item.color, filter: `drop-shadow(0 0 3px ${item.color}88)` }}
+            >
+              100
+            </text>
+          );
+        }
         const p = polarPoint(140, item.angle);
         return (
           <text
-            key={item.label}
+            key={`i-${item.label}`}
             x={p.x}
             y={p.y}
             textAnchor="middle"
             dominantBaseline="middle"
-            fill={RED}
+            fill={item.color}
             fontSize="10"
             fontFamily="monospace"
             fontWeight="700"
-            style={{ fill: RED, color: RED, filter: `drop-shadow(0 0 3px ${RED}88)` }}
+            style={{ fill: item.color, filter: `drop-shadow(0 0 3px ${item.color}88)` }}
           >
             {item.label}
           </text>

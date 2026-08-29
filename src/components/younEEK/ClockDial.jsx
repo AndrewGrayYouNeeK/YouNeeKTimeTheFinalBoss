@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import ClockTicks from './ClockTicks';
 import ClockLabels from './ClockLabels';
 import ClockHands from './ClockHands';
-import { GREEN } from './clockConstants';
+import { BLUE, PURPLE } from './clockConstants';
 
 const DEFAULT_CENTER_IMAGE = '/clock-face-default.jpg';
 
@@ -53,8 +53,8 @@ export default function ClockDial({ time, isGlitching, source = 'youneek' }) {
       <div
         className="absolute inset-0 rounded-full pointer-events-none z-40"
         style={{
-          border: `1px solid ${GREEN}`,
-          boxShadow: `0 0 8px ${GREEN}66, inset 0 0 12px ${GREEN}22`,
+          border: `1px solid ${PURPLE}`,
+          boxShadow: `0 0 8px ${PURPLE}66, 0 0 14px ${BLUE}44, inset 0 0 12px ${BLUE}22`,
         }}
       />
     </motion.div>
