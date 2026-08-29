@@ -113,10 +113,29 @@
 
 .erupt-reveal-title,
 .erupt-reveal-subtitle {
-  color: #ff6a1a;
-  text-shadow: 0 0 18px #ff3b00, 0 0 40px #ff9100aa;
   opacity: 0;
-  transition: opacity 0.05s linear;
+  transition: opacity 0.05s linear, filter 0.05s linear;
+}
+
+.lava-header-title,
+.lava-header-subtitle {
+  display: block;
+  width: auto;
+  max-width: min(92vw, 920px);
+  height: auto;
+  object-fit: contain;
+  pointer-events: none;
+  filter: drop-shadow(0 0 10px #ff3b0066);
+}
+
+.lava-header-title {
+  max-height: min(28vh, 280px);
+}
+
+.lava-header-subtitle {
+  margin-top: 0.35rem;
+  max-width: min(70vw, 520px);
+  max-height: min(10vh, 96px);
 }
 
 html.volcano-lit .header-lettering {
@@ -127,14 +146,18 @@ html.volcano-lit .header-lettering {
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  padding-top: min(12vh, 120px);
+  padding-top: min(10vh, 100px);
 }
 
 html.volcano-lit .erupt-reveal-title,
 html.volcano-lit .erupt-reveal-subtitle {
   opacity: 1;
-  color: #fff6d8;
-  text-shadow: 0 0 10px #fff, 0 0 28px #ff6a00, 0 0 70px #ff2200, 0 0 120px #ff4500;
+  filter:
+    drop-shadow(0 0 8px #fff6)
+    drop-shadow(0 0 22px #ff6a00)
+    drop-shadow(0 0 48px #ff2200)
+    brightness(1.25)
+    saturate(1.35);
 }
 
 .volcano-sky-flash {
