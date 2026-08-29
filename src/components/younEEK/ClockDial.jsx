@@ -3,7 +3,6 @@ import { motion } from 'framer-motion';
 import ClockTicks from './ClockTicks';
 import ClockLabels from './ClockLabels';
 import ClockHands from './ClockHands';
-import { BLUE } from './clockConstants';
 
 const DEFAULT_CENTER_IMAGE = '/astronaut-dial-bg.png';
 const BANNED_FACES = ['/clock-face-default.jpg', 'clock-face-default'];
@@ -33,11 +32,11 @@ export default function ClockDial({ time, isGlitching, source = 'youneek' }) {
       className="relative aspect-square w-full max-w-[32rem]"
     >
       {/* Opaque disc so falling ash and coals never show through the face */}
-      <div className="absolute inset-0 rounded-full bg-black z-0" aria-hidden="true" />
+      <div className="absolute inset-[6%] rounded-full bg-black z-0" aria-hidden="true" />
 
       {centerImage && (
         <div
-          className="absolute inset-[12%] rounded-full overflow-hidden z-10"
+          className="absolute inset-[6%] rounded-full overflow-hidden z-10"
           style={{ pointerEvents: 'none' }}
         >
           <img
@@ -59,12 +58,6 @@ export default function ClockDial({ time, isGlitching, source = 'youneek' }) {
         <ClockHands time={time} source={source} />
       </div>
 
-      <div
-        className="absolute inset-0 rounded-full pointer-events-none z-40"
-        style={{
-          border: `1.5px solid ${BLUE}`,
-        }}
-      />
     </motion.div>
   );
 }

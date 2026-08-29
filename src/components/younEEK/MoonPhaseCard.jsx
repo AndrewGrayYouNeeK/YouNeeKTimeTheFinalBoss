@@ -29,7 +29,7 @@ export default function MoonPhaseCard({ now }) {
   const shadowOffset = moon.illumination * 28;
 
   return (
-    <div className="mx-auto w-full max-w-[18rem] rounded-[1.6rem] border border-[#ff6a00]/15 bg-[#101010] px-6 py-5 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.04),0_0_26px_rgba(255,106,0,0.06)] text-center">
+    <div className="mx-auto w-full max-w-[18rem] rounded-[1.6rem] border border-[#00b7ff]/15 bg-[#101010] px-6 py-5 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.04),0_0_26px_rgba(0,183,255,0.06)] text-center">
       <div className="flex flex-col items-center gap-4">
         <div className="relative h-14 w-14 overflow-hidden rounded-full bg-[#e2e8f0] shadow-[0_0_28px_rgba(255,244,200,0.28)]">
           <div

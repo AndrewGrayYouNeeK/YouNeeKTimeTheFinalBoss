@@ -1,4 +1,4 @@
-const GREEN = '#ff6a00';
+const GREEN = '#00b7ff';
 
 const sections = [
   {
