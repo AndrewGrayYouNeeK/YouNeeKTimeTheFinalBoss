@@ -5,17 +5,23 @@ import ClockLabels from './ClockLabels';
 import ClockHands from './ClockHands';
 import { BLUE, PURPLE } from './clockConstants';
 
-const DEFAULT_CENTER_IMAGE = '/clock-face-default.jpg';
+const DEFAULT_CENTER_IMAGE = '/astronaut-dial-bg.png';
+const BANNED_FACES = ['/clock-face-default.jpg', 'clock-face-default'];
+
+function resolveFace() {
+  const stored = localStorage.getItem('clockFaceUrl');
+  if (!stored || BANNED_FACES.some((b) => stored.includes(b))) {
+    if (stored) localStorage.removeItem('clockFaceUrl');
+    return DEFAULT_CENTER_IMAGE;
+  }
+  return stored;
+}
 
 export default function ClockDial({ time, isGlitching, source = 'youneek' }) {
-  const [centerImage, setCenterImage] = useState(
-    localStorage.getItem('clockFaceUrl') || DEFAULT_CENTER_IMAGE
-  );
+  const [centerImage, setCenterImage] = useState(resolveFace);
 
   useEffect(() => {
-    const handleUpdate = () => {
-      setCenterImage(localStorage.getItem('clockFaceUrl') || DEFAULT_CENTER_IMAGE);
-    };
+    const handleUpdate = () => setCenterImage(resolveFace());
     window.addEventListener('clock-face-updated', handleUpdate);
     return () => window.removeEventListener('clock-face-updated', handleUpdate);
   }, []);
@@ -33,7 +39,7 @@ export default function ClockDial({ time, isGlitching, source = 'youneek' }) {
         >
           <img
             src={centerImage}
-            alt="YouNeek volcano"
+            alt=""
             className="volcano-erupt-img w-full h-full object-cover"
             style={{
               opacity: isGlitching ? 0 : 1,
