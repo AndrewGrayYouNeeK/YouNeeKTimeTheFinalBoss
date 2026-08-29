@@ -1,28 +1,26 @@
-import { fadeLavaMirror } from './clockConstants';
+import { BLUE, PURPLE } from './clockConstants';
 
 const polarPoint = (radius, angleDeg) => {
   const angle = (angleDeg - 90) * (Math.PI / 180);
   return { x: 200 + Math.cos(angle) * radius, y: 200 + Math.sin(angle) * radius };
 };
 
-// Outer ring: 0-100 units, 0 at the top
-const outerLabels = Array.from({ length: 10 }, (_, i) => {
-  const value = i * 10;
+// Outer ring: 24-hour labels like the concept art
+const outerLabels = Array.from({ length: 8 }, (_, i) => {
+  const value = i * 3;
   return {
-    label: String(value),
-    angle: value * 3.6,
-    color: fadeLavaMirror(value / 100),
+    label: String(value).padStart(2, '0'),
+    angle: value * 15,
     key: `o-${value}`,
   };
 });
 
-// Inner ring: 0-24 hours
-const innerLabels = Array.from({ length: 8 }, (_, i) => {
-  const value = i * 3;
+// Inner ring: 0-100 units
+const innerLabels = Array.from({ length: 10 }, (_, i) => {
+  const value = i * 10;
   return {
     label: String(value),
-    angle: value * 15,
-    color: fadeLavaMirror(value / 24),
+    angle: value * 3.6,
     key: `i-${value}`,
   };
 });
@@ -31,7 +29,7 @@ export default function ClockLabels() {
   return (
     <svg viewBox="0 0 400 400" className="absolute inset-0 h-full w-full pointer-events-none">
       {outerLabels.map((item) => {
-        const p = polarPoint(170, item.angle);
+        const p = polarPoint(163, item.angle);
         return (
           <text
             key={item.key}
@@ -39,11 +37,11 @@ export default function ClockLabels() {
             y={p.y}
             textAnchor="middle"
             dominantBaseline="middle"
-            fill={item.color}
-            fontSize="13"
+            fill={BLUE}
+            fontSize="16"
             fontFamily="monospace"
             fontWeight="700"
-            style={{ fill: item.color }}
+            style={{ fill: BLUE, filter: `drop-shadow(0 0 3px ${BLUE}88)` }}
           >
             {item.label}
           </text>
@@ -59,11 +57,11 @@ export default function ClockLabels() {
             y={p.y}
             textAnchor="middle"
             dominantBaseline="middle"
-            fill={item.color}
+            fill={PURPLE}
             fontSize="9"
             fontFamily="monospace"
             fontWeight="700"
-            style={{ fill: item.color }}
+            style={{ fill: PURPLE, filter: `drop-shadow(0 0 2px ${PURPLE}77)` }}
           >
             {item.label}
           </text>
