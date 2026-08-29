@@ -1,28 +1,26 @@
-import { LAVA, HAND_RED, YELLOW } from './clockConstants';
+import { GOLD, HAND_RED } from './clockConstants';
 import { getHandRotations } from '@/lib/clockPrefs';
 
 const CX = 200;
 const CY = 200;
 
-// Body sits lower so the shoulder pivots land at center height, offset left/right
-const BODY_DROP = 30;
+// Shoulder pivots on the torso art — offset left/right of center
 const L_SHOULDER_X = 174;
-const L_SHOULDER_Y = 196;
+const L_SHOULDER_Y = 166;
 const R_SHOULDER_X = 226;
-const R_SHOULDER_Y = 196;
+const R_SHOULDER_Y = 166;
 
-// Wide preview-style stance
+// Wide stance like the concept art, hips tucked under the torso
 const LEG_H = 122;
 const LEG_W = 28;
-const LEG_SPREAD_DEG = 34;
-const HIP_Y = CY + 26;
+const LEG_SPREAD_DEG = 32;
+const HIP_Y = CY - 2;
 
 const ARM_RATIO = 0.166;
 const HOUR_ARM_H = 104;
-const HOUR_ROD_TIP = 150;
+const HOUR_ROD_TIP = 140;
 const MIN_ARM_H = 122;
-const MIN_ROD_TIP = 175;
-const SEC_ROD_TIP = 178;
+const MIN_ROD_TIP = 160;
 
 function BeamArm({ x, y, angle, armH, rodTip, color, clipId, mirror }) {
   const armW = armH * ARM_RATIO;
@@ -47,7 +45,7 @@ function BeamArm({ x, y, angle, armH, rodTip, color, clipId, mirror }) {
 }
 
 export default function ClockHands({ time, source = 'youneek' }) {
-  const { hour, minute, second } = getHandRotations(time, source);
+  const { hour, minute } = getHandRotations(time, source);
 
   return (
     <svg viewBox="0 0 400 400" className="absolute inset-0 h-full w-full" style={{ overflow: 'visible' }}>
@@ -87,7 +85,7 @@ export default function ClockHands({ time, source = 'youneek' }) {
       <image
         href="/astro-torso.png"
         x={CX - (92 * 0.719) / 2}
-        y={CY - 92 * 0.8 + BODY_DROP}
+        y={CY - 92 * 0.8}
         width={92 * 0.719}
         height={92}
         preserveAspectRatio="xMidYMid meet"
@@ -97,31 +95,8 @@ export default function ClockHands({ time, source = 'youneek' }) {
       {/* Hour hand: left arm gripping a red beam */}
       <BeamArm x={L_SHOULDER_X} y={L_SHOULDER_Y} angle={hour} armH={HOUR_ARM_H} rodTip={HOUR_ROD_TIP} color={HAND_RED} clipId="armClipHour" mirror />
 
-      {/* Minute hand: right arm gripping an orange beam */}
-      <BeamArm x={R_SHOULDER_X} y={R_SHOULDER_Y} angle={minute} armH={MIN_ARM_H} rodTip={MIN_ROD_TIP} color={LAVA} clipId="armClipMin" />
-
-      {/* Seconds: extra-bright yellow beam from the right shoulder */}
-      <g transform={`translate(${R_SHOULDER_X} ${R_SHOULDER_Y}) rotate(${second})`}>
-        <line
-          x1="0"
-          y1="-8"
-          x2="0"
-          y2={-SEC_ROD_TIP}
-          stroke={YELLOW}
-          strokeWidth="5"
-          strokeLinecap="round"
-          style={{ filter: `drop-shadow(0 0 5px ${YELLOW}) drop-shadow(0 0 10px ${YELLOW}cc)` }}
-        />
-        <line
-          x1="0"
-          y1="-10"
-          x2="0"
-          y2={-SEC_ROD_TIP + 3}
-          stroke="#ffffff"
-          strokeWidth="2.2"
-          strokeLinecap="round"
-        />
-      </g>
+      {/* Minute hand: right arm gripping a bright gold beam */}
+      <BeamArm x={R_SHOULDER_X} y={R_SHOULDER_Y} angle={minute} armH={MIN_ARM_H} rodTip={MIN_ROD_TIP} color={GOLD} clipId="armClipMin" />
     </svg>
   );
 }

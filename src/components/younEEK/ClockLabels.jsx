@@ -43,10 +43,7 @@ export default function ClockLabels() {
             fontSize="13"
             fontFamily="monospace"
             fontWeight="700"
-            style={{
-              fill: item.color,
-              filter: `drop-shadow(0 0 5px ${item.color}) drop-shadow(0 0 10px ${item.color}88)`,
-            }}
+            style={{ fill: item.color }}
           >
             {item.label}
           </text>
@@ -66,10 +63,7 @@ export default function ClockLabels() {
             fontSize="9"
             fontFamily="monospace"
             fontWeight="700"
-            style={{
-              fill: item.color,
-              filter: `drop-shadow(0 0 4px ${item.color}aa)`,
-            }}
+            style={{ fill: item.color }}
           >
             {item.label}
           </text>

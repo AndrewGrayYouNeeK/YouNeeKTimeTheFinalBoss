@@ -12,7 +12,6 @@ const OUTER_TICKS = Array.from({ length: 100 }, (_, i) => {
     x2: 200 + Math.cos(angle) * innerR,
     y2: 200 + Math.sin(angle) * innerR,
     strokeWidth: isMajor ? 4 : 1.4,
-    isMajor,
     color: fadeLavaMirror(i / 100),
     key: `outer-${i}`,
   };
@@ -30,7 +29,6 @@ const INNER_TICKS = Array.from({ length: 24 }, (_, i) => {
     x2: 200 + Math.cos(angle) * outerR,
     y2: 200 + Math.sin(angle) * outerR,
     strokeWidth: isMajor ? 3.4 : 1.6,
-    isMajor,
     color: fadeLavaMirror(i / 24),
     key: `inner-${i}`,
   };
@@ -56,7 +54,6 @@ export default function ClockTicks() {
         strokeWidth="1"
         fill="none"
         strokeDasharray="4 5"
-        style={{ filter: `drop-shadow(0 0 3px ${LAVA_DEEP}aa)` }}
       />
 
       <circle
@@ -66,7 +63,6 @@ export default function ClockTicks() {
         stroke="url(#ringFade)"
         strokeWidth="1.4"
         fill="none"
-        style={{ filter: `drop-shadow(0 0 5px ${GOLD}) drop-shadow(0 0 10px ${LAVA_DEEP}66)` }}
       />
 
       {OUTER_TICKS.map((t) => (
@@ -79,11 +75,6 @@ export default function ClockTicks() {
           stroke={t.color}
           strokeWidth={t.strokeWidth}
           strokeLinecap="round"
-          style={{
-            filter: t.isMajor
-              ? `drop-shadow(0 0 4px ${t.color}) drop-shadow(0 0 9px ${t.color}aa)`
-              : `drop-shadow(0 0 3px ${t.color}88)`,
-          }}
         />
       ))}
 
@@ -97,11 +88,6 @@ export default function ClockTicks() {
           stroke={t.color}
           strokeWidth={t.strokeWidth}
           strokeLinecap="round"
-          style={{
-            filter: t.isMajor
-              ? `drop-shadow(0 0 4px ${t.color}) drop-shadow(0 0 8px ${t.color}88)`
-              : `drop-shadow(0 0 2px ${t.color}66)`,
-          }}
         />
       ))}
     </svg>
