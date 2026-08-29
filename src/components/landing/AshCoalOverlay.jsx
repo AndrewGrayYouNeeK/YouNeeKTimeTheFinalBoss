@@ -3,15 +3,15 @@ import { useMemo } from 'react';
 export default function AshCoalOverlay() {
   const ashes = useMemo(
     () =>
-      Array.from({ length: 90 }).map((_, i) => ({
+      Array.from({ length: 120 }).map((_, i) => ({
         id: `ash-${i}`,
         left: Math.random() * 100,
         delay: Math.random() * 8,
-        duration: 6 + Math.random() * 10,
-        opacity: 0.2 + Math.random() * 0.45,
-        size: 2 + Math.random() * 4,
-        heightScale: 0.7 + Math.random() * 0.6,
-        drift: -30 + Math.random() * 60,
+        duration: 5 + Math.random() * 9,
+        opacity: 0.35 + Math.random() * 0.5,
+        size: 3 + Math.random() * 6,
+        heightScale: 0.7 + Math.random() * 0.8,
+        drift: -40 + Math.random() * 80,
       })),
     []
   );
