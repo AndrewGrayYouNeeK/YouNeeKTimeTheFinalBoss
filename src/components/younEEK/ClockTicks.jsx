@@ -1,4 +1,4 @@
-import { BLUE, PURPLE, fadePurpleBlueMirror } from './clockConstants';
+import { LAVA_DEEP, GOLD, fadeLavaMirror } from './clockConstants';
 
 // Outer ring: 0-100 units, majors every 10
 const OUTER_TICKS = Array.from({ length: 100 }, (_, i) => {
@@ -13,7 +13,7 @@ const OUTER_TICKS = Array.from({ length: 100 }, (_, i) => {
     y2: 200 + Math.sin(angle) * innerR,
     strokeWidth: isMajor ? 4 : 1.4,
     isMajor,
-    color: fadePurpleBlueMirror(i / 100),
+    color: fadeLavaMirror(i / 100),
     key: `outer-${i}`,
   };
 });
@@ -31,7 +31,7 @@ const INNER_TICKS = Array.from({ length: 24 }, (_, i) => {
     y2: 200 + Math.sin(angle) * outerR,
     strokeWidth: isMajor ? 3.4 : 1.6,
     isMajor,
-    color: fadePurpleBlueMirror(i / 24),
+    color: fadeLavaMirror(i / 24),
     key: `inner-${i}`,
   };
 });
@@ -41,8 +41,8 @@ export default function ClockTicks() {
     <svg viewBox="0 0 400 400" className="absolute inset-0 h-full w-full z-20 pointer-events-none">
       <defs>
         <linearGradient id="ringFade" x1="0%" y1="0%" x2="0%" y2="100%">
-          <stop offset="0%" stopColor={PURPLE} />
-          <stop offset="100%" stopColor={BLUE} />
+          <stop offset="0%" stopColor={LAVA_DEEP} />
+          <stop offset="100%" stopColor={GOLD} />
         </linearGradient>
       </defs>
 
@@ -56,7 +56,7 @@ export default function ClockTicks() {
         strokeWidth="1"
         fill="none"
         strokeDasharray="4 5"
-        style={{ filter: `drop-shadow(0 0 3px ${PURPLE}aa)` }}
+        style={{ filter: `drop-shadow(0 0 3px ${LAVA_DEEP}aa)` }}
       />
 
       <circle
@@ -66,7 +66,7 @@ export default function ClockTicks() {
         stroke="url(#ringFade)"
         strokeWidth="1.4"
         fill="none"
-        style={{ filter: `drop-shadow(0 0 5px ${BLUE}) drop-shadow(0 0 10px ${PURPLE}66)` }}
+        style={{ filter: `drop-shadow(0 0 5px ${GOLD}) drop-shadow(0 0 10px ${LAVA_DEEP}66)` }}
       />
 
       {OUTER_TICKS.map((t) => (

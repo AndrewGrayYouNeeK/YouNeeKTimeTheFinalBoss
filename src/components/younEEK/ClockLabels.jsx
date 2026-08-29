@@ -1,4 +1,4 @@
-import { fadePurpleBlueMirror } from './clockConstants';
+import { fadeLavaMirror } from './clockConstants';
 
 const polarPoint = (radius, angleDeg) => {
   const angle = (angleDeg - 90) * (Math.PI / 180);
@@ -11,7 +11,7 @@ const outerLabels = Array.from({ length: 10 }, (_, i) => {
   return {
     label: String(value),
     angle: value * 3.6,
-    color: fadePurpleBlueMirror(value / 100),
+    color: fadeLavaMirror(value / 100),
     key: `o-${value}`,
   };
 });
@@ -22,7 +22,7 @@ const innerLabels = Array.from({ length: 8 }, (_, i) => {
   return {
     label: String(value),
     angle: value * 15,
-    color: fadePurpleBlueMirror(value / 24),
+    color: fadeLavaMirror(value / 24),
     key: `i-${value}`,
   };
 });

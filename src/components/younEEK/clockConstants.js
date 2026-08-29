@@ -31,6 +31,12 @@ export function fadePurpleBlueMirror(frac) {
   return fadePurpleBlue(1 - Math.abs(1 - 2 * f));
 }
 
+// Lava fade: red at top, through orange, yellow at bottom, back to red — seamless.
+export function fadeLavaMirror(frac) {
+  const f = ((frac % 1) + 1) % 1;
+  return mixHex('#ff2200', '#ffd700', 1 - Math.abs(1 - 2 * f));
+}
+
 export const HAND_RED = '#ff2a2a';
 export const HAND_WHITE = '#e8ecf4';
 export const HAND_BLUE = BLUE;

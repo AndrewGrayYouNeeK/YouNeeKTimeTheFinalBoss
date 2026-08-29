@@ -137,6 +137,48 @@
   max-height: min(6.5vh, 58px);
 }
 
+.volcano-bg-drift {
+  animation: bg-drift 45s ease-in-out infinite alternate;
+  will-change: transform;
+}
+
+@keyframes bg-drift {
+  from { transform: scale(1.05) translate3d(-0.7%, 0.4%, 0); }
+  to { transform: scale(1.14) translate3d(0.9%, -0.8%, 0); }
+}
+
+.volcano-bg-pulse {
+  background:
+    radial-gradient(ellipse at 50% 78%, #ff5a0033 0%, transparent 55%),
+    radial-gradient(ellipse at 42% 34%, #ff8a2018 0%, transparent 50%);
+  animation: lava-pulse 5.5s ease-in-out infinite;
+}
+
+@keyframes lava-pulse {
+  0%, 100% { opacity: 0.45; }
+  40% { opacity: 1; }
+  60% { opacity: 0.75; }
+}
+
+.ember-spark {
+  background: radial-gradient(circle, #fff0a0 0%, #ff8a20 45%, #ff3b00 80%, transparent 100%);
+  box-shadow: 0 0 6px #ff7a18, 0 0 10px #ff3b0066;
+}
+
+@keyframes ember-rise {
+  0% {
+    transform: translate3d(0, 0, 0) scale(1);
+    opacity: 0;
+  }
+  8% {
+    opacity: 0.9;
+  }
+  100% {
+    transform: translate3d(var(--drift, 30px), -105vh, 0) scale(0.4);
+    opacity: 0;
+  }
+}
+
 .ash-flake {
   background: radial-gradient(circle, #d0d0d0 0%, #8a8a8a 55%, #3a3a3a 100%);
   box-shadow: 0 0 2px #bbb8;

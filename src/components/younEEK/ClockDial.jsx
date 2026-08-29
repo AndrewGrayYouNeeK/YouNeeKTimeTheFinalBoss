@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import ClockTicks from './ClockTicks';
 import ClockLabels from './ClockLabels';
 import ClockHands from './ClockHands';
-import { BLUE, PURPLE } from './clockConstants';
+import { LAVA_DEEP, GOLD } from './clockConstants';
 
 const DEFAULT_CENTER_IMAGE = '/astronaut-dial-bg.png';
 const BANNED_FACES = ['/clock-face-default.jpg', 'clock-face-default'];
@@ -62,8 +62,8 @@ export default function ClockDial({ time, isGlitching, source = 'youneek' }) {
       <div
         className="absolute inset-0 rounded-full pointer-events-none z-40"
         style={{
-          border: `1px solid ${PURPLE}`,
-          boxShadow: `0 0 8px ${PURPLE}66, 0 0 14px ${BLUE}44, inset 0 0 12px ${BLUE}22`,
+          border: `1px solid ${LAVA_DEEP}`,
+          boxShadow: `0 0 8px ${LAVA_DEEP}66, 0 0 14px ${GOLD}44, inset 0 0 12px ${GOLD}22`,
         }}
       />
     </motion.div>

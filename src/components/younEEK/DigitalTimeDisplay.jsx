@@ -1,16 +1,20 @@
 import { formatDigital } from '@/lib/clockPrefs';
 
-const GREEN = '#ff6a00';
+const GOLD = '#ffd700';
+const LAVA_DEEP = '#ff3b00';
 
 function DigitCard({ digit }) {
   return (
     <div className="flex h-24 w-[4.8rem] items-center justify-center rounded-2xl border bg-black sm:h-28 sm:w-[5.4rem]"
       style={{
-        borderColor: `${GREEN}44`,
-        boxShadow: `inset 0 0 0 1px rgba(255,255,255,0.03), 0 0 24px ${GREEN}33`,
+        borderColor: `${GOLD}55`,
+        boxShadow: `inset 0 0 0 1px rgba(255,255,255,0.03), 0 0 24px ${LAVA_DEEP}55, 0 0 10px ${GOLD}33`,
       }}>
-      <span className="font-mono text-6xl font-semibold tracking-[0.08em] sm:text-7xl"
-        style={{ color: GREEN, textShadow: `0 0 18px ${GREEN}cc` }}>
+      <span className="font-mono text-6xl font-bold tracking-[0.08em] sm:text-7xl"
+        style={{
+          color: GOLD,
+          textShadow: `0 0 6px #ffffff88, 0 0 16px ${GOLD}, 0 0 34px ${LAVA_DEEP}`,
+        }}>
         {digit}
       </span>
     </div>
@@ -27,7 +31,7 @@ export default function DigitalTimeDisplay({ time, source = 'youneek' }) {
           ch === '•' || ch === ':'
             ? (
               <div key={`${ch}-${i}`} className="px-1 font-mono text-5xl sm:text-6xl"
-                style={{ color: GREEN, textShadow: `0 0 10px ${GREEN}` }}>{ch}</div>
+                style={{ color: GOLD, textShadow: `0 0 8px ${GOLD}, 0 0 18px ${LAVA_DEEP}` }}>{ch}</div>
             )
             : <DigitCard key={`${ch}-${i}`} digit={ch} />
         ))}
