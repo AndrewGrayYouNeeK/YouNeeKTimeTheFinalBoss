@@ -27,7 +27,7 @@ export default function VolcanoEruptFlash() {
       for (let i = 0; i < bursts; i++) {
         if (cancelled) return;
         setLit(true);
-        await sleep(i === bursts - 1 ? rand(120, 220) : rand(60, 110));
+        await sleep(i === bursts - 1 ? rand(220, 420) : rand(90, 160));
         if (cancelled) return;
         setLit(false);
         if (i < bursts - 1) await sleep(rand(50, 140));
