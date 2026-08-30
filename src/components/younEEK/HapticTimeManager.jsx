@@ -150,7 +150,7 @@ export default function HapticTimeManager({ time }) {
         variant="outline"
         className={`relative gap-2 rounded-full transition-colors border-2 ${
           enabled
-            ? 'bg-[#39ff14]/10 text-[#39ff14] border-[#39ff14]/60 hover:bg-[#39ff14]/20 hover:text-[#39ff14]'
+            ? 'bg-[#00b7ff]/10 text-[#00b7ff] border-[#00b7ff]/60 hover:bg-[#00b7ff]/20 hover:text-[#00b7ff]'
             : 'bg-transparent text-white/50 border-white/20 hover:text-white hover:border-white/40'
         }`}
         onPointerDown={unlockHaptics}
@@ -171,7 +171,7 @@ export default function HapticTimeManager({ time }) {
             writeClockSource(id);
           }}
         >
-          <SelectTrigger className="w-full bg-black/40 border-[#39ff14]/30 text-[#39ff14] text-[10px] font-mono uppercase tracking-widest">
+          <SelectTrigger className="w-full bg-black/40 border-[#00b7ff]/30 text-[#00b7ff] text-[10px] font-mono uppercase tracking-widest">
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
@@ -185,7 +185,7 @@ export default function HapticTimeManager({ time }) {
       {enabled && (
         <div className="mt-4 text-center space-y-3 max-w-xs">
           <div className="space-y-1">
-            <p className="text-[10px] text-[#39ff14]/70 font-mono tracking-widest uppercase">
+            <p className="text-[10px] text-[#00b7ff]/70 font-mono tracking-widest uppercase">
               {isPlayingTime ? 'Playing time…' : `Active — tells ${sourceLabel(clockSource)} every 15 min`}
             </p>
             <p className="text-[9px] text-white/40 font-mono tracking-wide leading-relaxed">
@@ -200,7 +200,7 @@ export default function HapticTimeManager({ time }) {
             disabled={isPlayingTime}
             onPointerDown={unlockHaptics}
             onClick={isIOS() ? undefined : handleFeelNow}
-            className="gap-2 rounded-full border-[#39ff14]/30 text-[#39ff14]/80 hover:bg-[#39ff14]/10 hover:text-[#39ff14] text-[10px] font-mono uppercase tracking-widest"
+            className="gap-2 rounded-full border-[#00b7ff]/30 text-[#00b7ff]/80 hover:bg-[#00b7ff]/10 hover:text-[#00b7ff] text-[10px] font-mono uppercase tracking-widest"
           >
             <Hand className="w-3.5 h-3.5" />
             Feel Time Now
@@ -209,7 +209,7 @@ export default function HapticTimeManager({ time }) {
           <div className="rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-left space-y-1.5">
             <p className="text-[9px] text-white/50 font-mono uppercase tracking-widest">How to read by feel</p>
             <p className="text-[9px] text-white/35 font-mono leading-relaxed">
-              <span className="text-[#39ff14]/60">Long buzz</span> = each hour digit of {sourceLabel(clockSource)} (tens, then ones)
+              <span className="text-[#00b7ff]/60">Long buzz</span> = each hour digit of {sourceLabel(clockSource)} (tens, then ones)
             </p>
             <p className="text-[9px] text-white/35 font-mono leading-relaxed">
               <span className="text-white/50">Spaced shorts</span> = tens of minutes

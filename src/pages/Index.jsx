@@ -1,7 +1,7 @@
 import YouNeekClock from '@/components/YouNeekClock';
 import StarsBackground from '@/components/younEEK/StarsBackground';
-import LightningFlash from '@/components/landing/LightningFlash';
-import RainOverlay from '@/components/landing/RainOverlay';
+import VolcanoBackground from '@/components/landing/VolcanoBackground';
+import AshCoalOverlay from '@/components/landing/AshCoalOverlay';
 import SkyCraft from '@/components/younEEK/SkyCraft';
 import PullToRefresh from '@/components/PullToRefresh';
 
@@ -14,8 +14,8 @@ export default function Index() {
   return (
     <div className="min-h-screen relative text-white" style={{ background: 'transparent' }}>
       <StarsBackground />
-      <LightningFlash />
-      <RainOverlay />
+      <VolcanoBackground />
+      <AshCoalOverlay />
       <SkyCraft />
       <PullToRefresh onRefresh={handleRefresh}>
         <div className="relative z-10">

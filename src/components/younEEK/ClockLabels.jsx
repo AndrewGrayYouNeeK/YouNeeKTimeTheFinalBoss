@@ -1,38 +1,23 @@
-const GREEN = '#39ff14';
-const RED = '#ff2222';
+import { BLUE } from './clockConstants';
 
 const polarPoint = (radius, angleDeg) => {
   const angle = (angleDeg - 90) * (Math.PI / 180);
   return { x: 200 + Math.cos(angle) * radius, y: 200 + Math.sin(angle) * radius };
 };
 
+// Four big 24-hour labels aligned with the hour bars, like the concept art
 const outerLabels = [
-  { label: '03', angle: 45 },
+  { label: '00', angle: 0 },
   { label: '06', angle: 90 },
-  { label: '09', angle: 135 },
   { label: '12', angle: 180 },
-  { label: '15', angle: 225 },
   { label: '18', angle: 270 },
-  { label: '21', angle: 315 },
-];
-
-const innerLabels = [
-  { label: '10', angle: 36 },
-  { label: '20', angle: 72 },
-  { label: '30', angle: 108 },
-  { label: '40', angle: 144 },
-  { label: '50', angle: 180 },
-  { label: '60', angle: 216 },
-  { label: '70', angle: 252 },
-  { label: '80', angle: 288 },
-  { label: '90', angle: 324 },
 ];
 
 export default function ClockLabels() {
   return (
     <svg viewBox="0 0 400 400" className="absolute inset-0 h-full w-full pointer-events-none">
       {outerLabels.map((item) => {
-        const p = polarPoint(170, item.angle);
+        const p = polarPoint(158, item.angle);
         return (
           <text
             key={item.label}
@@ -40,45 +25,11 @@ export default function ClockLabels() {
             y={p.y}
             textAnchor="middle"
             dominantBaseline="middle"
-            fill={GREEN}
-            fontSize="12"
+            fill={BLUE}
+            fontSize="20"
             fontFamily="monospace"
-            fontWeight="700"
-            style={{ fill: GREEN, color: GREEN, filter: `drop-shadow(0 0 4px ${GREEN}99)` }}
-          >
-            {item.label}
-          </text>
-        );
-      })}
-
-      <text
-        x="200"
-        y="60"
-        textAnchor="middle"
-        dominantBaseline="middle"
-        fill={RED}
-        fontSize="10"
-        fontFamily="monospace"
-        fontWeight="700"
-        style={{ fill: RED, color: RED, filter: `drop-shadow(0 0 3px ${RED}88)` }}
-      >
-        0
-      </text>
-
-      {innerLabels.map((item) => {
-        const p = polarPoint(140, item.angle);
-        return (
-          <text
-            key={item.label}
-            x={p.x}
-            y={p.y}
-            textAnchor="middle"
-            dominantBaseline="middle"
-            fill={RED}
-            fontSize="10"
-            fontFamily="monospace"
-            fontWeight="700"
-            style={{ fill: RED, color: RED, filter: `drop-shadow(0 0 3px ${RED}88)` }}
+            fontWeight="400"
+            style={{ fill: BLUE, filter: `drop-shadow(0 0 3px ${BLUE}88)` }}
           >
             {item.label}
           </text>
