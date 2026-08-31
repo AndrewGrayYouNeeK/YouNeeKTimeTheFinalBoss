@@ -1,22 +1,34 @@
-import { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import { useState, useEffect, forwardRef } from 'react';
 import ClockTicks from './ClockTicks';
 import ClockLabels from './ClockLabels';
 import ClockHands from './ClockHands';
+import AstronautArt from './AstronautArt';
 
-const DEFAULT_CENTER_IMAGE = '/astronaut-dial-bg.png';
-const BANNED_FACES = ['/clock-face-default.jpg', 'clock-face-default'];
+const BANNED_FACES = ['/clock-face-default.jpg', 'clock-face-default', 'astronaut-dial-bg'];
 
 function resolveFace() {
   const stored = localStorage.getItem('clockFaceUrl');
   if (!stored || BANNED_FACES.some((b) => stored.includes(b))) {
-    if (stored) localStorage.removeItem('clockFaceUrl');
-    return DEFAULT_CENTER_IMAGE;
+    if (stored && BANNED_FACES.some((b) => stored.includes(b))) {
+      localStorage.removeItem('clockFaceUrl');
+    }
+    return null;
   }
   return stored;
 }
 
-export default function ClockDial({ time, isGlitching, source = 'youneek' }) {
+const ClockDial = forwardRef(function ClockDial(
+  {
+    time,
+    isGlitching,
+    source = 'youneek',
+    handStyle = 'needle',
+    hubRef,
+    omitSeconds = false,
+    showHubAstronaut = false,
+  },
+  ref
+) {
   const [centerImage, setCenterImage] = useState(resolveFace);
 
   useEffect(() => {
@@ -26,38 +38,46 @@ export default function ClockDial({ time, isGlitching, source = 'youneek' }) {
   }, []);
 
   return (
-    <motion.div
-      animate={{ scale: [1, 1.018, 1] }}
-      transition={{ duration: 8.64, repeat: Infinity, ease: 'easeInOut' }}
-      className="relative aspect-square w-full max-w-[32rem]"
-    >
-      {/* Opaque disc so falling ash and coals never show through the face */}
-      <div className="absolute inset-[6%] rounded-full bg-black z-0" aria-hidden="true" />
+    <div ref={ref} className="relative mx-auto aspect-square w-full max-w-[22rem] sm:max-w-[24rem]">
+      <div className="absolute inset-[6%] z-0 rounded-full bg-black" aria-hidden="true" />
 
       {centerImage && (
-        <div
-          className="absolute inset-[6%] rounded-full overflow-hidden z-10"
-          style={{ pointerEvents: 'none' }}
-        >
+        <div className="absolute inset-[6%] z-10 overflow-hidden rounded-full" style={{ pointerEvents: 'none' }}>
           <img
             src={centerImage}
             alt=""
-            className="w-full h-full object-cover"
-            style={{
-              opacity: isGlitching ? 0 : 1,
-              transition: 'opacity 0.05s',
-            }}
+            className="h-full w-full object-cover"
+            style={{ opacity: isGlitching ? 0 : 0.55, transition: 'opacity 0.05s' }}
           />
         </div>
       )}
 
+      <div
+        ref={hubRef}
+        className="absolute left-1/2 top-1/2 z-[15] h-[28%] w-[28%] -translate-x-1/2 -translate-y-1/2 rounded-full"
+        aria-hidden="true"
+      />
+
+      {showHubAstronaut && (
+        <AstronautArt
+          className="pointer-events-none absolute left-1/2 top-[46%] z-20 -translate-x-1/2 -translate-y-1/2"
+          style={{
+            width: '42%',
+            height: '56%',
+            filter: 'brightness(0.55) contrast(1.12) drop-shadow(0 2px 8px #000c)',
+            opacity: isGlitching ? 0 : 1,
+          }}
+        />
+      )}
+
       <ClockTicks />
 
-      <div className="absolute inset-0 z-30 pointer-events-none">
+      <div className="pointer-events-none absolute inset-0 z-30">
         <ClockLabels />
-        <ClockHands time={time} source={source} />
+        <ClockHands time={time} source={source} handStyle={handStyle} omitSeconds={omitSeconds} />
       </div>
-
-    </motion.div>
+    </div>
   );
-}
+});
+
+export default ClockDial;

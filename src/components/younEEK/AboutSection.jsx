@@ -21,7 +21,7 @@ const sections = [
   },
   {
     title: 'The Analog Face',
-    body: 'The outer ring maps the 100-unit YouNeeK day with 0 at the top while the inner ring tracks the familiar 24-hour day. The hands move continuously so the dial feels fluid and precise.',
+    body: 'The sticky dial stays clean at the top with a yellow second hand that never leaves the face. Scroll and the scene fades in, then the astronaut unhooks from the hub and launches into the parallax landscape below.',
   },
 ];
 

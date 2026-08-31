@@ -93,6 +93,13 @@
   }
 }
 
+.clock-sticky {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  background: linear-gradient(to bottom, #000 0%, #000 78%, rgba(0, 0, 0, 0) 100%);
+}
+
 .header {
   position: relative;
   height: min(42vh, 440px);

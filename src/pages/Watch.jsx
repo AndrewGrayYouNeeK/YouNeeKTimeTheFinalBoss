@@ -5,6 +5,7 @@ import { BLUE } from '@/components/younEEK/clockConstants';
 import {
   formatDigital,
   readClockSource,
+  readHandStyle,
   readWatchDisplay,
   writeWatchDisplay,
   sourceLabel,
@@ -16,6 +17,7 @@ export default function Watch() {
   const time = getDecimalTime(now);
   const [source, setSource] = useState(readClockSource);
   const [display, setDisplay] = useState(readWatchDisplay);
+  const [handStyle, setHandStyle] = useState(readHandStyle);
 
   useEffect(() => {
     document.documentElement.classList.add('watch-mode');
@@ -23,6 +25,7 @@ export default function Watch() {
     const sync = () => {
       setSource(readClockSource());
       setDisplay(readWatchDisplay());
+      setHandStyle(readHandStyle());
     };
     window.addEventListener(PREFS_EVENT, sync);
     window.addEventListener('storage', sync);
@@ -67,7 +70,7 @@ export default function Watch() {
             {formatDigital(time, source)}
           </div>
           <div className="w-[min(72vw,72vh)] max-w-[196px]">
-            <ClockDial time={time} isGlitching={false} source={source} />
+            <ClockDial time={time} isGlitching={false} source={source} handStyle={handStyle} />
           </div>
         </div>
       )}
