@@ -1,6 +1,6 @@
-export default function AstronautArt({ className = '', style, thruster = false }) {
+export default function AstronautArt({ className = 'relative', style, thruster = false, arms = true }) {
   return (
-    <div className={`relative ${className}`} style={style} aria-hidden="true">
+    <div className={className} style={style} aria-hidden="true">
       <img
         src="/astro-leg.png"
         alt=""
@@ -19,18 +19,40 @@ export default function AstronautArt({ className = '', style, thruster = false }
         className="absolute left-1/2 top-0 -translate-x-1/2"
         style={{ width: '72%', height: '58%', objectFit: 'contain' }}
       />
-      <img
-        src="/astro-arm.png"
-        alt=""
-        className="absolute"
-        style={{ left: '4%', top: '22%', width: '22%', height: '42%', transform: 'rotate(-28deg) scaleX(-1)', transformOrigin: 'top center' }}
-      />
-      <img
-        src="/astro-arm.png"
-        alt=""
-        className="absolute"
-        style={{ right: '4%', top: '22%', width: '22%', height: '42%', transform: 'rotate(28deg)', transformOrigin: 'top center' }}
-      />
+      {arms && (
+        <>
+          <img
+            src="/astro-arm.png"
+            alt=""
+            className="absolute"
+            style={{
+              left: '4%',
+              top: '22%',
+              width: '22%',
+              height: '34%',
+              transform: 'rotate(-28deg) scaleX(-1)',
+              transformOrigin: 'top center',
+              objectFit: 'cover',
+              objectPosition: 'center top',
+            }}
+          />
+          <img
+            src="/astro-arm.png"
+            alt=""
+            className="absolute"
+            style={{
+              right: '4%',
+              top: '22%',
+              width: '22%',
+              height: '34%',
+              transform: 'rotate(28deg)',
+              transformOrigin: 'top center',
+              objectFit: 'cover',
+              objectPosition: 'center top',
+            }}
+          />
+        </>
+      )}
       {thruster && (
         <div
           className="absolute left-1/2 rounded-full"

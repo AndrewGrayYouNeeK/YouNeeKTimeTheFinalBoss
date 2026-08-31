@@ -73,7 +73,7 @@ export default function YouNeekClock({ launch = 0 }) {
               handStyle={handStyle}
               hubRef={hubRef}
               omitSeconds
-              showHubAstronaut={launch < 0.04}
+              showHubAstronaut={launch < 0.03}
             />
           </div>
         </div>
@@ -82,13 +82,13 @@ export default function YouNeekClock({ launch = 0 }) {
       <SecondsOverlay dialRef={dialRef} time={time} source={source} handStyle={handStyle} />
       <AstronautFlyer hubRef={hubRef} landRef={landRef} launch={launch} />
 
-      <div className="relative mt-2 w-full" style={{ height: 'min(92vh, 720px)' }}>
+      <div className="relative mt-2 w-full" style={{ height: 'min(120vh, 920px)' }}>
         <div
           ref={landRef}
-          className="absolute left-1/2 top-[42%] h-40 w-40 -translate-x-1/2 -translate-y-1/2"
+          className="absolute left-1/2 top-[38%] h-40 w-40 -translate-x-1/2 -translate-y-1/2"
           aria-hidden="true"
         />
-        <p className="pointer-events-none absolute bottom-6 left-0 right-0 text-center font-mono text-[10px] uppercase tracking-[0.28em] text-white/25">
+        <p className="pointer-events-none absolute bottom-10 left-0 right-0 text-center font-mono text-[10px] uppercase tracking-[0.28em] text-white/25">
           Scroll — astronaut launches into the scene
         </p>
       </div>

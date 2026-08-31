@@ -1,10 +1,6 @@
 import { useEffect, useState } from 'react';
 import AstronautArt from './AstronautArt';
 
-function easeOutCubic(t) {
-  return 1 - (1 - t) ** 3;
-}
-
 function lerp(a, b, t) {
   return a + (b - a) * t;
 }
@@ -16,24 +12,28 @@ export default function AstronautFlyer({ hubRef, landRef, launch }) {
     let raf = 0;
     const tick = () => {
       const hub = hubRef?.current?.getBoundingClientRect();
-      const land = landRef?.current?.getBoundingClientRect();
-      if (!hub || !land) {
+      const sticky = document.querySelector('.clock-sticky')?.getBoundingClientRect();
+      if (!hub || !sticky) {
         raf = requestAnimationFrame(tick);
         return;
       }
 
-      const t = easeOutCubic(Math.min(1, Math.max(0, launch)));
-      const fly = Math.min(1, t * 1.18);
+      const t = Math.min(1, Math.max(0, launch));
+      // Linear with a light lead so the unhook feels like a launch, not a scroll drag
+      const fly = Math.min(1, t * 1.08);
       const hubSize = Math.min(hub.width, hub.height) * 1.55;
-      const landSize = Math.min(land.width, 280) * 0.95;
+      const landSize = Math.min(window.innerWidth * 0.4, 200);
       const size = lerp(hubSize, landSize, fly);
+
       const hx = hub.left + hub.width / 2;
       const hy = hub.top + hub.height / 2;
-      const lx = land.left + land.width / 2;
-      const ly = land.top + land.height * 0.42;
-      const x = lerp(hx, lx, fly);
-      const y = lerp(hy, ly, fly);
-      const rot = lerp(0, -18, Math.sin(fly * Math.PI));
+      const sceneTop = sticky.bottom + 8;
+      const sceneBottom = window.innerHeight - 96;
+      const parkY = sceneTop + (sceneBottom - sceneTop) * 0.55;
+      const parkX = window.innerWidth / 2;
+      const x = lerp(hx, parkX, fly);
+      const y = lerp(hy, parkY, fly);
+      const rot = lerp(0, -14, Math.sin(fly * Math.PI));
 
       setPose({ x, y, size, rot, ready: true });
       raf = requestAnimationFrame(tick);
@@ -42,14 +42,15 @@ export default function AstronautFlyer({ hubRef, landRef, launch }) {
     return () => cancelAnimationFrame(raf);
   }, [hubRef, landRef, launch]);
 
-  if (!pose.ready || launch < 0.04) return null;
+  if (!pose.ready || launch < 0.03) return null;
 
   const w = pose.size;
   const h = pose.size * 1.35;
 
   return (
     <AstronautArt
-      thruster={launch > 0.05 && launch < 0.95}
+      arms={false}
+      thruster={launch > 0.04 && launch < 0.92}
       className="pointer-events-none fixed z-[35]"
       style={{
         left: pose.x,
