@@ -10,8 +10,16 @@ export const WATCH_DISPLAYS = [
   { id: 'decimal', label: 'Decimal Clock' },
 ];
 
+export const HAND_STYLES = [
+  { id: 'needle', label: 'Needle' },
+  { id: 'ring', label: 'Ring + Dart' },
+  { id: 'comet', label: 'Comet' },
+  { id: 'pulse', label: 'Pulse' },
+];
+
 export const SOURCE_KEY = 'hapticClockSource';
 export const WATCH_DISPLAY_KEY = 'watchDisplay';
+export const HAND_STYLE_KEY = 'clockHandStyle';
 export const PREFS_EVENT = 'clock-prefs-updated';
 
 export function readClockSource() {
@@ -24,6 +32,11 @@ export function readWatchDisplay() {
   return WATCH_DISPLAYS.some((s) => s.id === id) ? id : 'face';
 }
 
+export function readHandStyle() {
+  const id = localStorage.getItem(HAND_STYLE_KEY);
+  return HAND_STYLES.some((s) => s.id === id) ? id : 'needle';
+}
+
 export function writeClockSource(id) {
   localStorage.setItem(SOURCE_KEY, id);
   window.dispatchEvent(new Event(PREFS_EVENT));
@@ -34,8 +47,17 @@ export function writeWatchDisplay(id) {
   window.dispatchEvent(new Event(PREFS_EVENT));
 }
 
+export function writeHandStyle(id) {
+  localStorage.setItem(HAND_STYLE_KEY, id);
+  window.dispatchEvent(new Event(PREFS_EVENT));
+}
+
 export function sourceLabel(id) {
   return CLOCK_SOURCES.find((s) => s.id === id)?.label || 'YouNeeK Digital';
+}
+
+export function handStyleLabel(id) {
+  return HAND_STYLES.find((s) => s.id === id)?.label || 'Needle';
 }
 
 function pad(value) {

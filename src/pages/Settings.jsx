@@ -9,7 +9,17 @@ import { useState, useEffect } from 'react';
 import { Switch } from '@/components/ui/switch';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import StarsBackground from '@/components/younEEK/StarsBackground';
-import { CLOCK_SOURCES, WATCH_DISPLAYS, readClockSource, readWatchDisplay, writeClockSource, writeWatchDisplay } from '@/lib/clockPrefs';
+import {
+  CLOCK_SOURCES,
+  HAND_STYLES,
+  WATCH_DISPLAYS,
+  readClockSource,
+  readHandStyle,
+  readWatchDisplay,
+  writeClockSource,
+  writeHandStyle,
+  writeWatchDisplay,
+} from '@/lib/clockPrefs';
 
 export default function Settings() {
   const { user, setEmail } = useAuth();
@@ -21,6 +31,7 @@ export default function Settings() {
   const [freqDuration, setFreqDuration] = useState(() => localStorage.getItem('hourlyFreqDuration') || '5');
   const [clockSource, setClockSource] = useState(readClockSource);
   const [watchDisplay, setWatchDisplay] = useState(readWatchDisplay);
+  const [handStyle, setHandStyle] = useState(readHandStyle);
 
   useEffect(() => {
     localStorage.setItem('hourlyFreqEnabled', freqEnabled);
@@ -32,6 +43,7 @@ export default function Settings() {
     const sync = () => {
       setClockSource(readClockSource());
       setWatchDisplay(readWatchDisplay());
+      setHandStyle(readHandStyle());
     };
     window.addEventListener('clock-prefs-updated', sync);
     return () => window.removeEventListener('clock-prefs-updated', sync);
@@ -72,6 +84,20 @@ export default function Settings() {
             <h2 className="text-xl font-semibold mb-4 text-white">Clock Appearance</h2>
             <div className="space-y-4">
               <div>
+                <p className="text-sm text-white/50 mb-2">Hand style</p>
+                <Select value={handStyle} onValueChange={(id) => { setHandStyle(id); writeHandStyle(id); }}>
+                  <SelectTrigger className="w-full sm:w-[240px] bg-white/5 border-white/20 text-white">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {HAND_STYLES.map((item) => (
+                      <SelectItem key={item.id} value={item.id}>{item.label}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <p className="mt-2 text-xs text-white/35">Yellow seconds on every style.</p>
+              </div>
+              <div>
                 <p className="text-sm text-white/50 mb-2">Clock Face Background</p>
                 <div className="flex gap-3 items-center">
                   <Button
@@ -86,7 +112,7 @@ export default function Settings() {
                     onClick={() => {
                       localStorage.removeItem('clockFaceUrl');
                       window.dispatchEvent(new Event('clock-face-updated'));
-                      toast({ title: 'Clock face reset to default' });
+                      toast({ title: 'Clock face reset to clean dial' });
                     }}
                     className="text-white/60 hover:text-white hover:bg-white/10"
                   >

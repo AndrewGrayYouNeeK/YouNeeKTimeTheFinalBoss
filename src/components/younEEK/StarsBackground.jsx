@@ -1,7 +1,9 @@
 import { useEffect, useRef } from 'react';
 
-export default function StarsBackground() {
+export default function StarsBackground({ starOpacity = 1 }) {
   const canvasRef = useRef(null);
+  const opacityRef = useRef(starOpacity);
+  opacityRef.current = starOpacity;
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -53,53 +55,54 @@ export default function StarsBackground() {
     const render = () => {
       frame++;
 
-      // Solid black background
       ctx.fillStyle = '#000000';
       ctx.fillRect(0, 0, width, height);
 
-      // Slow global pulse — makes the whole field breathe (~6s cycle at 60fps)
-      const globalPulse = 0.85 + Math.sin(frame * 0.0175) * 0.15;
+      const field = Math.max(0, Math.min(1, opacityRef.current));
+      if (field > 0.001) {
+        const globalPulse = 0.85 + Math.sin(frame * 0.0175) * 0.15;
 
-      // Stars with twinkling
-      stars.forEach((s) => {
-        const twinkle = Math.sin(frame * s.twinkleSpeed + s.twinkleOffset);
-        const opacity = Math.max(0, s.baseOpacity * (1 - s.twinkleDepth + twinkle * s.twinkleDepth) * globalPulse);
-        ctx.fillStyle = `rgba(255, 255, 255, ${opacity})`;
-        ctx.beginPath();
-        ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
-        ctx.fill();
-
-        // Glow on bigger stars
-        if (s.r > 1.3) {
-          ctx.fillStyle = `rgba(255, 255, 255, ${opacity * 0.15})`;
+        stars.forEach((s) => {
+          const twinkle = Math.sin(frame * s.twinkleSpeed + s.twinkleOffset);
+          const opacity = Math.max(
+            0,
+            s.baseOpacity * (1 - s.twinkleDepth + twinkle * s.twinkleDepth) * globalPulse * field
+          );
+          ctx.fillStyle = `rgba(255, 255, 255, ${opacity})`;
           ctx.beginPath();
-          ctx.arc(s.x, s.y, s.r * 3, 0, Math.PI * 2);
+          ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
           ctx.fill();
-        }
-      });
 
-      // Shooting stars
-      if (Math.random() < 0.004) spawnShootingStar();
-      for (let i = shootingStars.length - 1; i >= 0; i--) {
-        const ss = shootingStars[i];
-        ss.x += Math.cos(ss.angle) * ss.speed;
-        ss.y += Math.sin(ss.angle) * ss.speed;
-        ss.life -= 0.01;
+          if (s.r > 1.3) {
+            ctx.fillStyle = `rgba(255, 255, 255, ${opacity * 0.15})`;
+            ctx.beginPath();
+            ctx.arc(s.x, s.y, s.r * 3, 0, Math.PI * 2);
+            ctx.fill();
+          }
+        });
 
-        const tailX = ss.x - Math.cos(ss.angle) * ss.len;
-        const tailY = ss.y - Math.sin(ss.angle) * ss.len;
-        const tailGrad = ctx.createLinearGradient(ss.x, ss.y, tailX, tailY);
-        tailGrad.addColorStop(0, `rgba(255, 255, 255, ${ss.life})`);
-        tailGrad.addColorStop(1, 'rgba(255, 255, 255, 0)');
-        ctx.strokeStyle = tailGrad;
-        ctx.lineWidth = 1.5;
-        ctx.beginPath();
-        ctx.moveTo(ss.x, ss.y);
-        ctx.lineTo(tailX, tailY);
-        ctx.stroke();
+        if (Math.random() < 0.004 * field) spawnShootingStar();
+        for (let i = shootingStars.length - 1; i >= 0; i--) {
+          const ss = shootingStars[i];
+          ss.x += Math.cos(ss.angle) * ss.speed;
+          ss.y += Math.sin(ss.angle) * ss.speed;
+          ss.life -= 0.01;
 
-        if (ss.life <= 0 || ss.x > width || ss.y > height) {
-          shootingStars.splice(i, 1);
+          const tailX = ss.x - Math.cos(ss.angle) * ss.len;
+          const tailY = ss.y - Math.sin(ss.angle) * ss.len;
+          const tailGrad = ctx.createLinearGradient(ss.x, ss.y, tailX, tailY);
+          tailGrad.addColorStop(0, `rgba(255, 255, 255, ${ss.life * field})`);
+          tailGrad.addColorStop(1, 'rgba(255, 255, 255, 0)');
+          ctx.strokeStyle = tailGrad;
+          ctx.lineWidth = 1.5;
+          ctx.beginPath();
+          ctx.moveTo(ss.x, ss.y);
+          ctx.lineTo(tailX, tailY);
+          ctx.stroke();
+
+          if (ss.life <= 0 || ss.x > width || ss.y > height) {
+            shootingStars.splice(i, 1);
+          }
         }
       }
 
