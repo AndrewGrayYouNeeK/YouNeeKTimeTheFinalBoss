@@ -4,7 +4,7 @@ import SwiftUI
 struct YouNeeKTimeApp: App {
     var body: some Scene {
         WindowGroup {
-            WatchClockView()
+            YouNeekShipScroll()
                 .preferredColorScheme(.dark)
         }
     }
