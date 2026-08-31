@@ -18,7 +18,7 @@ function lerp(a, b, t) {
   return a + (b - a) * t;
 }
 
-export default function YouNeekClock({ launch = 0, dock = 0 }) {
+export default function YouNeekClock({ launch = 0, dock = 0, returning = false }) {
   const [now, setNow] = useState(() => new Date());
   const time = getDecimalTime(now);
   const [isGlitching, setIsGlitching] = useState(false);
@@ -61,9 +61,9 @@ export default function YouNeekClock({ launch = 0, dock = 0 }) {
     return () => clearTimeout(glitchTimer);
   }, [hour]);
 
-  const scale = lerp(1, 0.4, dock);
-  const digitSize = lerp(2.4, 1.15, dock);
-  const showBrand = dock < 0.55;
+  const scale = lerp(1, 0.38, dock);
+  const digitSize = lerp(2.4, 1.05, dock);
+  const showBrand = dock < 0.2;
 
   return (
     <div className={`mx-auto flex w-full max-w-[36rem] flex-col items-center px-4 pb-28 transition-colors duration-100 ${isGlitching ? 'bg-black' : 'bg-transparent'}`}>
@@ -101,15 +101,17 @@ export default function YouNeekClock({ launch = 0, dock = 0 }) {
       </div>
 
       <SecondsOverlay dialRef={dialRef} time={time} source={source} handStyle={handStyle} />
-      <AstronautFlyer hubRef={hubRef} launch={launch} dock={dock} />
+      <AstronautFlyer hubRef={hubRef} launch={launch} dock={dock} returning={returning} />
 
-      <div className="relative mt-2 w-full" style={{ height: 'min(130vh, 980px)' }}>
-        <p className="pointer-events-none absolute bottom-10 left-0 right-0 text-center font-mono text-[10px] uppercase tracking-[0.28em] text-white/25">
-          Scroll — hangar opens, astronaut flies the bay
-        </p>
+      <div className="relative mt-2 w-full" style={{ height: 'min(165vh, 1200px)' }}>
+        {dock < 0.35 && (
+          <p className="pointer-events-none absolute bottom-10 left-0 right-0 text-center font-mono text-[10px] uppercase tracking-[0.28em] text-white/25">
+            Scroll — hangar opens, astronaut flies the bay
+          </p>
+        )}
       </div>
 
-      <div className={`mt-4 flex w-full flex-col items-center gap-8 transition-opacity duration-100 ${isGlitching ? 'opacity-0' : ''}`}>
+      <div className={`mt-4 flex w-full flex-col items-center gap-8 transition-opacity duration-100 ${isGlitching ? 'opacity-0' : ''}`} style={{ opacity: isGlitching ? 0 : Math.max(0.15, dock) }}>
         <HapticTimeManager time={time} />
         <FrequencyManager time={time} />
         <HandStyleSelect value={handStyle} />

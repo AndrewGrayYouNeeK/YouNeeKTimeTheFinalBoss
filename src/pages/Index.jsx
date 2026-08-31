@@ -7,7 +7,7 @@ import useLaunchScroll from '@/hooks/useLaunchScroll';
 import { PREFS_EVENT, readClockSource } from '@/lib/clockPrefs';
 
 export default function Index() {
-  const { sceneFade, launch, dock, parallax } = useLaunchScroll();
+  const { sceneFade, launch, dock, parallax, returning } = useLaunchScroll();
   const [source, setSource] = useState(readClockSource);
   const army = source === 'army';
 
@@ -32,7 +32,7 @@ export default function Index() {
       <ShipHangarScene sceneFade={sceneFade} dock={dock} parallax={parallax} army={army} />
       <PullToRefresh onRefresh={handleRefresh}>
         <div className="relative z-10">
-          <YouNeekClock launch={launch} dock={dock} />
+          <YouNeekClock launch={launch} dock={dock} returning={returning} />
         </div>
       </PullToRefresh>
     </div>

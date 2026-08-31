@@ -4,7 +4,7 @@ function clamp(n, a, b) {
   return Math.min(b, Math.max(a, n));
 }
 
-function readLaunch() {
+function readLaunch(velocity = 0) {
   const track = typeof window !== 'undefined' ? Math.max(window.innerHeight * 1.45, 720) : 800;
   const y = typeof window !== 'undefined' ? window.scrollY || 0 : 0;
   const progress = clamp(y / track, 0, 1);
@@ -13,19 +13,20 @@ function readLaunch() {
   const launch = clamp((progress - 0.2) / 0.3, 0, 1);
   const dock = clamp((progress - 0.5) / 0.5, 0, 1);
   const parallax = y * 0.28;
-  return { progress, sceneFade, launch, dock, parallax, track, scrollY: y };
+  const returning = velocity < -40;
+  return { progress, sceneFade, launch, dock, parallax, track, scrollY: y, velocity, returning };
 }
 
 export default function useLaunchScroll() {
-  const [state, setState] = useState(readLaunch);
+  const [state, setState] = useState(() => readLaunch(0));
   const lastY = useRef(0);
-  const lastT = useRef(0);
+  const lastT = useRef(typeof performance !== 'undefined' ? performance.now() : 0);
   const velocity = useRef(0);
   const snapping = useRef(false);
 
   useEffect(() => {
     let raf = 0;
-    const publish = () => setState(readLaunch());
+    const publish = () => setState(readLaunch(velocity.current));
 
     const onScroll = () => {
       const y = window.scrollY || 0;
@@ -38,18 +39,21 @@ export default function useLaunchScroll() {
       raf = requestAnimationFrame(publish);
     };
 
+    // Flick up → snap to clean so he gets sucked into the hub again
     const rubberBandToClean = () => {
       if (snapping.current) return;
-      const { track, scrollY } = readLaunch();
-      const nearClean = scrollY < track * 0.18;
-      const flickUp = velocity.current < -420;
-      if ((nearClean && flickUp) || (scrollY > 0 && scrollY < track * 0.08 && velocity.current <= 0)) {
+      const { track, scrollY } = readLaunch(velocity.current);
+      const flickUp = velocity.current < -380;
+      const inLaunchBand = scrollY > 0 && scrollY < track * 0.55;
+      const nearClean = scrollY > 0 && scrollY < track * 0.12;
+      if ((flickUp && inLaunchBand) || (nearClean && velocity.current <= 0)) {
         snapping.current = true;
         window.scrollTo({ top: 0, behavior: 'smooth' });
         window.setTimeout(() => {
           snapping.current = false;
+          velocity.current = 0;
           publish();
-        }, 420);
+        }, 480);
       }
     };
 
