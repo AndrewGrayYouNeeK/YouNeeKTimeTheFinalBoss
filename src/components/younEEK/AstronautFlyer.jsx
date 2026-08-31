@@ -5,7 +5,7 @@ function lerp(a, b, t) {
   return a + (b - a) * t;
 }
 
-export default function AstronautFlyer({ hubRef, landRef, launch }) {
+export default function AstronautFlyer({ hubRef, launch }) {
   const [pose, setPose] = useState({ x: 0, y: 0, size: 96, rot: 0, ready: false });
 
   useEffect(() => {
@@ -40,7 +40,7 @@ export default function AstronautFlyer({ hubRef, landRef, launch }) {
     };
     raf = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(raf);
-  }, [hubRef, landRef, launch]);
+  }, [hubRef, launch]);
 
   if (!pose.ready || launch < 0.03) return null;
 

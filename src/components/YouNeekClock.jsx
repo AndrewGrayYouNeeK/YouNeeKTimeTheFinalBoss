@@ -80,7 +80,7 @@ export default function YouNeekClock({ launch = 0 }) {
       </div>
 
       <SecondsOverlay dialRef={dialRef} time={time} source={source} handStyle={handStyle} />
-      <AstronautFlyer hubRef={hubRef} landRef={landRef} launch={launch} />
+      <AstronautFlyer hubRef={hubRef} launch={launch} />
 
       <div className="relative mt-2 w-full" style={{ height: 'min(120vh, 920px)' }}>
         <div
