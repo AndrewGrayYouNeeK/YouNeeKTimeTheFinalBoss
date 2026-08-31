@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 
-export default function StarsBackground({ starOpacity = 1 }) {
+export default function StarsBackground({ starOpacity = 1, offsetY = 0 }) {
   const canvasRef = useRef(null);
   const opacityRef = useRef(starOpacity);
   opacityRef.current = starOpacity;
@@ -124,8 +124,11 @@ export default function StarsBackground({ starOpacity = 1 }) {
   }, []);
 
   return (
-    <div className="fixed inset-0 pointer-events-none z-0">
-      <canvas ref={canvasRef} className="absolute inset-0 w-full h-full" />
+    <div
+      className="fixed inset-0 pointer-events-none z-0 will-change-transform"
+      style={typeof offsetY === 'number' ? { transform: `translate3d(0, ${offsetY}px, 0)` } : undefined}
+    >
+      <canvas ref={canvasRef} className="absolute inset-0 h-full w-full" />
     </div>
   );
 }
