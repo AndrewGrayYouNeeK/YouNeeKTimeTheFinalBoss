@@ -4,12 +4,13 @@ export function resetLaunchThump() {
   fired = false;
 }
 
-export function maybeLaunchThump(launch) {
-  if (launch < 0.12) {
+/** Short haptic when p crosses ~0.22 — the launch. */
+export function maybeLaunchThump(p) {
+  if (p < 0.18) {
     fired = false;
     return;
   }
-  if (fired || launch < 0.18) return;
+  if (fired || p < 0.22) return;
   fired = true;
 
   try {

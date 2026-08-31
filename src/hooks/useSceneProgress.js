@@ -1,24 +1,26 @@
 import { useEffect, useRef, useState } from 'react';
+import { clamp } from '@/lib/parallax';
 
-function clamp(n, a, b) {
-  return Math.min(b, Math.max(a, n));
-}
-
-function readLaunch(velocity = 0) {
-  const track = typeof window !== 'undefined' ? Math.max(window.innerHeight * 1.45, 720) : 800;
+function readState(velocity = 0) {
+  const travel = typeof window !== 'undefined' ? Math.max(window.innerHeight * 1.5, 760) : 800;
   const y = typeof window !== 'undefined' ? window.scrollY || 0 : 0;
-  const progress = clamp(y / track, 0, 1);
-  // 0–20% hangar fade, 20–50% launch, 50–100% dock into ship
-  const sceneFade = clamp(progress / 0.2, 0, 1);
-  const launch = clamp((progress - 0.2) / 0.3, 0, 1);
-  const dock = clamp((progress - 0.5) / 0.5, 0, 1);
-  const parallax = y * 0.28;
-  const returning = velocity < -40;
-  return { progress, sceneFade, launch, dock, parallax, track, scrollY: y, velocity, returning };
+  // p = how far you pulled the scene open
+  const p = clamp(y / travel, 0, 1);
+  // Overscroll stretch of the black void when pulling past the top
+  const overscroll = y < 0 ? Math.min(48, -y) : 0;
+  return {
+    p,
+    travel,
+    scrollY: y,
+    velocity,
+    returning: velocity < -40,
+    overscroll,
+    screenHeight: typeof window !== 'undefined' ? window.innerHeight : 800,
+  };
 }
 
-export default function useLaunchScroll() {
-  const [state, setState] = useState(() => readLaunch(0));
+export default function useSceneProgress() {
+  const [state, setState] = useState(() => readState(0));
   const lastY = useRef(0);
   const lastT = useRef(typeof performance !== 'undefined' ? performance.now() : 0);
   const velocity = useRef(0);
@@ -26,7 +28,7 @@ export default function useLaunchScroll() {
 
   useEffect(() => {
     let raf = 0;
-    const publish = () => setState(readLaunch(velocity.current));
+    const publish = () => setState(readState(velocity.current));
 
     const onScroll = () => {
       const y = window.scrollY || 0;
@@ -39,14 +41,13 @@ export default function useLaunchScroll() {
       raf = requestAnimationFrame(publish);
     };
 
-    // Flick up → snap to clean so he gets sucked into the hub again
     const rubberBandToClean = () => {
       if (snapping.current) return;
-      const { track, scrollY } = readLaunch(velocity.current);
+      const { travel, scrollY } = readState(velocity.current);
       const flickUp = velocity.current < -380;
-      const inLaunchBand = scrollY > 0 && scrollY < track * 0.55;
-      const nearClean = scrollY > 0 && scrollY < track * 0.12;
-      if ((flickUp && inLaunchBand) || (nearClean && velocity.current <= 0)) {
+      const inBand = scrollY > 0 && scrollY < travel * 0.55;
+      const nearClean = scrollY > 0 && scrollY < travel * 0.1;
+      if ((flickUp && inBand) || (nearClean && velocity.current <= 0)) {
         snapping.current = true;
         window.scrollTo({ top: 0, behavior: 'smooth' });
         window.setTimeout(() => {

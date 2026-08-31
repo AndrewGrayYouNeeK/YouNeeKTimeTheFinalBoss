@@ -21,7 +21,7 @@ const sections = [
   },
   {
     title: 'The Analog Face',
-    body: 'Lock-screen clean: black void, purple Y hub, cyan/magenta hands, loud yellow seconds. Scroll and the hangar fades in; the astronaut unhooks and dives into the open bay while the clock shrinks and pins at the top so time never leaves the screen.',
+    body: 'One scroll number opens the scene. Far layers crawl, near layers race, the astronaut flies his own curve, and the sticky dial collapses to a top puck — yellow seconds locked to the ring the whole time.',
   },
 ];
 
