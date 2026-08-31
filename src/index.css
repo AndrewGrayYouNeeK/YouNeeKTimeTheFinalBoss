@@ -97,7 +97,7 @@
   position: sticky;
   top: 0;
   z-index: 30;
-  background: linear-gradient(to bottom, #000 0%, #000 78%, rgba(0, 0, 0, 0) 100%);
+  background: linear-gradient(to bottom, #000 0%, #000 72%, rgba(0, 0, 0, 0) 100%);
 }
 
 .header {

@@ -87,19 +87,28 @@ export default function SecondsOverlay({ dialRef, time, source, handStyle }) {
             <line x1={CX} y1={CY - 20} x2={CX} y2={CY - 152} stroke={YELLOW} strokeWidth="1.8" strokeLinecap="round" />
           </g>
         ) : (
-          <line
-            x1={CX}
-            y1={CY + 18}
-            x2={CX}
-            y2={CY - 168}
-            stroke={YELLOW}
-            strokeWidth="2"
-            strokeLinecap="round"
-            transform={`rotate(${second} ${CX} ${CY})`}
-            style={{ filter: `drop-shadow(0 0 6px ${YELLOW})` }}
-          />
+          <g transform={`rotate(${second} ${CX} ${CY})`}>
+            <line
+              x1={CX}
+              y1={CY + 16}
+              x2={CX}
+              y2={CY - 162}
+              stroke={YELLOW}
+              strokeWidth="1.7"
+              strokeLinecap="round"
+              style={{ filter: `drop-shadow(0 0 5px ${YELLOW})` }}
+            />
+            <circle
+              cx={CX}
+              cy={CY - 166}
+              r="3.2"
+              fill="#fff6a0"
+              stroke={YELLOW}
+              strokeWidth="1.2"
+              style={{ filter: `drop-shadow(0 0 8px ${YELLOW})` }}
+            />
+          </g>
         )}
-        <circle cx={CX} cy={CY} r="2.4" fill={YELLOW} />
       </svg>
     </div>
   );

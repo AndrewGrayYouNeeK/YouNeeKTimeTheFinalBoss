@@ -21,7 +21,7 @@ const sections = [
   },
   {
     title: 'The Analog Face',
-    body: 'The sticky dial stays clean at the top with a yellow second hand that never leaves the face. Scroll and the scene fades in, then the astronaut unhooks from the hub and launches into the parallax landscape below.',
+    body: 'Lock-screen clean: black void, purple Y hub, cyan/magenta hands, loud yellow seconds. Scroll and the hangar fades in; the astronaut unhooks and dives into the open bay while the clock shrinks and pins at the top so time never leaves the screen.',
   },
 ];
 

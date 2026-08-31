@@ -6,12 +6,22 @@ const CY = 200;
 const CYAN = ARMY_CYAN;
 const MAGENTA = PURPLE;
 
-function Hub() {
+function PurpleYHub() {
   return (
     <g>
-      <circle cx={CX} cy={CY} r="11" fill="#0a0a0a" stroke={CYAN} strokeWidth="1.6" />
-      <circle cx={CX} cy={CY} r="5.5" fill="#111" stroke={MAGENTA} strokeWidth="1.2" />
-      <circle cx={CX} cy={CY} r="2.2" fill={YELLOW} opacity="0.35" />
+      <circle cx={CX} cy={CY} r="18" fill="#050505" stroke={PURPLE} strokeWidth="2.8"
+        style={{ filter: `drop-shadow(0 0 6px ${PURPLE}88)` }} />
+      <circle cx={CX} cy={CY} r="12.5" fill="#0a0a0a" stroke={PURPLE} strokeWidth="1.2" opacity="0.95" />
+      {/* Purple Y */}
+      <path
+        d={`M ${CX - 5.5} ${CY - 7} L ${CX} ${CY - 0.5} L ${CX + 5.5} ${CY - 7} M ${CX} ${CY - 0.5} L ${CX} ${CY + 7.5}`}
+        stroke={PURPLE}
+        strokeWidth="2.4"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        fill="none"
+        style={{ filter: `drop-shadow(0 0 4px ${PURPLE})` }}
+      />
     </g>
   );
 }
@@ -66,29 +76,42 @@ function YellowSeconds({ second, handStyle }) {
       </g>
     );
   }
+  // Thin yellow needle with hot tip
   return (
-    <line
-      x1={CX}
-      y1={CY + 18}
-      x2={CX}
-      y2={CY - 168}
-      stroke={YELLOW}
-      strokeWidth="2"
-      strokeLinecap="round"
-      transform={`rotate(${second} ${CX} ${CY})`}
-      style={{ filter: `drop-shadow(0 0 6px ${YELLOW})` }}
-    />
+    <g transform={`rotate(${second} ${CX} ${CY})`}>
+      <line
+        x1={CX}
+        y1={CY + 16}
+        x2={CX}
+        y2={CY - 162}
+        stroke={YELLOW}
+        strokeWidth="1.7"
+        strokeLinecap="round"
+        style={{ filter: `drop-shadow(0 0 5px ${YELLOW})` }}
+      />
+      <circle
+        cx={CX}
+        cy={CY - 166}
+        r="3.2"
+        fill="#fff6a0"
+        stroke={YELLOW}
+        strokeWidth="1.2"
+        style={{ filter: `drop-shadow(0 0 8px ${YELLOW})` }}
+      />
+    </g>
   );
 }
 
 function NeedleHands({ hour, minute }) {
   return (
     <g>
-      <line x1={CX} y1={CY} x2={CX} y2={CY - 92} stroke={CYAN} strokeWidth="5.5" strokeLinecap="round"
-        transform={`rotate(${hour} ${CX} ${CY})`} style={{ filter: `drop-shadow(0 0 4px ${CYAN}aa)` }} />
-      <line x1={CX} y1={CY} x2={CX} y2={CY - 132} stroke={MAGENTA} strokeWidth="3.6" strokeLinecap="round"
+      {/* Hour: short, fat, cyan */}
+      <line x1={CX} y1={CY + 6} x2={CX} y2={CY - 78} stroke={CYAN} strokeWidth="7.5" strokeLinecap="round"
+        transform={`rotate(${hour} ${CX} ${CY})`} style={{ filter: `drop-shadow(0 0 5px ${CYAN}aa)` }} />
+      {/* Minute: long, thin, magenta */}
+      <line x1={CX} y1={CY + 8} x2={CX} y2={CY - 138} stroke={MAGENTA} strokeWidth="2.8" strokeLinecap="round"
         transform={`rotate(${minute} ${CX} ${CY})`} style={{ filter: `drop-shadow(0 0 4px ${MAGENTA}aa)` }} />
-      <Hub />
+      <PurpleYHub />
     </g>
   );
 }
@@ -113,7 +136,7 @@ function RingDartHands({ hour, minute }) {
         style={{ filter: `drop-shadow(0 0 4px ${CYAN}99)` }} />
       <path d={ringArc(148, minuteSpan)} fill="none" stroke={MAGENTA} strokeWidth="5" strokeLinecap="round"
         style={{ filter: `drop-shadow(0 0 4px ${MAGENTA}99)` }} />
-      <Hub />
+      <PurpleYHub />
     </g>
   );
 }
@@ -136,7 +159,7 @@ function CometHands({ hour, minute }) {
     <g>
       <Blade angle={hour} length={96} width={7} color={CYAN} />
       <Blade angle={minute} length={128} width={5} color={MAGENTA} />
-      <Hub />
+      <PurpleYHub />
     </g>
   );
 }
@@ -146,7 +169,7 @@ function PulseHands({ hour, minute }) {
     <g>
       <Blade angle={hour} length={90} width={6} color={CYAN} />
       <Blade angle={minute} length={122} width={4.5} color={MAGENTA} />
-      <Hub />
+      <PurpleYHub />
     </g>
   );
 }
