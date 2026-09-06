@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { getDecimalTime } from '@/lib/decimalTime';
+import ClockHeader from '@/components/younEEK/ClockHeader';
 import ClockDial from '@/components/younEEK/ClockDial';
 import ClockTypeSelect from '@/components/younEEK/ClockTypeSelect';
 import ClockTimeLegend from '@/components/younEEK/ClockTimeLegend';
@@ -80,9 +81,7 @@ export default function YouNeekClock({ p = 0, overscroll = 0 }) {
             willChange: 'transform',
           }}
         >
-          {showBrand && (
-            <p className="font-mono text-[10px] uppercase tracking-[0.35em] text-[#00b7ff]/70">YouNeeK Time</p>
-          )}
+          {showBrand && <ClockHeader />}
           <div
             className="font-mono font-semibold tracking-[0.14em]"
             style={{ color: '#ffe600', fontSize: `${digitSize}rem` }}
