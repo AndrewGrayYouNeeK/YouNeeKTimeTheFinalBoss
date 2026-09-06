@@ -102,16 +102,16 @@
 
 .header {
   position: relative;
-  height: min(42vh, 440px);
+  height: auto;
+  width: 100%;
   background: transparent;
 }
 
 .header-lettering {
-  position: absolute;
-  inset: 0;
+  position: relative;
   pointer-events: none;
   text-align: center;
-  padding: 0 1rem;
+  padding: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -136,13 +136,13 @@
 }
 
 .lava-header-title {
-  max-height: min(28vh, 280px);
+  max-height: min(9vh, 88px);
 }
 
 .lava-header-subtitle {
-  margin-top: 0.3rem;
+  margin-top: 0.15rem;
   max-width: min(48vw, 340px);
-  max-height: min(6.5vh, 58px);
+  max-height: min(3.2vh, 28px);
 }
 
 .volcano-bg-drift {
