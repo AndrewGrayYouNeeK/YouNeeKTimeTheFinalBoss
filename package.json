@@ -4,7 +4,7 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite --host :: --port 5173 --strictPort",
+    "dev": "vite --host 0.0.0.0 --port 5173 --strictPort",
     "build": "vite build && cp dist/index.html dist/404.html",
     "lint": "eslint . --quiet",
     "lint:fix": "eslint . --fix",
