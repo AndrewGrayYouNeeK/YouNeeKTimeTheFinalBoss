@@ -59,10 +59,12 @@ export function lunationIndexForDate(date) {
   const dayStart = startOfLocalDay(date);
   let index = meanLunationIndex(dayStart);
   let bounds = lunationBounds(index);
-  if (dayStart.getTime() < bounds.startMs) {
+  const startDay = startOfLocalDay(bounds.start).getTime();
+  const endDay = startOfLocalDay(bounds.end).getTime();
+  if (dayStart.getTime() < startDay) {
     index -= 1;
     bounds = lunationBounds(index);
-  } else if (dayStart.getTime() >= bounds.endMs) {
+  } else if (dayStart.getTime() >= endDay) {
     index += 1;
     bounds = lunationBounds(index);
   }
