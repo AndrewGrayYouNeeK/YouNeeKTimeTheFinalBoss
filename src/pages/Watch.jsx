@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { getDecimalTime } from '@/lib/decimalTime';
 import ClockDial from '@/components/younEEK/ClockDial';
-import { BLUE } from '@/components/younEEK/clockConstants';
 import {
   formatDigital,
   readClockSource,
@@ -52,22 +51,22 @@ export default function Watch() {
       {display === 'decimal' ? (
         <div className="flex flex-col items-center gap-2 px-3">
           <div
-            className="font-mono text-[2.6rem] font-semibold leading-none tracking-[0.08em]"
-            style={{ color: BLUE, textShadow: `0 0 16px ${BLUE}` }}
+            className="text-[2.8rem] font-thin leading-none tracking-tight text-white"
+            style={{ fontFamily: 'system-ui, -apple-system, sans-serif' }}
           >
-            {formatDigital(time, source)}
+            {formatDigital(time, source).replace('•', ':')}
           </div>
-          <div className="font-mono text-[9px] uppercase tracking-[0.22em] text-white/40">
+          <div className="text-[11px] font-medium text-[#FF9F0A]">
             {sourceLabel(source)}
           </div>
         </div>
       ) : (
         <div className="flex w-full max-w-[220px] flex-col items-center gap-0.5">
           <div
-            className="font-mono text-[1.45rem] font-semibold leading-none tracking-[0.12em]"
-            style={{ color: BLUE, textShadow: `0 0 12px ${BLUE}` }}
+            className="text-[1.45rem] font-thin leading-none tracking-tight text-white"
+            style={{ fontFamily: 'system-ui, -apple-system, sans-serif' }}
           >
-            {formatDigital(time, source)}
+            {formatDigital(time, source).replace('•', ':')}
           </div>
           <div className="w-[min(72vw,72vh)] max-w-[196px]">
             <ClockDial time={time} isGlitching={false} source={source} handStyle={handStyle} />
