@@ -107,7 +107,7 @@ export default function Calendar() {
           Today
         </button>
 
-        <div className="mt-3 grid grid-cols-7 text-center text-[12px] font-semibold text-[#8e8e93]">
+        <div className="mt-3 grid grid-cols-7 text-center text-[12px] font-semibold text-white/35">
           {WEEKDAYS.map((d, i) => (
             <div key={`${d}-${i}`} className="py-2">{d}</div>
           ))}
@@ -132,7 +132,7 @@ export default function Calendar() {
                       ? 'bg-[#FF3B30] text-white'
                       : active
                         ? 'bg-[#2c2c2e] text-white'
-                        : 'text-[#f2f2f7]'
+                        : 'text-white'
                   }`}
                 >
                   {d.day}
