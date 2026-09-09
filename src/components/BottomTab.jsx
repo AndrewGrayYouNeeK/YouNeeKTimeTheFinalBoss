@@ -12,13 +12,12 @@ export default function BottomTab() {
 
   return (
     <div
-      className="fixed bottom-0 left-0 right-0 z-40 flex justify-around border-t border-white/10 bg-[#1c1c1e]/92 backdrop-blur-xl"
-      style={{ paddingBottom: 'max(0.35rem, env(safe-area-inset-bottom))', fontFamily: 'system-ui, -apple-system, sans-serif' }}
+      className="fixed bottom-0 left-0 right-0 border-t border-[#00b7ff]/10 bg-[#050505]/95 backdrop-blur-md flex justify-around z-40"
+      style={{ paddingBottom: 'max(1rem, env(safe-area-inset-bottom))' }}
     >
       {tabs.map((tab) => {
         const Icon = tab.icon;
         const isActive = location.pathname === tab.path;
-        const color = tab.path === '/calendar' ? '#FF3B30' : '#FF9F0A';
         return (
           <Link
             key={tab.path}
@@ -29,11 +28,14 @@ export default function BottomTab() {
                 window.scrollTo({ top: 0, behavior: 'smooth' });
               }
             }}
-            className="flex flex-1 flex-col items-center justify-center py-2"
-            style={{ color: isActive ? color : '#8e8e93' }}
+            className={`flex flex-col items-center justify-center py-3 px-4 flex-1 transition-colors ${
+              isActive
+                ? 'text-[#00b7ff]'
+                : 'text-white/30 hover:text-white/60'
+            }`}
           >
-            <Icon className="h-[22px] w-[22px]" strokeWidth={isActive ? 2.2 : 1.8} />
-            <span className="mt-0.5 text-[10px] font-medium">{tab.label}</span>
+            <Icon className={`w-6 h-6 ${isActive ? 'drop-shadow-[0_0_8px_rgba(0,183,255,0.8)]' : ''}`} />
+            <span className="font-mono text-[10px] mt-1 uppercase tracking-[0.2em]">{tab.label}</span>
           </Link>
         );
       })}

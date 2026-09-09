@@ -1,12 +1,18 @@
 export default function ClockHeader() {
   return (
-    <div className="pt-2 text-center">
-      <p className="text-[13px] font-semibold tracking-tight text-white/90" style={{ fontFamily: 'system-ui, -apple-system, sans-serif' }}>
-        YouNeeK Time
-      </p>
-      <p className="mt-0.5 text-[11px] font-normal text-white/45" style={{ fontFamily: 'system-ui, -apple-system, sans-serif' }}>
-        by Andrew Gray
-      </p>
+    <div className="header">
+      <div className="header-lettering">
+        <img
+          src="/lava-header-youneek-time.png"
+          alt="YouNeeK Time"
+          className="erupt-reveal-title lava-header-title"
+        />
+        <img
+          src="/lava-header-by-andrew.png"
+          alt="by Andrew Gray"
+          className="erupt-reveal-subtitle lava-header-subtitle"
+        />
+      </div>
     </div>
   );
 }

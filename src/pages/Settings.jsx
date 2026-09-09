@@ -8,6 +8,7 @@ import { useToast } from '@/components/ui/use-toast';
 import { useState, useEffect } from 'react';
 import { Switch } from '@/components/ui/switch';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import StarsBackground from '@/components/younEEK/StarsBackground';
 import {
   CLOCK_SOURCES,
   HAND_STYLES,
@@ -60,8 +61,9 @@ export default function Settings() {
   };
 
   return (
-    <div className="relative min-h-screen bg-black pb-24 text-white" style={{ fontFamily: 'system-ui, -apple-system, sans-serif' }}>
-      <div className="relative z-10 mx-auto max-w-2xl px-6 pb-8 pt-24">
+    <div className="min-h-screen pb-24 relative text-white">
+      <StarsBackground />
+      <div className="pt-24 px-6 py-8 max-w-2xl mx-auto relative z-10">
         <div className="space-y-6">
           <div className="border-b border-white/10 pb-6">
             <h2 className="text-xl font-semibold mb-4 text-white">Profile</h2>
@@ -93,7 +95,7 @@ export default function Settings() {
                     ))}
                   </SelectContent>
                 </Select>
-                <p className="mt-2 text-xs text-white/35">Orange seconds on every style.</p>
+                <p className="mt-2 text-xs text-white/35">Yellow seconds on every style.</p>
               </div>
               <div>
                 <p className="text-sm text-white/50 mb-2">Clock Face Background</p>

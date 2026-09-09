@@ -86,7 +86,6 @@
     @apply text-foreground;
     background: #000;
     overscroll-behavior: none;
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
   }
 
   button, .clock-face {
