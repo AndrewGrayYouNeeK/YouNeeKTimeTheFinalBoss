@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import StarsBackground from '@/components/younEEK/StarsBackground';
 import ClockHeader from '@/components/younEEK/ClockHeader';
 import { getDecimalTime } from '@/lib/decimalTime';
 import { formatDigital, readClockSource } from '@/lib/clockPrefs';
@@ -8,8 +9,6 @@ import {
   getLunarMonthDays,
   lunarNoteKey,
 } from '@/lib/lunarCalendar';
-
-const WEEKDAYS = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
 
 function readNote(index, day) {
   return localStorage.getItem(lunarNoteKey(index, day)) || '';
@@ -39,7 +38,6 @@ export default function Calendar() {
   const headerDate = useMemo(() => getLunarDate(month.start), [month.start]);
   const selected = month.days.find((d) => d.day === selectedDay) || month.days[0];
   const selectedLunar = selected ? getLunarDate(selected.date) : headerDate;
-  const lead = month.start.getDay();
 
   useEffect(() => {
     if (!month.days.some((d) => d.day === selectedDay)) {
@@ -63,59 +61,55 @@ export default function Calendar() {
   };
 
   return (
-    <div
-      className="relative min-h-screen bg-black pb-28 text-white"
-      style={{ fontFamily: 'system-ui, -apple-system, sans-serif' }}
-    >
-      <div className="relative z-10 mx-auto flex w-full max-w-[36rem] flex-col px-4 pt-20">
+    <div className="relative min-h-screen pb-28 text-white">
+      <StarsBackground />
+      <div className="relative z-10 mx-auto flex w-full max-w-[36rem] flex-col gap-6 px-4 py-8">
         <ClockHeader />
-        <h1 className="mt-4 text-[34px] font-bold tracking-tight">Calendar</h1>
-        <p className="text-[15px] text-white/45">Lunar months · in-app YouNeeK time {formatDigital(time, source).replace('•', ':')}</p>
 
-        <div className="mt-5 flex items-center justify-between">
+        <section className="rounded-[1.6rem] border border-[#00b7ff]/15 bg-[#101010] p-5 text-center">
+          <p className="font-mono text-[10px] uppercase tracking-[0.35em] text-[#00b7ff]">Lunar calendar</p>
+          <p className="mt-2 font-mono text-lg uppercase tracking-[0.2em]">{todayLunar.longLabel}</p>
+          <p className="mt-1 font-mono text-sm text-white/70">{todayLunar.phase} · {todayLunar.illumination}% lit</p>
+          <p className="mt-3 font-mono text-2xl tracking-widest text-[#ffe600]">{formatDigital(time, source)}</p>
+          <p className="mt-1 font-mono text-[10px] uppercase tracking-[0.3em] text-white/40">YouNeeK time · device clock is only a sensor</p>
+        </section>
+
+        <div className="flex items-center justify-between gap-2">
           <button
             type="button"
             onClick={() => setIndex((v) => v - 1)}
-            className="flex h-11 w-11 items-center justify-center text-[#FF3B30]"
+            className="flex h-10 w-10 items-center justify-center rounded-xl border border-[#00b7ff]/20 text-[#00b7ff]"
             aria-label="Previous lunation"
           >
-            <ChevronLeft className="h-7 w-7" />
+            <ChevronLeft className="h-5 w-5" />
           </button>
-          <div className="text-center">
-            <p className="text-[22px] font-semibold text-[#FF3B30]">
-              {headerDate.year} Lunar {headerDate.monthInYear}
+          <div className="flex-1 text-center">
+            <p className="font-mono text-sm uppercase tracking-[0.25em]">
+              {headerDate.year} · Month {headerDate.monthInYear}
             </p>
-            <p className="text-[12px] text-white/40">
-              {month.start.toLocaleDateString()} – {month.end.toLocaleDateString()}
+            <p className="font-mono text-[10px] text-white/40">
+              {month.start.toLocaleDateString()} → {month.end.toLocaleDateString()} · {month.length} days
             </p>
           </div>
           <button
             type="button"
             onClick={() => setIndex((v) => v + 1)}
-            className="flex h-11 w-11 items-center justify-center text-[#FF3B30]"
+            className="flex h-10 w-10 items-center justify-center rounded-xl border border-[#00b7ff]/20 text-[#00b7ff]"
             aria-label="Next lunation"
           >
-            <ChevronRight className="h-7 w-7" />
+            <ChevronRight className="h-5 w-5" />
           </button>
         </div>
 
         <button
           type="button"
           onClick={goToday}
-          className="mt-1 self-end text-[17px] font-semibold text-[#FF3B30]"
+          className="self-center rounded-full border border-[#00b7ff]/30 px-4 py-1 font-mono text-[10px] uppercase tracking-[0.3em] text-[#00b7ff]"
         >
           Today
         </button>
 
-        <div className="mt-3 grid grid-cols-7 text-center text-[12px] font-semibold text-white/35">
-          {WEEKDAYS.map((d, i) => (
-            <div key={`${d}-${i}`} className="py-2">{d}</div>
-          ))}
-        </div>
-        <div className="grid grid-cols-7">
-          {Array.from({ length: lead }).map((_, i) => (
-            <div key={`pad-${i}`} className="aspect-square" />
-          ))}
+        <div className="grid grid-cols-7 gap-1.5">
           {month.days.map((d) => {
             const hasNote = !!readNote(index, d.day);
             const active = selected?.day === d.day;
@@ -124,36 +118,31 @@ export default function Calendar() {
                 key={d.key}
                 type="button"
                 onClick={() => setSelectedDay(d.day)}
-                className="flex aspect-square flex-col items-center justify-center"
+                className={`flex aspect-square flex-col items-center justify-center rounded-xl border font-mono text-xs ${
+                  active
+                    ? 'border-[#00b7ff] bg-[#00b7ff]/20 text-white'
+                    : d.isToday
+                      ? 'border-[#ffe600]/60 bg-[#ffe600]/10 text-[#ffe600]'
+                      : 'border-white/10 bg-black/40 text-white/80'
+                }`}
               >
-                <span
-                  className={`flex h-[34px] w-[34px] items-center justify-center rounded-full text-[20px] ${
-                    d.isToday
-                      ? 'bg-[#FF3B30] text-white'
-                      : active
-                        ? 'bg-[#2c2c2e] text-white'
-                        : 'text-white'
-                  }`}
-                >
-                  {d.day}
-                </span>
-                {hasNote ? <span className="mt-0.5 h-1 w-1 rounded-full bg-[#FF3B30]" /> : <span className="mt-0.5 h-1 w-1" />}
+                <span>{d.day}</span>
+                <span className="text-[8px] text-white/40">{d.date.getDate()}</span>
+                {hasNote ? <span className="mt-0.5 h-1 w-1 rounded-full bg-[#00b7ff]" /> : null}
               </button>
             );
           })}
         </div>
 
         {selected ? (
-          <section className="mt-6 rounded-2xl bg-[#1c1c1e] p-4">
-            <p className="text-[13px] font-semibold uppercase tracking-wide text-white/40">Selected</p>
-            <h2 className="mt-1 text-[20px] font-semibold">{selectedLunar.longLabel}</h2>
-            <p className="mt-1 text-[15px] text-white/55">
-              {selected.date.toLocaleDateString(undefined, { weekday: 'long', month: 'long', day: 'numeric' })}
-              {' · '}
-              {selectedLunar.phase}
+          <section className="rounded-[1.6rem] border border-[#00b7ff]/15 bg-[#101010] p-5">
+            <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-[#00b7ff]">Selected day</p>
+            <h2 className="mt-2 font-mono text-lg">{selectedLunar.longLabel}</h2>
+            <p className="mt-1 text-sm text-white/60">
+              Gregorian {selected.date.toLocaleDateString()} · {selectedLunar.phase} · {selectedLunar.illumination}%
             </p>
-            <label className="mt-4 block text-[13px] text-white/40" htmlFor="lunar-note">
-              Note
+            <label className="mt-4 block font-mono text-[10px] uppercase tracking-[0.25em] text-white/40" htmlFor="lunar-note">
+              Note (this device)
             </label>
             <textarea
               id="lunar-note"
@@ -161,7 +150,7 @@ export default function Calendar() {
               onChange={(e) => saveNote(e.target.value)}
               rows={4}
               placeholder="Add a note for this lunar day"
-              className="mt-2 w-full rounded-xl bg-black/40 p-3 text-[17px] text-white placeholder:text-white/30 outline-none"
+              className="mt-2 w-full rounded-xl border border-white/15 bg-black/50 p-3 font-mono text-sm text-white placeholder:text-white/30"
             />
           </section>
         ) : null}
