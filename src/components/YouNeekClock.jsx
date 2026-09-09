@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { getDecimalTime } from '@/lib/decimalTime';
 import ClockHeader from '@/components/younEEK/ClockHeader';
 import DigitalTimeDisplay from '@/components/younEEK/DigitalTimeDisplay';
@@ -12,10 +12,15 @@ import LiveMoonPhaseCard from '@/components/younEEK/LiveMoonPhaseCard';
 import AboutSection from '@/components/younEEK/AboutSection';
 import HandStyleSelect from '@/components/younEEK/HandStyleSelect';
 import { PREFS_EVENT, readClockSource, readHandStyle } from '@/lib/clockPrefs';
+import { getLunarDate } from '@/lib/lunarCalendar';
 
 export default function YouNeekClock() {
   const [now, setNow] = useState(() => new Date());
   const time = getDecimalTime(now);
+  const lunar = useMemo(
+    () => getLunarDate(now),
+    [now.getFullYear(), now.getMonth(), now.getDate()],
+  );
   const [isGlitching, setIsGlitching] = useState(false);
   const [source, setSource] = useState(readClockSource);
   const [handStyle, setHandStyle] = useState(readHandStyle);
@@ -57,6 +62,12 @@ export default function YouNeekClock() {
       </div>
       <div className={`w-full transition-opacity duration-100 ${isGlitching ? 'opacity-0' : ''}`}>
         <DigitalTimeDisplay time={time} source={source} />
+        <p className="mt-3 text-center font-mono text-[10px] uppercase tracking-[0.3em] text-[#00b7ff]/80">
+          {lunar.longLabel}
+        </p>
+        <p className="mt-1 text-center font-mono text-[10px] uppercase tracking-[0.25em] text-white/40">
+          {lunar.phase} · {lunar.illumination}% · in-app YouNeeK time
+        </p>
       </div>
       <div className={`w-full transition-opacity duration-100 ${isGlitching ? 'opacity-0' : ''}`}>
         <HapticTimeManager time={time} />

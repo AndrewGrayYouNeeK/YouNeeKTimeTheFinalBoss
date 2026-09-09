@@ -1,11 +1,12 @@
 import { Link, useLocation } from 'react-router-dom';
-import { Clock, Smartphone, Settings } from 'lucide-react';
+import { Clock, CalendarDays, Settings } from 'lucide-react';
 
 export default function BottomTab() {
   const location = useLocation();
 
   const tabs = [
     { path: '/', icon: Clock, label: 'Clock' },
+    { path: '/calendar', icon: CalendarDays, label: 'Calendar' },
     { path: '/settings', icon: Settings, label: 'Settings' },
   ];
 
