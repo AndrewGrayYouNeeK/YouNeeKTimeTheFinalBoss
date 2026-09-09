@@ -1,37 +1,19 @@
 import { formatDigital } from '@/lib/clockPrefs';
 
-const BLUE = '#00b7ff';
-
-function DigitCard({ digit }) {
-  return (
-    <div className="flex h-24 w-[4.8rem] items-center justify-center rounded-2xl border bg-black sm:h-28 sm:w-[5.4rem]"
-      style={{
-        borderColor: `${BLUE}66`,
-        boxShadow: 'inset 0 0 0 1px rgba(255,255,255,0.03)',
-      }}>
-      <span className="font-mono text-6xl font-bold tracking-[0.08em] sm:text-7xl"
-        style={{ color: '#ffe600' }}>
-        {digit}
-      </span>
-    </div>
-  );
-}
-
 export default function DigitalTimeDisplay({ time, source = 'youneek' }) {
-  const chars = [...formatDigital(time, source)];
+  const text = formatDigital(time, source).replace('•', ':');
 
   return (
     <div className="w-full text-center">
-      <div className="flex items-center justify-center gap-2 sm:gap-3">
-        {chars.map((ch, i) => (
-          ch === '•' || ch === ':'
-            ? (
-              <div key={`${ch}-${i}`} className="px-1 font-mono text-5xl sm:text-6xl"
-                style={{ color: '#ffe600' }}>{ch}</div>
-            )
-            : <DigitCard key={`${ch}-${i}`} digit={ch} />
-        ))}
-      </div>
+      <p
+        className="select-none text-[5.4rem] font-thin leading-none tracking-tight text-white sm:text-[6.5rem]"
+        style={{ fontFamily: 'system-ui, -apple-system, "SF Pro Display", sans-serif', fontVariantNumeric: 'tabular-nums' }}
+      >
+        {text}
+      </p>
+      <p className="mt-2 text-[13px] font-medium text-[#FF9F0A]" style={{ fontFamily: 'system-ui, -apple-system, sans-serif' }}>
+        Timer
+      </p>
     </div>
   );
 }

@@ -1,13 +1,10 @@
 import { HAND_STYLES, writeHandStyle } from '@/lib/clockPrefs';
-import { YELLOW } from './clockConstants';
 
 export default function HandStyleSelect({ value }) {
   return (
     <div className="w-full">
-      <p className="mb-2 text-center font-mono text-[10px] uppercase tracking-widest text-white/40">
-        Hand style
-      </p>
-      <div className="mx-auto flex max-w-md flex-wrap justify-center gap-2">
+      <p className="mb-2 text-center text-[13px] text-white/45">Hand style</p>
+      <div className="mx-auto flex max-w-md justify-center gap-1 rounded-lg bg-[#1c1c1e] p-1">
         {HAND_STYLES.map((style) => {
           const active = value === style.id;
           return (
@@ -15,13 +12,9 @@ export default function HandStyleSelect({ value }) {
               key={style.id}
               type="button"
               onClick={() => writeHandStyle(style.id)}
-              className="rounded-full border px-3 py-1.5 font-mono text-[10px] uppercase tracking-[0.18em] transition-colors"
-              style={{
-                borderColor: active ? YELLOW : 'rgba(255,255,255,0.18)',
-                color: active ? YELLOW : 'rgba(255,255,255,0.45)',
-                background: active ? 'rgba(255,230,0,0.08)' : 'transparent',
-                boxShadow: active ? `0 0 12px ${YELLOW}44` : 'none',
-              }}
+              className={`flex-1 rounded-md px-2 py-1.5 text-[12px] font-medium ${
+                active ? 'bg-[#3a3a3c] text-white' : 'text-white/50'
+              }`}
             >
               {style.label}
             </button>
