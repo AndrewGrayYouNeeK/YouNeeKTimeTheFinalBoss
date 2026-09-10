@@ -24,6 +24,7 @@ const ClockDial = forwardRef(function ClockDial(
     handStyle = 'needle',
     hubRef,
     omitSeconds = false,
+    lunar,
     maxWidthClass = 'max-w-[22rem] sm:max-w-[24rem]',
   },
   ref
@@ -60,7 +61,7 @@ const ClockDial = forwardRef(function ClockDial(
       <ClockTicks />
 
       <div className="pointer-events-none absolute inset-0 z-30">
-        <ClockLabels />
+        <ClockLabels lunar={lunar} />
         <ClockHands time={time} source={source} handStyle={handStyle} omitSeconds={omitSeconds} />
       </div>
     </div>

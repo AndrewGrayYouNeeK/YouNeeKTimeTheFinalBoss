@@ -1,6 +1,7 @@
 import { BLUE, PURPLE, HAND_WHITE } from './clockConstants';
 
 const VIOLET = '#7d5fff';
+const GOLD = '#ffd700';
 
 function pad(v) { return String(v).padStart(2, '0'); }
 
@@ -19,7 +20,7 @@ function Row({ color, label, value, active }) {
   );
 }
 
-export default function ClockTimeLegend({ now, time, source = 'youneek' }) {
+export default function ClockTimeLegend({ now, time, source = 'youneek', lunar }) {
   const standardTime = `${pad(time.hours12)}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
   const armyStr = `${pad(time.armyHours)}:${pad(time.armyMinutes)}:${pad(time.armySeconds)}`;
   const army12Str = `${pad(time.hours12)}:${pad(time.armyMinutes)}:${pad(time.armySeconds)}`;
@@ -32,6 +33,9 @@ export default function ClockTimeLegend({ now, time, source = 'youneek' }) {
         <Row color={HAND_WHITE} label="Regular Time" value={standardTime} active={source === 'regular'} />
         <Row color={PURPLE} label="YouNeeK Time" value={army12Str} active={source === 'youneek12'} />
         <Row color={VIOLET} label="Army YouNeeK Time" value={armyStr} active={source === 'army'} />
+        {lunar?.label ? (
+          <Row color={GOLD} label="YouNeeK Lunar" value={lunar.label} active />
+        ) : null}
       </div>
     </div>
   );
