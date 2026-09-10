@@ -83,10 +83,31 @@ export function formatDigital(time, source = 'youneek') {
   return `${pad(hours)}${sep}${pad(minutes)}`;
 }
 
-export function getHandRotations(time) {
+export function getHandRotations(time, source = 'youneek') {
+  if (source === 'regular') {
+    return {
+      hour: time.regularHourRotation,
+      minute: time.regularMinuteRotation,
+      second: time.regularSecondRotation,
+    };
+  }
+  if (source === 'army') {
+    return {
+      hour: time.armyHourRotation,
+      minute: time.armyMinuteRotation,
+      second: time.armySecondRotation,
+    };
+  }
+  if (source === 'youneek12') {
+    return {
+      hour: time.regularHourRotation,
+      minute: time.armyMinuteRotation,
+      second: time.armySecondRotation,
+    };
+  }
   return {
-    hour: time.regularHourRotation,
-    minute: time.regularMinuteRotation,
-    second: time.regularSecondRotation,
+    hour: time.unitRotation,
+    minute: time.minuteRotation,
+    second: time.secondRotation,
   };
 }

@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { getDecimalTime } from '@/lib/decimalTime';
 import ClockHeader from '@/components/younEEK/ClockHeader';
 import DigitalTimeDisplay from '@/components/younEEK/DigitalTimeDisplay';
@@ -12,15 +12,10 @@ import LiveMoonPhaseCard from '@/components/younEEK/LiveMoonPhaseCard';
 import AboutSection from '@/components/younEEK/AboutSection';
 import HandStyleSelect from '@/components/younEEK/HandStyleSelect';
 import { PREFS_EVENT, readClockSource, readHandStyle } from '@/lib/clockPrefs';
-import { getLunarDate } from '@/lib/lunarCalendar';
 
 export default function YouNeekClock() {
   const [now, setNow] = useState(() => new Date());
   const time = getDecimalTime(now);
-  const lunar = useMemo(
-    () => getLunarDate(now),
-    [now.getFullYear(), now.getMonth(), now.getDate()],
-  );
   const [isGlitching, setIsGlitching] = useState(false);
   const [source, setSource] = useState(readClockSource);
   const [handStyle, setHandStyle] = useState(readHandStyle);
@@ -56,33 +51,38 @@ export default function YouNeekClock() {
   }, [hour]);
 
   return (
-    <div
-      className={`mx-auto flex min-h-screen w-full max-w-[36rem] flex-col items-center gap-7 px-4 pb-28 pt-6 sm:gap-8 ${isGlitching ? 'bg-black' : 'bg-black'}`}
-      style={{ fontFamily: 'system-ui, -apple-system, sans-serif' }}
-    >
-      <ClockHeader />
-      <DigitalTimeDisplay time={time} source={source} />
-      <p className="text-center text-[13px] text-white/45">
-        {lunar.longLabel}
-      </p>
-      <p className="text-center text-[12px] text-white/35">
-        {lunar.phase} · {lunar.illumination}% · in-app YouNeeK time
-      </p>
-      <HapticTimeManager time={time} />
-      <FrequencyManager time={time} />
+    <div className={`mx-auto flex min-h-screen w-full max-w-[36rem] flex-col items-center gap-8 px-4 py-8 sm:gap-9 sm:py-10 transition-colors duration-100 ${isGlitching ? 'bg-black' : 'bg-transparent'}`}>
+      <div className={`w-full transition-opacity duration-100 ${isGlitching ? 'opacity-0' : ''}`}>
+        <ClockHeader />
+      </div>
+      <div className={`w-full transition-opacity duration-100 ${isGlitching ? 'opacity-0' : ''}`}>
+        <DigitalTimeDisplay time={time} source={source} />
+      </div>
+      <div className={`w-full transition-opacity duration-100 ${isGlitching ? 'opacity-0' : ''}`}>
+        <HapticTimeManager time={time} />
+        <FrequencyManager time={time} />
+      </div>
       <div className={`w-full overflow-visible ${isGlitching ? 'animate-glitch' : ''}`}>
-        <ClockTypeSelect value={source} />
-        <div className="mt-4">
+        <div className="mb-4">
+          <p className="mb-2 text-center font-mono text-[10px] uppercase tracking-widest text-white/40">Clock type</p>
+          <ClockTypeSelect value={source} />
+        </div>
+        <div className="mb-4">
           <HandStyleSelect value={handStyle} />
         </div>
-        <div className="mt-5">
-          <ClockTimeLegend now={now} time={time} source={source} lunar={lunar} />
-        </div>
-        <ClockDial time={time} isGlitching={isGlitching} source={source} handStyle={handStyle} lunar={lunar} />
+        <ClockTimeLegend now={now} time={time} source={source} />
+        <ClockDial time={time} isGlitching={isGlitching} source={source} handStyle={handStyle} />
       </div>
-      <DayProgressBar time={time} />
-      <LiveMoonPhaseCard />
-      <AboutSection />
+
+      <div className={`w-full transition-opacity duration-100 ${isGlitching ? 'opacity-0' : ''}`}>
+        <DayProgressBar time={time} />
+      </div>
+      <div className={`w-full transition-opacity duration-100 ${isGlitching ? 'opacity-0' : ''}`}>
+        <LiveMoonPhaseCard />
+      </div>
+      <div className={`w-full transition-opacity duration-100 ${isGlitching ? 'opacity-0' : ''}`}>
+        <AboutSection />
+      </div>
     </div>
   );
 }
