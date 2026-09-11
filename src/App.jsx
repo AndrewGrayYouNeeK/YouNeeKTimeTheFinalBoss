@@ -7,6 +7,7 @@ import { AuthProvider } from '@/lib/AuthContext';
 import Index from '@/pages/Index';
 import Settings from '@/pages/Settings';
 import Watch from '@/pages/Watch';
+import Calendar from '@/pages/Calendar';
 import Header from '@/components/Header';
 import BottomTab from '@/components/BottomTab';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -38,6 +39,7 @@ const AuthenticatedApp = () => {
       <AnimatePresence mode="wait">
         <Routes location={location} key={location.pathname}>
           <Route path="/" element={<PageTransition><Index /></PageTransition>} />
+          <Route path="/calendar" element={<PageTransition><Calendar /></PageTransition>} />
           <Route path="/settings" element={<PageTransition><Settings /></PageTransition>} />
           <Route path="/watch" element={<Watch />} />
           <Route path="*" element={<PageNotFound />} />
