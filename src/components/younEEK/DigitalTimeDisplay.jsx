@@ -1,13 +1,13 @@
 import { formatDigital } from '@/lib/clockPrefs';
 
-const BLUE = '#00b7ff';
+const MAGENTA = '#c026ff';
 
 function DigitCard({ digit }) {
   return (
-    <div className="flex h-24 w-[4.8rem] items-center justify-center rounded-2xl border bg-black sm:h-28 sm:w-[5.4rem]"
+    <div className="flex h-24 w-[4.8rem] items-center justify-center rounded-2xl border bg-[#05010a] sm:h-28 sm:w-[5.4rem]"
       style={{
-        borderColor: `${BLUE}66`,
-        boxShadow: 'inset 0 0 0 1px rgba(255,255,255,0.03)',
+        borderColor: `${MAGENTA}66`,
+        boxShadow: `inset 0 0 0 1px rgba(192,38,255,0.12), 0 0 18px ${MAGENTA}22`,
       }}>
       <span className="font-mono text-6xl font-bold tracking-[0.08em] sm:text-7xl"
         style={{ color: '#ffe600' }}>

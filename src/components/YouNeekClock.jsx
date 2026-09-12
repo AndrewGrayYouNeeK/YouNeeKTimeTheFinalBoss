@@ -15,6 +15,9 @@ import { PREFS_EVENT, readClockSource, readHandStyle } from '@/lib/clockPrefs';
 import { getLunarDate } from '@/lib/lunarCalendar';
 import TimeScope from '@/components/TimeScope';
 
+const MAGENTA = '#c026ff';
+const CYAN = '#00b7ff';
+
 export default function YouNeekClock() {
   const [now, setNow] = useState(() => new Date());
   const time = getDecimalTime(now);
@@ -59,22 +62,29 @@ export default function YouNeekClock() {
 
   return (
     <div
-      className={`mx-auto flex min-h-screen w-full max-w-[36rem] flex-col items-center gap-7 px-4 pb-28 pt-6 sm:gap-8 ${isGlitching ? 'bg-black' : 'bg-black'}`}
+      className="mx-auto flex min-h-screen w-full max-w-[36rem] flex-col items-center gap-7 px-4 pb-28 pt-6 sm:gap-8"
       style={{ fontFamily: 'system-ui, -apple-system, sans-serif' }}
     >
       <ClockHeader />
-      <div className="flex w-full overflow-hidden rounded border border-[#7CFF6B]/30 font-mono text-[10px] uppercase tracking-[0.25em]">
+      <div className="flex w-full overflow-hidden rounded border font-mono text-[10px] uppercase tracking-[0.25em]"
+        style={{ borderColor: `${MAGENTA}55` }}>
         <button
           type="button"
           onClick={() => setScopeOn(true)}
-          className={`flex-1 py-2 ${scopeOn ? 'bg-[#7CFF6B] text-[#050805]' : 'text-[#7CFF6B]/70'}`}
+          className="flex-1 py-2"
+          style={scopeOn
+            ? { background: MAGENTA, color: '#140018' }
+            : { color: `${MAGENTA}cc` }}
         >
           TIME SCOPE
         </button>
         <button
           type="button"
           onClick={() => setScopeOn(false)}
-          className={`flex-1 py-2 ${scopeOn ? 'text-white/40' : 'bg-white/10 text-white'}`}
+          className="flex-1 py-2"
+          style={scopeOn
+            ? { color: 'rgba(255,255,255,0.35)' }
+            : { background: `${CYAN}22`, color: CYAN }}
         >
           FACE
         </button>
