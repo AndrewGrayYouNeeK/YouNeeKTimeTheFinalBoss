@@ -3,8 +3,8 @@ import ClockTicks from './ClockTicks';
 import ClockLabels from './ClockLabels';
 import ClockHands from './ClockHands';
 
-const DEFAULT_FACE = '/astronaut-dial-bg.png';
-const BANNED_FACES = ['/clock-face-default.jpg', 'clock-face-default'];
+const DEFAULT_CENTER_IMAGE = '/astronaut-concept.png';
+const BANNED_FACES = ['/clock-face-default.jpg', 'clock-face-default', 'volcano-bg'];
 
 function resolveFace() {
   const stored = localStorage.getItem('clockFaceUrl');
@@ -12,7 +12,7 @@ function resolveFace() {
     if (stored && BANNED_FACES.some((b) => stored.includes(b))) {
       localStorage.removeItem('clockFaceUrl');
     }
-    return DEFAULT_FACE;
+    return DEFAULT_CENTER_IMAGE;
   }
   return stored;
 }
@@ -40,17 +40,16 @@ const ClockDial = forwardRef(function ClockDial(
 
   return (
     <div ref={ref} className={`relative mx-auto aspect-square w-full ${maxWidthClass}`}>
-      <div className="absolute inset-[6%] z-0 rounded-full bg-[#05010a]" aria-hidden="true" />
+      <div className="absolute inset-[8%] z-0 rounded-full bg-black" aria-hidden="true" />
 
       {centerImage && (
-        <div className="absolute inset-[6%] z-10 overflow-hidden rounded-full" style={{ pointerEvents: 'none' }}>
+        <div className="absolute inset-[8%] z-10 overflow-hidden rounded-full" style={{ pointerEvents: 'none' }}>
           <img
             src={centerImage}
             alt=""
             className="h-full w-full object-cover"
-            style={{ opacity: isGlitching ? 0 : 0.32, transition: 'opacity 0.05s' }}
+            style={{ opacity: isGlitching ? 0 : 1, transition: 'opacity 0.05s' }}
           />
-          <div className="absolute inset-0 bg-[#05010a]/35" />
         </div>
       )}
 
@@ -63,7 +62,7 @@ const ClockDial = forwardRef(function ClockDial(
       <ClockTicks source={source} />
 
       <div className="pointer-events-none absolute inset-0 z-30">
-        <ClockLabels lunar={lunar} source={source} />
+        <ClockLabels source={source} />
         <ClockHands time={time} source={source} handStyle={handStyle} omitSeconds={omitSeconds} />
       </div>
     </div>

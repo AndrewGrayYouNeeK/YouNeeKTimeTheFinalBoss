@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-import StarsBackground from '@/components/younEEK/StarsBackground';
-import ClockHeader from '@/components/younEEK/ClockHeader';
+import PageShell from '@/components/PageShell';
 import { getDecimalTime } from '@/lib/decimalTime';
 import { formatDigital, readClockSource } from '@/lib/clockPrefs';
 import {
@@ -61,16 +60,13 @@ export default function Calendar() {
   };
 
   return (
-    <div className="relative min-h-screen pb-28 text-white">
-      <StarsBackground />
-      <div className="relative z-10 mx-auto flex w-full max-w-[36rem] flex-col gap-6 px-4 py-8">
-        <ClockHeader />
-
-        <section className="rounded-[1.6rem] border border-[#00b7ff]/15 bg-[#101010] p-5 text-center">
-          <p className="font-mono text-[10px] uppercase tracking-[0.35em] text-[#00b7ff]">Lunar calendar</p>
+    <PageShell topPad>
+      <div className="flex flex-col gap-6">
+        <section className="rounded-2xl border border-[#7CFF6B]/15 bg-white/[0.04] p-5 text-center">
+          <p className="font-mono text-[10px] uppercase tracking-[0.35em] text-[#7CFF6B]">Lunar calendar</p>
           <p className="mt-2 font-mono text-lg uppercase tracking-[0.2em]">{todayLunar.longLabel}</p>
           <p className="mt-1 font-mono text-sm text-white/70">{todayLunar.phase} · {todayLunar.illumination}% lit</p>
-          <p className="mt-3 font-mono text-2xl tracking-widest text-[#ffe600]">{formatDigital(time, source)}</p>
+          <p className="mt-3 font-mono text-2xl tracking-widest text-[#7CFF6B]">{formatDigital(time, source)}</p>
           <p className="mt-1 font-mono text-[10px] uppercase tracking-[0.3em] text-white/40">YouNeeK time · device clock is only a sensor</p>
         </section>
 
@@ -78,7 +74,7 @@ export default function Calendar() {
           <button
             type="button"
             onClick={() => setIndex((v) => v - 1)}
-            className="flex h-10 w-10 items-center justify-center rounded-xl border border-[#00b7ff]/20 text-[#00b7ff]"
+            className="flex h-10 w-10 items-center justify-center rounded-xl border border-[#7CFF6B]/20 text-[#7CFF6B]"
             aria-label="Previous lunation"
           >
             <ChevronLeft className="h-5 w-5" />
@@ -94,7 +90,7 @@ export default function Calendar() {
           <button
             type="button"
             onClick={() => setIndex((v) => v + 1)}
-            className="flex h-10 w-10 items-center justify-center rounded-xl border border-[#00b7ff]/20 text-[#00b7ff]"
+            className="flex h-10 w-10 items-center justify-center rounded-xl border border-[#7CFF6B]/20 text-[#7CFF6B]"
             aria-label="Next lunation"
           >
             <ChevronRight className="h-5 w-5" />
@@ -104,7 +100,7 @@ export default function Calendar() {
         <button
           type="button"
           onClick={goToday}
-          className="self-center rounded-full border border-[#00b7ff]/30 px-4 py-1 font-mono text-[10px] uppercase tracking-[0.3em] text-[#00b7ff]"
+          className="self-center rounded-full border border-[#7CFF6B]/30 px-4 py-1 font-mono text-[10px] uppercase tracking-[0.3em] text-[#7CFF6B]"
         >
           Today
         </button>
@@ -120,23 +116,23 @@ export default function Calendar() {
                 onClick={() => setSelectedDay(d.day)}
                 className={`flex aspect-square flex-col items-center justify-center rounded-xl border font-mono text-xs ${
                   active
-                    ? 'border-[#00b7ff] bg-[#00b7ff]/20 text-white'
+                    ? 'border-[#7CFF6B] bg-[#7CFF6B]/20 text-white'
                     : d.isToday
-                      ? 'border-[#ffe600]/60 bg-[#ffe600]/10 text-[#ffe600]'
+                      ? 'border-[#7CFF6B]/50 bg-[#7CFF6B]/10 text-[#7CFF6B]'
                       : 'border-white/10 bg-black/40 text-white/80'
                 }`}
               >
                 <span>{d.day}</span>
                 <span className="text-[8px] text-white/40">{d.date.getDate()}</span>
-                {hasNote ? <span className="mt-0.5 h-1 w-1 rounded-full bg-[#00b7ff]" /> : null}
+                {hasNote ? <span className="mt-0.5 h-1 w-1 rounded-full bg-[#7CFF6B]" /> : null}
               </button>
             );
           })}
         </div>
 
         {selected ? (
-          <section className="rounded-[1.6rem] border border-[#00b7ff]/15 bg-[#101010] p-5">
-            <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-[#00b7ff]">Selected day</p>
+          <section className="rounded-2xl border border-[#7CFF6B]/15 bg-white/[0.04] p-5">
+            <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-[#7CFF6B]">Selected day</p>
             <h2 className="mt-2 font-mono text-lg">{selectedLunar.longLabel}</h2>
             <p className="mt-1 text-sm text-white/60">
               Gregorian {selected.date.toLocaleDateString()} · {selectedLunar.phase} · {selectedLunar.illumination}%
@@ -155,6 +151,6 @@ export default function Calendar() {
           </section>
         ) : null}
       </div>
-    </div>
+    </PageShell>
   );
 }
