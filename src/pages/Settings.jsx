@@ -9,6 +9,7 @@ import { useState, useEffect } from 'react';
 import { Switch } from '@/components/ui/switch';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import PageShell from '@/components/PageShell';
+import AppPanel from '@/components/AppPanel';
 import {
   CLOCK_SOURCES,
   HAND_STYLES,
@@ -63,9 +64,9 @@ export default function Settings() {
   return (
     <PageShell wide topPad>
       <div className="px-2 py-2">
-        <div className="space-y-6">
-          <div className="border-b border-white/10 pb-6">
-            <h2 className="text-xl font-semibold mb-4 text-white">Profile</h2>
+        <div className="space-y-4">
+          <AppPanel>
+            <h2 className="mb-4 font-mono text-sm uppercase tracking-[0.28em] text-[#7CFF6B]">Profile</h2>
             <p className="text-sm text-white/50 mb-2">Email (stored locally on this device)</p>
             <div className="flex gap-3 items-center">
               <Input
@@ -77,15 +78,15 @@ export default function Settings() {
               />
               <Button variant="outline" onClick={handleSaveEmail} className="border-white/20 text-white hover:bg-white/10">Save</Button>
             </div>
-          </div>
+          </AppPanel>
 
-          <div className="border-b border-white/10 pb-6">
-            <h2 className="text-xl font-semibold mb-4 text-white">Clock Appearance</h2>
+          <AppPanel>
+            <h2 className="mb-4 font-mono text-sm uppercase tracking-[0.28em] text-[#7CFF6B]">Clock Appearance</h2>
             <div className="space-y-4">
               <div>
                 <p className="text-sm text-white/50 mb-2">Hand style</p>
                 <Select value={handStyle} onValueChange={(id) => { setHandStyle(id); writeHandStyle(id); }}>
-                  <SelectTrigger className="w-full sm:w-[240px] bg-white/5 border-white/20 text-white">
+                  <SelectTrigger className="w-full border-[#7CFF6B]/25 bg-black/40 text-white sm:w-[240px]">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -94,7 +95,7 @@ export default function Settings() {
                     ))}
                   </SelectContent>
                 </Select>
-                <p className="mt-2 text-xs text-white/35">Yellow seconds on every style.</p>
+                <p className="mt-2 text-xs text-white/35">Seconds stay marked on every style.</p>
               </div>
               <div>
                 <p className="text-sm text-white/50 mb-2">Clock Face Background</p>
@@ -160,12 +161,10 @@ export default function Settings() {
                 </div>
               </div>
             </div>
-          </div>
+          </AppPanel>
 
-
-
-          <div className="border-b border-white/10 pb-6">
-            <h2 className="text-xl font-semibold mb-4 text-white">Apple Watch</h2>
+          <AppPanel>
+            <h2 className="mb-4 font-mono text-sm uppercase tracking-[0.28em] text-[#7CFF6B]">Apple Watch</h2>
             <p className="text-sm text-white/50 mb-3">
               Safari on Apple Watch cannot install this site. Use the native watchOS app in
               {' '}<span className="text-white/80">native/YouNeeKTime</span>, or open the compact watch face below.
@@ -174,7 +173,7 @@ export default function Settings() {
               <div>
                 <p className="text-sm text-white/50 mb-2">Watch display</p>
                 <Select value={watchDisplay} onValueChange={(id) => { setWatchDisplay(id); writeWatchDisplay(id); }}>
-                  <SelectTrigger className="w-full sm:w-[240px] bg-white/5 border-white/20 text-white">
+                  <SelectTrigger className="w-full border-[#7CFF6B]/25 bg-black/40 text-white sm:w-[240px]">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -187,7 +186,7 @@ export default function Settings() {
               <div>
                 <p className="text-sm text-white/50 mb-2">Clock time (face, decimal, and haptics)</p>
                 <Select value={clockSource} onValueChange={(id) => { setClockSource(id); writeClockSource(id); }}>
-                  <SelectTrigger className="w-full sm:w-[240px] bg-white/5 border-white/20 text-white">
+                  <SelectTrigger className="w-full border-[#7CFF6B]/25 bg-black/40 text-white sm:w-[240px]">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -201,10 +200,10 @@ export default function Settings() {
             <Button asChild variant="outline" className="border-white/20 text-white hover:bg-white/10">
               <Link to="/watch">Open Watch Face</Link>
             </Button>
-          </div>
+          </AppPanel>
 
-          <div className="border-b border-white/10 pb-6">
-            <h2 className="text-xl font-semibold mb-4 text-white">Hourly Frequency</h2>
+          <AppPanel>
+            <h2 className="mb-4 font-mono text-sm uppercase tracking-[0.28em] text-[#7CFF6B]">Hourly Frequency</h2>
             <div className="space-y-6">
               <div className="flex items-center justify-between">
                 <div>
@@ -222,7 +221,7 @@ export default function Settings() {
                   <div>
                     <p className="text-sm text-white/50 mb-2">Frequency</p>
                     <Select value={freqHz} onValueChange={setFreqHz}>
-                      <SelectTrigger className="w-full sm:w-[200px] bg-white/5 border-white/20 text-white">
+                      <SelectTrigger className="w-full border-[#7CFF6B]/25 bg-black/40 text-white sm:w-[200px]">
                         <SelectValue placeholder="Select frequency" />
                       </SelectTrigger>
                       <SelectContent>
@@ -243,7 +242,7 @@ export default function Settings() {
                   <div>
                     <p className="text-sm text-white/50 mb-2">Duration: {freqDuration} Seconds</p>
                     <Select value={freqDuration} onValueChange={setFreqDuration}>
-                      <SelectTrigger className="w-full sm:w-[200px] bg-white/5 border-white/20 text-white">
+                      <SelectTrigger className="w-full border-[#7CFF6B]/25 bg-black/40 text-white sm:w-[200px]">
                         <SelectValue placeholder="Select duration" />
                       </SelectTrigger>
                       <SelectContent>
@@ -259,10 +258,10 @@ export default function Settings() {
                 </div>
               )}
             </div>
-          </div>
+          </AppPanel>
 
-          <div className="border-b border-white/10 pb-6">
-            <h2 className="text-xl font-semibold mb-4 text-white">Danger Zone</h2>
+          <AppPanel>
+            <h2 className="mb-4 font-mono text-sm uppercase tracking-[0.28em] text-[#7CFF6B]">Danger Zone</h2>
             <AlertDialog>
               <AlertDialogTrigger asChild>
                 <Button variant="destructive">Reset App Data</Button>
@@ -282,7 +281,7 @@ export default function Settings() {
                 </div>
               </AlertDialogContent>
             </AlertDialog>
-          </div>
+          </AppPanel>
         </div>
       </div>
     </PageShell>

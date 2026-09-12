@@ -62,11 +62,11 @@ export default function Calendar() {
   return (
     <PageShell topPad>
       <div className="flex flex-col gap-6">
-        <section className="rounded-2xl border border-white/10 bg-white/5 p-5 text-center">
+        <section className="rounded-2xl border border-[#7CFF6B]/15 bg-white/[0.04] p-5 text-center">
           <p className="font-mono text-[10px] uppercase tracking-[0.35em] text-[#7CFF6B]">Lunar calendar</p>
           <p className="mt-2 font-mono text-lg uppercase tracking-[0.2em]">{todayLunar.longLabel}</p>
           <p className="mt-1 font-mono text-sm text-white/70">{todayLunar.phase} · {todayLunar.illumination}% lit</p>
-          <p className="mt-3 font-mono text-2xl tracking-widest text-[#ffe600]">{formatDigital(time, source)}</p>
+          <p className="mt-3 font-mono text-2xl tracking-widest text-[#7CFF6B]">{formatDigital(time, source)}</p>
           <p className="mt-1 font-mono text-[10px] uppercase tracking-[0.3em] text-white/40">YouNeeK time · device clock is only a sensor</p>
         </section>
 
@@ -118,7 +118,7 @@ export default function Calendar() {
                   active
                     ? 'border-[#7CFF6B] bg-[#7CFF6B]/20 text-white'
                     : d.isToday
-                      ? 'border-[#ffe600]/60 bg-[#ffe600]/10 text-[#ffe600]'
+                      ? 'border-[#7CFF6B]/50 bg-[#7CFF6B]/10 text-[#7CFF6B]'
                       : 'border-white/10 bg-black/40 text-white/80'
                 }`}
               >
@@ -131,7 +131,7 @@ export default function Calendar() {
         </div>
 
         {selected ? (
-          <section className="rounded-2xl border border-white/10 bg-white/5 p-5">
+          <section className="rounded-2xl border border-[#7CFF6B]/15 bg-white/[0.04] p-5">
             <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-[#7CFF6B]">Selected day</p>
             <h2 className="mt-2 font-mono text-lg">{selectedLunar.longLabel}</h2>
             <p className="mt-1 text-sm text-white/60">

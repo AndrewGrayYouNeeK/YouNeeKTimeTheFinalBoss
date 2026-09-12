@@ -14,6 +14,7 @@ import HandStyleSelect from '@/components/younEEK/HandStyleSelect';
 import { PREFS_EVENT, readClockSource, readHandStyle } from '@/lib/clockPrefs';
 import { getLunarDate } from '@/lib/lunarCalendar';
 import TimeScope from '@/components/TimeScope';
+import AppPanel from '@/components/AppPanel';
 
 export default function YouNeekClock() {
   const [now, setNow] = useState(() => new Date());
@@ -65,28 +66,35 @@ export default function YouNeekClock() {
         </button>
       </div>
 
-      {scopeOn ? <TimeScope /> : <DigitalTimeDisplay time={time} source={source} />}
+      <AppPanel className="!p-4">
+        {scopeOn ? <TimeScope /> : <DigitalTimeDisplay time={time} source={source} />}
+      </AppPanel>
 
-      <section className="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-4 text-center">
-        <p className="text-[13px] text-white/70">{lunar.longLabel}</p>
+      <AppPanel className="text-center">
+        <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-[#7CFF6B]">Lunar date</p>
+        <p className="mt-2 text-[13px] text-white/75">{lunar.longLabel}</p>
         <p className="mt-1 text-[12px] text-white/40">
-          {lunar.phase} · {lunar.illumination}% · in-app YouNeeK time
+          {lunar.phase} · {lunar.illumination}%
         </p>
-      </section>
+      </AppPanel>
 
-      <HapticTimeManager time={time} />
-      <FrequencyManager time={time} />
+      <AppPanel>
+        <HapticTimeManager time={time} />
+        <FrequencyManager time={time} />
+      </AppPanel>
 
       {!scopeOn && (
-        <div className="flex w-full flex-col gap-5">
+        <AppPanel className="flex flex-col gap-5">
           <ClockTypeSelect value={source} />
           <HandStyleSelect value={handStyle} />
           <ClockTimeLegend now={now} time={time} source={source} lunar={lunar} />
           <ClockDial time={time} isGlitching={false} source={source} handStyle={handStyle} lunar={lunar} />
-        </div>
+        </AppPanel>
       )}
 
-      <DayProgressBar time={time} />
+      <AppPanel>
+        <DayProgressBar time={time} />
+      </AppPanel>
       <LiveMoonPhaseCard />
       <AboutSection />
     </div>

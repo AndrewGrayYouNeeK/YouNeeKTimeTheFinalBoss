@@ -404,7 +404,6 @@ export default function TimeScope() {
 
   return (
     <div className="time-scope w-full" data-scope="youneek-time">
-      <p className="mb-3 text-center font-mono text-[10px] uppercase tracking-[0.35em] text-[#7CFF6B]/80">TIME SCOPE</p>
       <div ref={wrapRef} className="relative mx-auto aspect-square w-full max-w-[28rem]" style={{ background: BG }}>
         <canvas ref={canvasRef} className="block h-full w-full" />
         <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center">

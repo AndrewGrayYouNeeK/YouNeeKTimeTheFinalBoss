@@ -10,7 +10,7 @@ function DigitCard({ digit }) {
         boxShadow: 'inset 0 0 0 1px rgba(255,255,255,0.03)',
       }}>
       <span className="font-mono text-6xl font-bold tracking-[0.08em] sm:text-7xl"
-        style={{ color: '#ffe600' }}>
+        style={{ color: BLUE }}>
         {digit}
       </span>
     </div>
@@ -27,7 +27,7 @@ export default function DigitalTimeDisplay({ time, source = 'youneek' }) {
           ch === '•' || ch === ':'
             ? (
               <div key={`${ch}-${i}`} className="px-1 font-mono text-5xl sm:text-6xl"
-                style={{ color: '#ffe600' }}>{ch}</div>
+                style={{ color: BLUE }}>{ch}</div>
             )
             : <DigitCard key={`${ch}-${i}`} digit={ch} />
         ))}

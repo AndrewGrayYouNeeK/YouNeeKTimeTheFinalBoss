@@ -1,5 +1,5 @@
 import { HAND_STYLES, writeHandStyle } from '@/lib/clockPrefs';
-import { YELLOW } from './clockConstants';
+import { BLUE } from './clockConstants';
 
 export default function HandStyleSelect({ value }) {
   return (
@@ -17,10 +17,10 @@ export default function HandStyleSelect({ value }) {
               onClick={() => writeHandStyle(style.id)}
               className="rounded-full border px-3 py-1.5 font-mono text-[10px] uppercase tracking-[0.18em] transition-colors"
               style={{
-                borderColor: active ? YELLOW : 'rgba(255,255,255,0.18)',
-                color: active ? YELLOW : 'rgba(255,255,255,0.45)',
-                background: active ? 'rgba(255,230,0,0.08)' : 'transparent',
-                boxShadow: active ? `0 0 12px ${YELLOW}44` : 'none',
+                borderColor: active ? BLUE : 'rgba(255,255,255,0.18)',
+                color: active ? BLUE : 'rgba(255,255,255,0.45)',
+                background: active ? 'rgba(124,255,107,0.08)' : 'transparent',
+                boxShadow: active ? `0 0 12px ${BLUE}44` : 'none',
               }}
             >
               {style.label}

@@ -27,7 +27,7 @@ const sections = [
 
 export default function AboutSection() {
   return (
-    <section className="w-full px-5 py-6 sm:px-6 flex flex-col items-center text-center">
+    <section className="w-full rounded-2xl border border-[#7CFF6B]/15 bg-white/[0.04] px-5 py-6 text-center sm:px-6">
       <div className="space-y-6 max-w-[32rem]">
         {sections.map((section, index) => (
           <div key={section.title} className={index === 0 ? '' : 'border-t border-white/8 pt-6'}>
