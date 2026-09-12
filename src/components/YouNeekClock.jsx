@@ -13,6 +13,7 @@ import AboutSection from '@/components/younEEK/AboutSection';
 import HandStyleSelect from '@/components/younEEK/HandStyleSelect';
 import { PREFS_EVENT, readClockSource, readHandStyle } from '@/lib/clockPrefs';
 import { getLunarDate } from '@/lib/lunarCalendar';
+import TimeScope from '@/components/TimeScope';
 
 export default function YouNeekClock() {
   const [now, setNow] = useState(() => new Date());
@@ -24,6 +25,7 @@ export default function YouNeekClock() {
   const [isGlitching, setIsGlitching] = useState(false);
   const [source, setSource] = useState(readClockSource);
   const [handStyle, setHandStyle] = useState(readHandStyle);
+  const [scopeOn, setScopeOn] = useState(true);
   const hour = now.getHours();
   const skipGlitch = useRef(true);
 
@@ -61,7 +63,27 @@ export default function YouNeekClock() {
       style={{ fontFamily: 'system-ui, -apple-system, sans-serif' }}
     >
       <ClockHeader />
-      <DigitalTimeDisplay time={time} source={source} />
+      <div className="flex w-full overflow-hidden rounded border border-[#7CFF6B]/30 font-mono text-[10px] uppercase tracking-[0.25em]">
+        <button
+          type="button"
+          onClick={() => setScopeOn(true)}
+          className={`flex-1 py-2 ${scopeOn ? 'bg-[#7CFF6B] text-[#050805]' : 'text-[#7CFF6B]/70'}`}
+        >
+          TIME SCOPE
+        </button>
+        <button
+          type="button"
+          onClick={() => setScopeOn(false)}
+          className={`flex-1 py-2 ${scopeOn ? 'text-white/40' : 'bg-white/10 text-white'}`}
+        >
+          FACE
+        </button>
+      </div>
+      {scopeOn ? (
+        <TimeScope />
+      ) : (
+        <DigitalTimeDisplay time={time} source={source} />
+      )}
       <p className="text-center text-[13px] text-white/45">
         {lunar.longLabel}
       </p>
@@ -70,16 +92,18 @@ export default function YouNeekClock() {
       </p>
       <HapticTimeManager time={time} />
       <FrequencyManager time={time} />
-      <div className={`w-full overflow-visible ${isGlitching ? 'animate-glitch' : ''}`}>
-        <ClockTypeSelect value={source} />
-        <div className="mt-4">
-          <HandStyleSelect value={handStyle} />
+      {!scopeOn && (
+        <div className={`w-full overflow-visible ${isGlitching ? 'animate-glitch' : ''}`}>
+          <ClockTypeSelect value={source} />
+          <div className="mt-4">
+            <HandStyleSelect value={handStyle} />
+          </div>
+          <div className="mt-5">
+            <ClockTimeLegend now={now} time={time} source={source} lunar={lunar} />
+          </div>
+          <ClockDial time={time} isGlitching={isGlitching} source={source} handStyle={handStyle} lunar={lunar} />
         </div>
-        <div className="mt-5">
-          <ClockTimeLegend now={now} time={time} source={source} lunar={lunar} />
-        </div>
-        <ClockDial time={time} isGlitching={isGlitching} source={source} handStyle={handStyle} lunar={lunar} />
-      </div>
+      )}
       <DayProgressBar time={time} />
       <LiveMoonPhaseCard />
       <AboutSection />
