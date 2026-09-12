@@ -1,4 +1,4 @@
-import { PURPLE, GOLD } from './clockConstants';
+import { BLUE, PURPLE } from './clockConstants';
 
 const polarPoint = (radius, angleDeg) => {
   const angle = (angleDeg - 90) * (Math.PI / 180);
@@ -26,22 +26,26 @@ export default function ClockLabels({ lunar, source = 'youneek' }) {
   return (
     <svg viewBox="0 0 400 400" className="pointer-events-none absolute inset-0 h-full w-full">
       {labelsFor(source).map((item) => {
-        const p = polarPoint(150, item.angle);
+        const p = polarPoint(132, item.angle);
         return (
-          <text
-            key={`${source}-${item.label}`}
-            x={p.x}
-            y={p.y}
-            textAnchor="middle"
-            dominantBaseline="middle"
-            fill={PURPLE}
-            fontSize={20}
-            fontFamily="monospace"
-            fontWeight="700"
-            style={{ filter: `drop-shadow(0 0 6px ${PURPLE})` }}
-          >
-            {item.label}
-          </text>
+          <g key={`${source}-${item.label}`}>
+            <circle cx={p.x} cy={p.y} r="22" fill="#05010a" fillOpacity="0.82" />
+            <text
+              x={p.x}
+              y={p.y}
+              textAnchor="middle"
+              dominantBaseline="middle"
+              fill="#f2e9ff"
+              stroke={PURPLE}
+              strokeWidth="0.8"
+              fontSize={26}
+              fontFamily="monospace"
+              fontWeight="800"
+              style={{ filter: `drop-shadow(0 0 6px ${BLUE})` }}
+            >
+              {item.label}
+            </text>
+          </g>
         );
       })}
       {lunar?.label ? (
@@ -50,11 +54,10 @@ export default function ClockLabels({ lunar, source = 'youneek' }) {
           y="268"
           textAnchor="middle"
           dominantBaseline="middle"
-          fill={GOLD}
-          fontSize="11"
+          fill={BLUE}
+          fontSize="12"
           fontFamily="monospace"
           fontWeight="600"
-          style={{ filter: `drop-shadow(0 0 3px ${GOLD}66)` }}
         >
           {lunar.label}
         </text>

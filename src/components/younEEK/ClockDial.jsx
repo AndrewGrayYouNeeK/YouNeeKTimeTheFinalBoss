@@ -48,8 +48,9 @@ const ClockDial = forwardRef(function ClockDial(
             src={centerImage}
             alt=""
             className="h-full w-full object-cover"
-            style={{ opacity: isGlitching ? 0 : 0.72, transition: 'opacity 0.05s' }}
+            style={{ opacity: isGlitching ? 0 : 0.32, transition: 'opacity 0.05s' }}
           />
+          <div className="absolute inset-0 bg-[#05010a]/35" />
         </div>
       )}
 

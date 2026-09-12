@@ -7,14 +7,14 @@ function buildTicks(source) {
     const isCardinal = source === 'regular' ? i % 15 === 0 : i % 25 === 0;
     const isMajor = source === 'regular' ? i % 5 === 0 : i % 10 === 0;
     const outerR = 197;
-    const innerR = isCardinal ? 172 : isMajor ? 180 : 188;
+    const innerR = isCardinal ? 168 : isMajor ? 178 : 188;
     return {
       x1: 200 + Math.cos(angle) * outerR,
       y1: 200 + Math.sin(angle) * outerR,
       x2: 200 + Math.cos(angle) * innerR,
       y2: 200 + Math.sin(angle) * innerR,
-      strokeWidth: isCardinal ? 2.6 : isMajor ? 1.8 : 0.9,
-      color: isCardinal || isMajor ? BLUE : PURPLE,
+      strokeWidth: isCardinal ? 3.2 : isMajor ? 2.1 : 1.1,
+      color: isCardinal ? BLUE : isMajor ? PURPLE : '#9ae8ff',
       key: `rim-${source}-${i}`,
     };
   });
@@ -33,7 +33,7 @@ export default function ClockTicks({ source = 'youneek' }) {
           stroke={t.color}
           strokeWidth={t.strokeWidth}
           strokeLinecap="round"
-          style={{ filter: `drop-shadow(0 0 3px ${t.color}99)` }}
+          style={{ filter: `drop-shadow(0 0 3px ${t.color})` }}
         />
       ))}
     </svg>
