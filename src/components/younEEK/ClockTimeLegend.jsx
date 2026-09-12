@@ -1,4 +1,4 @@
-import { BLUE, PURPLE, HAND_WHITE } from './clockConstants';
+import { BLUE, HAND_WHITE } from './clockConstants';
 
 function pad(v) {
   return String(v).padStart(2, '0');
@@ -21,14 +21,12 @@ function Row({ color, label, value, active }) {
 
 export default function ClockTimeLegend({ now, time, source = 'youneek' }) {
   const regular = `${pad(time.hours12)}:${pad(now.getMinutes())}:${pad(now.getSeconds())} ${time.ampm}`;
-  const decimal = `${pad(time.decimalHours)}:${pad(time.decimalMinutes)}:${pad(time.decimalSeconds)}`;
   const youneek = `${pad(time.units)}:${pad(time.minutes)}:${pad(time.seconds)}`;
 
   return (
     <div className="mb-3 flex justify-center">
       <div className="inline-grid grid-cols-[1fr_auto_1fr] gap-x-3 gap-y-1 items-center justify-center">
-        <Row color={BLUE} label="YouNeeK Time" value={youneek} active={source === 'youneek'} />
-        <Row color={PURPLE} label="Decimal Time" value={decimal} active={source === 'decimal'} />
+        <Row color={BLUE} label="YouNeeK Time" value={youneek} active={source !== 'regular'} />
         <Row color={HAND_WHITE} label="Regular Time" value={regular} active={source === 'regular'} />
       </div>
     </div>

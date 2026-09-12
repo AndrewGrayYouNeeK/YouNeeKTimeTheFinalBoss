@@ -1,6 +1,5 @@
 export const CLOCK_SOURCES = [
   { id: 'youneek', label: 'YouNeeK Time 100:100:100' },
-  { id: 'decimal', label: 'Decimal Time 10:100:100' },
   { id: 'regular', label: 'Regular Time' },
 ];
 
@@ -23,7 +22,7 @@ export const PREFS_EVENT = 'clock-prefs-updated';
 
 export function readClockSource() {
   const id = localStorage.getItem(SOURCE_KEY);
-  if (id === 'youneek12' || id === 'army') return 'youneek';
+  if (id === 'youneek12' || id === 'army' || id === 'decimal') return 'youneek';
   return CLOCK_SOURCES.some((s) => s.id === id) ? id : 'youneek';
 }
 
@@ -68,9 +67,6 @@ export function getHapticDigits(time, source = 'youneek') {
   if (source === 'regular') {
     return { hours: time.hours12, minutes: time.regularMinutes ?? 0, seconds: time.regularSeconds ?? 0 };
   }
-  if (source === 'decimal') {
-    return { hours: time.decimalHours, minutes: time.decimalMinutes, seconds: time.decimalSeconds };
-  }
   return { hours: time.units, minutes: time.minutes, seconds: time.seconds };
 }
 
@@ -90,13 +86,6 @@ export function getHandRotations(time, source = 'youneek') {
       hour: time.regularHourRotation,
       minute: time.regularMinuteRotation,
       second: time.regularSecondRotation,
-    };
-  }
-  if (source === 'decimal') {
-    return {
-      hour: time.decimalHourRotation,
-      minute: time.decimalMinuteRotation,
-      second: time.decimalSecondRotation,
     };
   }
   return {

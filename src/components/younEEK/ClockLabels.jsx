@@ -14,14 +14,6 @@ function labelsFor(source) {
       { label: '9', angle: 270 },
     ];
   }
-  if (source === 'decimal') {
-    return [
-      { label: '0', angle: 0 },
-      { label: '2.5', angle: 90 },
-      { label: '5', angle: 180 },
-      { label: '7.5', angle: 270 },
-    ];
-  }
   return [
     { label: '00', angle: 0 },
     { label: '25', angle: 90 },
@@ -43,7 +35,7 @@ export default function ClockLabels({ lunar, source = 'youneek' }) {
             textAnchor="middle"
             dominantBaseline="middle"
             fill={BLUE}
-            fontSize={item.label.length > 2 ? 16 : 20}
+            fontSize={20}
             fontFamily="monospace"
             fontWeight="700"
             style={{ filter: `drop-shadow(0 0 3px ${BLUE}88)` }}
