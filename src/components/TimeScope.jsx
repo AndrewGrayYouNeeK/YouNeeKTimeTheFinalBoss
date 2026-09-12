@@ -404,25 +404,7 @@ export default function TimeScope() {
 
   return (
     <div className="time-scope w-full" data-scope="youneek-time">
-      <div className="mb-3 flex items-center justify-between gap-2">
-        <p className="font-mono text-[10px] uppercase tracking-[0.35em] text-[#00b7ff]/80">TIME SCOPE</p>
-        <div className="flex overflow-hidden rounded-xl border border-white/10 font-mono text-[10px] uppercase tracking-[0.2em]">
-          <button
-            type="button"
-            onClick={() => setMode('369')}
-            className={`px-3 py-1 ${mode === '369' ? 'bg-[#00b7ff] text-black' : 'text-white/45'}`}
-          >
-            369
-          </button>
-          <button
-            type="button"
-            onClick={() => setMode('time')}
-            className={`px-3 py-1 ${mode === 'time' ? 'bg-[#00b7ff] text-black' : 'text-white/45'}`}
-          >
-            TIME
-          </button>
-        </div>
-      </div>
+      <p className="mb-3 text-center font-mono text-[10px] uppercase tracking-[0.35em] text-[#00b7ff]/80">TIME SCOPE</p>
       <div ref={wrapRef} className="relative mx-auto aspect-square w-full max-w-[28rem]" style={{ background: BG }}>
         <canvas ref={canvasRef} className="block h-full w-full" />
         <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center">
@@ -437,6 +419,24 @@ export default function TimeScope() {
             style={{ textShadow: '0 0 12px #00b7ff88' }}
           />
           <p ref={subRef} className="mt-1 font-mono text-[10px] uppercase tracking-[0.28em] text-[#00b7ff]/60" />
+        </div>
+      </div>
+      <div className="mt-3 flex justify-center">
+        <div className="flex overflow-hidden rounded-xl border border-white/10 font-mono text-[10px] uppercase tracking-[0.2em]">
+          <button
+            type="button"
+            onClick={() => setMode('369')}
+            className={`px-4 py-1.5 ${mode === '369' ? 'bg-[#00b7ff] text-black' : 'text-white/45'}`}
+          >
+            369
+          </button>
+          <button
+            type="button"
+            onClick={() => setMode('time')}
+            className={`px-4 py-1.5 ${mode === 'time' ? 'bg-[#00b7ff] text-black' : 'text-white/45'}`}
+          >
+            TIME
+          </button>
         </div>
       </div>
     </div>
