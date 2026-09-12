@@ -3,8 +3,7 @@ import ClockTicks from './ClockTicks';
 import ClockLabels from './ClockLabels';
 import ClockHands from './ClockHands';
 
-const DEFAULT_CENTER_IMAGE = '/astronaut-dial-bg.png';
-const BANNED_FACES = ['/clock-face-default.jpg', 'clock-face-default'];
+const BANNED_FACES = ['/clock-face-default.jpg', 'clock-face-default', 'astronaut-dial-bg', 'volcano-bg'];
 
 function resolveFace() {
   const stored = localStorage.getItem('clockFaceUrl');
@@ -12,7 +11,7 @@ function resolveFace() {
     if (stored && BANNED_FACES.some((b) => stored.includes(b))) {
       localStorage.removeItem('clockFaceUrl');
     }
-    return DEFAULT_CENTER_IMAGE;
+    return null;
   }
   return stored;
 }
@@ -40,7 +39,11 @@ const ClockDial = forwardRef(function ClockDial(
 
   return (
     <div ref={ref} className={`relative mx-auto aspect-square w-full ${maxWidthClass}`}>
-      <div className="absolute inset-[6%] z-0 rounded-full bg-black" aria-hidden="true" />
+      <div
+        className="absolute inset-[6%] z-0 rounded-full"
+        aria-hidden="true"
+        style={{ background: 'radial-gradient(circle, rgba(0,0,0,0.28) 0%, rgba(0,0,0,0.08) 72%, transparent 100%)' }}
+      />
 
       {centerImage && (
         <div className="absolute inset-[6%] z-10 overflow-hidden rounded-full" style={{ pointerEvents: 'none' }}>
