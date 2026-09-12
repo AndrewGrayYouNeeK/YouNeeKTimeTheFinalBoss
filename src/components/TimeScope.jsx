@@ -19,8 +19,8 @@ import {
 } from '@/lib/youneekEpoch';
 
 const BG = '#000000';
-const PHOSPHOR = '#00b7ff';
-const PHASE_COLOR = ['#00b7ff', '#7ad4ff', '#4d8cff'];
+const PHOSPHOR = '#7CFF6B';
+const PHASE_COLOR = ['#7CFF6B', '#C8FF7A', '#5EE0A0'];
 const FLASH_HOLD_MS = 400;
 
 function polar(cx, cy, r, angleDeg) {
@@ -404,21 +404,21 @@ export default function TimeScope() {
 
   return (
     <div className="time-scope w-full" data-scope="youneek-time">
-      <p className="mb-3 text-center font-mono text-[10px] uppercase tracking-[0.35em] text-[#00b7ff]/80">TIME SCOPE</p>
+      <p className="mb-3 text-center font-mono text-[10px] uppercase tracking-[0.35em] text-[#7CFF6B]/80">TIME SCOPE</p>
       <div ref={wrapRef} className="relative mx-auto aspect-square w-full max-w-[28rem]" style={{ background: BG }}>
         <canvas ref={canvasRef} className="block h-full w-full" />
         <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center">
           <p
             ref={flashElRef}
-            className="absolute font-mono text-4xl font-bold tracking-[0.2em] text-[#00b7ff] transition-opacity duration-75"
-            style={{ opacity: 0, textShadow: '0 0 18px #00b7ff' }}
+            className="absolute font-mono text-4xl font-bold tracking-[0.2em] text-[#7CFF6B] transition-opacity duration-75"
+            style={{ opacity: 0, textShadow: '0 0 18px #7CFF6B' }}
           />
           <p
             ref={readoutRef}
-            className="font-mono text-3xl font-semibold tracking-[0.12em] text-[#00b7ff]"
-            style={{ textShadow: '0 0 12px #00b7ff88' }}
+            className="font-mono text-3xl font-semibold tracking-[0.12em] text-[#7CFF6B]"
+            style={{ textShadow: '0 0 12px #7CFF6B88' }}
           />
-          <p ref={subRef} className="mt-1 font-mono text-[10px] uppercase tracking-[0.28em] text-[#00b7ff]/60" />
+          <p ref={subRef} className="mt-1 font-mono text-[10px] uppercase tracking-[0.28em] text-[#7CFF6B]/60" />
         </div>
       </div>
       <div className="mt-3 flex justify-center">
@@ -426,14 +426,14 @@ export default function TimeScope() {
           <button
             type="button"
             onClick={() => setMode('369')}
-            className={`px-4 py-1.5 ${mode === '369' ? 'bg-[#00b7ff] text-black' : 'text-white/45'}`}
+            className={`px-4 py-1.5 ${mode === '369' ? 'bg-[#7CFF6B] text-black' : 'text-white/45'}`}
           >
             369
           </button>
           <button
             type="button"
             onClick={() => setMode('time')}
-            className={`px-4 py-1.5 ${mode === 'time' ? 'bg-[#00b7ff] text-black' : 'text-white/45'}`}
+            className={`px-4 py-1.5 ${mode === 'time' ? 'bg-[#7CFF6B] text-black' : 'text-white/45'}`}
           >
             TIME
           </button>

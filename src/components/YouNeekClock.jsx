@@ -52,14 +52,14 @@ export default function YouNeekClock() {
         <button
           type="button"
           onClick={() => setScopeOn(true)}
-          className={`flex-1 py-2.5 ${scopeOn ? 'bg-[#00b7ff] text-black' : 'text-white/45'}`}
+          className={`flex-1 py-2.5 ${scopeOn ? 'bg-[#7CFF6B] text-black' : 'text-white/45'}`}
         >
           TIME SCOPE
         </button>
         <button
           type="button"
           onClick={() => setScopeOn(false)}
-          className={`flex-1 py-2.5 ${scopeOn ? 'text-white/45' : 'bg-[#00b7ff] text-black'}`}
+          className={`flex-1 py-2.5 ${scopeOn ? 'text-white/45' : 'bg-[#7CFF6B] text-black'}`}
         >
           FACE
         </button>

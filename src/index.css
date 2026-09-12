@@ -158,7 +158,7 @@
 .volcano-bg-pulse {
   background:
     radial-gradient(ellipse at 50% 78%, #7d5fff33 0%, transparent 55%),
-    radial-gradient(ellipse at 42% 34%, #00b7ff18 0%, transparent 50%);
+    radial-gradient(ellipse at 42% 34%, #7CFF6B18 0%, transparent 50%);
   animation: lava-pulse 5.5s ease-in-out infinite;
 }
 

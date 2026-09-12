@@ -8,7 +8,7 @@ export const ARMY_CYAN = '#22d3ee';
 export const RING_GRAY = '#4a4a4a';
 
 export const PURPLE = '#c026ff';
-export const BLUE = '#00b7ff';
+export const BLUE = '#7CFF6B';
 export const LAVA = '#ff6a00';
 export const LAVA_DEEP = '#ff3b00';
 export const GOLD = '#ffd700';

@@ -1,5 +1,5 @@
 const PURPLE = '#c026ff';
-const BLUE = '#00b7ff';
+const BLUE = '#7CFF6B';
 
 function pad(value) { return String(value).padStart(2, '0'); }
 
