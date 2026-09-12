@@ -1,5 +1,5 @@
 export const CLOCK_SOURCES = [
-  { id: 'youneek', label: 'YouNeeK Digital' },
+  { id: 'youneek', label: '100.100.100' },
   { id: 'youneek12', label: 'YouNeeK Time' },
   { id: 'regular', label: 'Regular Time' },
   { id: 'army', label: 'Army YouNeeK Time' },
@@ -7,7 +7,7 @@ export const CLOCK_SOURCES = [
 
 export const WATCH_DISPLAYS = [
   { id: 'face', label: 'Clock Face' },
-  { id: 'decimal', label: 'Decimal Clock' },
+  { id: 'decimal', label: '100.100.100' },
 ];
 
 export const HAND_STYLES = [
@@ -53,7 +53,7 @@ export function writeHandStyle(id) {
 }
 
 export function sourceLabel(id) {
-  return CLOCK_SOURCES.find((s) => s.id === id)?.label || 'YouNeeK Digital';
+  return CLOCK_SOURCES.find((s) => s.id === id)?.label || '100.100.100';
 }
 
 export function handStyleLabel(id) {
@@ -78,9 +78,16 @@ export function getHapticDigits(time, source = 'youneek') {
 }
 
 export function formatDigital(time, source = 'youneek') {
-  const { hours, minutes } = getHapticDigits(time, source);
-  const sep = source === 'youneek' ? '•' : ':';
-  return `${pad(hours)}${sep}${pad(minutes)}`;
+  if (source === 'regular') {
+    return `${pad(time.hours12)}:${pad(time.regularMinutes)}:${pad(time.regularSeconds ?? 0)}`;
+  }
+  if (source === 'army') {
+    return `${pad(time.armyHours)}:${pad(time.armyMinutes)}:${pad(time.armySeconds)}`;
+  }
+  if (source === 'youneek12') {
+    return `${pad(time.hours12)}:${pad(time.armyMinutes)}:${pad(time.armySeconds)}`;
+  }
+  return `${pad(time.units)}•${pad(time.minutes)}•${pad(time.seconds)}`;
 }
 
 export function getHandRotations(time) {

@@ -84,7 +84,7 @@ struct YouNeeKTimeWatchWidgets: Widget {
                 .containerBackground(for: .widget) { Color.black }
         }
         .configurationDisplayName("YouNeeK Time")
-        .description("Decimal time on your watch face.")
+        .description("100.100.100 on your watch face.")
         .supportedFamilies([
             .accessoryCircular,
             .accessoryRectangular,

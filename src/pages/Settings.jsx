@@ -184,7 +184,7 @@ export default function Settings() {
                 </Select>
               </div>
               <div>
-                <p className="text-sm text-white/50 mb-2">Clock time (face, decimal, and haptics)</p>
+                <p className="text-sm text-white/50 mb-2">Clock time (face, 100.100.100, and haptics)</p>
                 <Select value={clockSource} onValueChange={(id) => { setClockSource(id); writeClockSource(id); }}>
                   <SelectTrigger className="w-full border-[#7CFF6B]/25 bg-black/40 text-white sm:w-[240px]">
                     <SelectValue />

@@ -3,11 +3,11 @@ const GREEN = '#7CFF6B';
 const sections = [
   {
     title: 'What is YouNeeK Time',
-    body: 'YouNeeK Time is a modern, intuitive approach to timekeeping that reimagines the standard 24-hour day into a streamlined base-100 system, giving you a fresh perspective on the passage of time.',
+    body: 'YouNeeK Time is 100.100.100 — 100 hours, 100 minutes, and 100 seconds in one civilian day. Not 10 hours. Not a four-digit clock.',
   },
   {
     title: 'How to Read YouNeeK Time',
-    body: 'The day is split into 100 equal hours from midnight to midnight, replacing the traditional 24-hour clock.',
+    body: 'The day is 100 YouNeeK hours from midnight to midnight.',
     points: [
       '00 = midnight',
       '25 = 6:00 AM',
@@ -17,7 +17,7 @@ const sections = [
   },
   {
     title: 'The Digital Display',
-    body: 'The four-digit display shows where you are inside the 100-hour day. The first two digits are the YouNeeK hour and the last two are the YouNeeK minute.',
+    body: 'The readout is hour.minute.second, each 00 to 99. That is 100.100.100.',
   },
   {
     title: 'Time Scope',

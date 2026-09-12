@@ -5,7 +5,6 @@ export function getDecimalTime(now = new Date()) {
   const elapsedMs = now.getTime() - startOfDay.getTime();
   const dayProgress = ((elapsedMs % 86400000) + 86400000) % 86400000 / 86400000;
 
-  // YouNeeK decimal time: 100 units/day, 100 minutes/unit, 100 seconds/minute
   const totalUnits = dayProgress * 100;
   const totalBaseMinutes = dayProgress * 10000;
   const totalBaseSeconds = dayProgress * 1000000;
@@ -80,5 +79,6 @@ export function getDecimalTime(now = new Date()) {
     regularMinuteRotation,
     regularSecondRotation,
     regularMinutes: realMinutes,
+    regularSeconds: realSeconds,
   };
 }

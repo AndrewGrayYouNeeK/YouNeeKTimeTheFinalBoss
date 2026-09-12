@@ -11,8 +11,9 @@ const t = getDecimalTime(three);
 assert(getHapticDigits(t, 'regular').hours === 3, 'regular hours');
 assert(getHapticDigits(t, 'regular').minutes === 30, 'regular mins');
 assert(getHapticDigits(t, 'army').hours === 15, 'army hours');
-assert(formatDigital(t, 'youneek').includes('•'), formatDigital(t, 'youneek'));
-assert(formatDigital(t, 'regular') === '03:30', formatDigital(t, 'regular'));
+assert(formatDigital(t, 'youneek') === '64•58•33', formatDigital(t, 'youneek'));
+assert(formatDigital(t, 'regular') === '03:30:00', formatDigital(t, 'regular'));
+assert(formatDigital(t, 'youneek').split('•').length === 3, '100.100.100 fields');
 
 const hands = getHandRotations(t, 'youneek');
 assert(Math.abs(hands.hour - t.regularHourRotation) < 1e-9, 'hands follow civil hour');

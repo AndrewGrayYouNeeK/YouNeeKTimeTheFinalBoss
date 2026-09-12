@@ -4,12 +4,12 @@ const BLUE = '#7CFF6B';
 
 function DigitCard({ digit }) {
   return (
-    <div className="flex h-24 w-[4.8rem] items-center justify-center rounded-2xl border bg-black sm:h-28 sm:w-[5.4rem]"
+    <div className="flex h-16 w-[2.35rem] items-center justify-center rounded-xl border bg-black sm:h-20 sm:w-[2.9rem]"
       style={{
         borderColor: `${BLUE}66`,
         boxShadow: 'inset 0 0 0 1px rgba(255,255,255,0.03)',
       }}>
-      <span className="font-mono text-6xl font-bold tracking-[0.08em] sm:text-7xl"
+      <span className="font-mono text-4xl font-bold tracking-[0.04em] sm:text-5xl"
         style={{ color: BLUE }}>
         {digit}
       </span>

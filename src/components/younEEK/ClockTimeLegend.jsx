@@ -26,7 +26,7 @@ export default function ClockTimeLegend({ now, time, source = 'youneek', lunar }
   return (
     <div className="mb-3 flex justify-center">
       <div className="inline-grid grid-cols-[1fr_auto_1fr] items-center justify-center gap-x-3 gap-y-1">
-        <Row label="YouNeeK Digital" value={digitalStr} active={source === 'youneek'} />
+        <Row label="100.100.100" value={digitalStr} active={source === 'youneek'} />
         <Row label="Regular Time" value={standardTime} active={source === 'regular'} />
         <Row label="YouNeeK Time" value={army12Str} active={source === 'youneek12'} />
         <Row label="Army YouNeeK Time" value={armyStr} active={source === 'army'} />
