@@ -18,9 +18,9 @@ import {
   stackBlips,
 } from '@/lib/youneekEpoch';
 
-const BG = '#050805';
-const PHOSPHOR = '#7CFF6B';
-const PHASE_COLOR = ['#7CFF6B', '#C8FF7A', '#5EE0A0'];
+const BG = '#000000';
+const PHOSPHOR = '#00b7ff';
+const PHASE_COLOR = ['#00b7ff', '#7ad4ff', '#4d8cff'];
 const FLASH_HOLD_MS = 400;
 
 function polar(cx, cy, r, angleDeg) {
@@ -405,19 +405,19 @@ export default function TimeScope() {
   return (
     <div className="time-scope w-full" data-scope="youneek-time">
       <div className="mb-3 flex items-center justify-between gap-2">
-        <p className="font-mono text-[10px] uppercase tracking-[0.35em] text-[#7CFF6B]/80">TIME SCOPE</p>
-        <div className="flex overflow-hidden rounded border border-[#7CFF6B]/35 font-mono text-[10px] uppercase tracking-[0.2em]">
+        <p className="font-mono text-[10px] uppercase tracking-[0.35em] text-[#00b7ff]/80">TIME SCOPE</p>
+        <div className="flex overflow-hidden rounded-xl border border-white/10 font-mono text-[10px] uppercase tracking-[0.2em]">
           <button
             type="button"
             onClick={() => setMode('369')}
-            className={`px-3 py-1 ${mode === '369' ? 'bg-[#7CFF6B] text-[#050805]' : 'text-[#7CFF6B]/70'}`}
+            className={`px-3 py-1 ${mode === '369' ? 'bg-[#00b7ff] text-black' : 'text-white/45'}`}
           >
             369
           </button>
           <button
             type="button"
             onClick={() => setMode('time')}
-            className={`px-3 py-1 ${mode === 'time' ? 'bg-[#7CFF6B] text-[#050805]' : 'text-[#7CFF6B]/70'}`}
+            className={`px-3 py-1 ${mode === 'time' ? 'bg-[#00b7ff] text-black' : 'text-white/45'}`}
           >
             TIME
           </button>
@@ -428,15 +428,15 @@ export default function TimeScope() {
         <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center">
           <p
             ref={flashElRef}
-            className="absolute font-mono text-4xl font-bold tracking-[0.2em] text-[#7CFF6B] transition-opacity duration-75"
-            style={{ opacity: 0, textShadow: '0 0 18px #7CFF6B' }}
+            className="absolute font-mono text-4xl font-bold tracking-[0.2em] text-[#00b7ff] transition-opacity duration-75"
+            style={{ opacity: 0, textShadow: '0 0 18px #00b7ff' }}
           />
           <p
             ref={readoutRef}
-            className="font-mono text-3xl font-semibold tracking-[0.12em] text-[#7CFF6B]"
-            style={{ textShadow: '0 0 12px #7CFF6B88' }}
+            className="font-mono text-3xl font-semibold tracking-[0.12em] text-[#00b7ff]"
+            style={{ textShadow: '0 0 12px #00b7ff88' }}
           />
-          <p ref={subRef} className="mt-1 font-mono text-[10px] uppercase tracking-[0.28em] text-[#7CFF6B]/60" />
+          <p ref={subRef} className="mt-1 font-mono text-[10px] uppercase tracking-[0.28em] text-[#00b7ff]/60" />
         </div>
       </div>
     </div>

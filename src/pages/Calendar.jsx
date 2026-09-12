@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-import StarsBackground from '@/components/younEEK/StarsBackground';
-import ClockHeader from '@/components/younEEK/ClockHeader';
+import PageShell from '@/components/PageShell';
 import { getDecimalTime } from '@/lib/decimalTime';
 import { formatDigital, readClockSource } from '@/lib/clockPrefs';
 import {
@@ -61,12 +60,9 @@ export default function Calendar() {
   };
 
   return (
-    <div className="relative min-h-screen pb-28 text-white">
-      <StarsBackground />
-      <div className="relative z-10 mx-auto flex w-full max-w-[36rem] flex-col gap-6 px-4 py-8">
-        <ClockHeader />
-
-        <section className="rounded-[1.6rem] border border-[#00b7ff]/15 bg-[#101010] p-5 text-center">
+    <PageShell topPad>
+      <div className="flex flex-col gap-6">
+        <section className="rounded-2xl border border-white/10 bg-white/5 p-5 text-center">
           <p className="font-mono text-[10px] uppercase tracking-[0.35em] text-[#00b7ff]">Lunar calendar</p>
           <p className="mt-2 font-mono text-lg uppercase tracking-[0.2em]">{todayLunar.longLabel}</p>
           <p className="mt-1 font-mono text-sm text-white/70">{todayLunar.phase} · {todayLunar.illumination}% lit</p>
@@ -135,7 +131,7 @@ export default function Calendar() {
         </div>
 
         {selected ? (
-          <section className="rounded-[1.6rem] border border-[#00b7ff]/15 bg-[#101010] p-5">
+          <section className="rounded-2xl border border-white/10 bg-white/5 p-5">
             <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-[#00b7ff]">Selected day</p>
             <h2 className="mt-2 font-mono text-lg">{selectedLunar.longLabel}</h2>
             <p className="mt-1 text-sm text-white/60">
@@ -155,6 +151,6 @@ export default function Calendar() {
           </section>
         ) : null}
       </div>
-    </div>
+    </PageShell>
   );
 }

@@ -20,8 +20,8 @@ const sections = [
     body: 'The four-digit display shows where you are inside the 100-hour day. The first two digits are the YouNeeK hour and the last two are the YouNeeK minute.',
   },
   {
-    title: 'The Analog Face',
-    body: 'One scroll number opens the scene. Far layers crawl, near layers race, the astronaut flies his own curve, and the sticky dial collapses to a top puck — yellow seconds locked to the ring the whole time.',
+    title: 'Time Scope',
+    body: 'The Time Scope is a 100-hour PPI. One beam sweep is one YouNeeK hour (14.4 civilian minutes). 369 mode sweeps a 3–6–9 cycle. Events in the current window show as arcs and blips.',
   },
 ];
 
