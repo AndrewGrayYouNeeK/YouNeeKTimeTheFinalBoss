@@ -25,7 +25,7 @@ export default function YouNeekClock() {
   );
   const [source, setSource] = useState(readClockSource);
   const [handStyle, setHandStyle] = useState(readHandStyle);
-  const [scopeOn, setScopeOn] = useState(true);
+  const [scopeOn, setScopeOn] = useState(false);
 
   useEffect(() => {
     const id = window.setInterval(() => setNow(new Date()), 16);
@@ -67,7 +67,11 @@ export default function YouNeekClock() {
       </div>
 
       <AppPanel className="!p-4">
-        {scopeOn ? <TimeScope /> : <DigitalTimeDisplay time={time} source={source} />}
+        {scopeOn ? (
+          <TimeScope />
+        ) : (
+          <ClockDial time={time} isGlitching={false} source={source} handStyle={handStyle} lunar={lunar} />
+        )}
       </AppPanel>
 
       <AppPanel className="text-center">
@@ -88,7 +92,7 @@ export default function YouNeekClock() {
           <ClockTypeSelect value={source} />
           <HandStyleSelect value={handStyle} />
           <ClockTimeLegend now={now} time={time} source={source} lunar={lunar} />
-          <ClockDial time={time} isGlitching={false} source={source} handStyle={handStyle} lunar={lunar} />
+          <DigitalTimeDisplay time={time} source={source} />
         </AppPanel>
       )}
 

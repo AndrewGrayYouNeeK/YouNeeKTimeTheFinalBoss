@@ -112,7 +112,7 @@ export default function Settings() {
                     onClick={() => {
                       localStorage.removeItem('clockFaceUrl');
                       window.dispatchEvent(new Event('clock-face-updated'));
-                      toast({ title: 'Clock face reset to clean dial' });
+                      toast({ title: 'Clock face reset to astronaut' });
                     }}
                     className="text-white/60 hover:text-white hover:bg-white/10"
                   >

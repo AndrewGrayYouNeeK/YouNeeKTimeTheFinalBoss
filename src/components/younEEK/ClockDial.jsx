@@ -3,7 +3,8 @@ import ClockTicks from './ClockTicks';
 import ClockLabels from './ClockLabels';
 import ClockHands from './ClockHands';
 
-const BANNED_FACES = ['/clock-face-default.jpg', 'clock-face-default', 'astronaut-dial-bg'];
+const DEFAULT_CENTER_IMAGE = '/astronaut-dial-bg.png';
+const BANNED_FACES = ['/clock-face-default.jpg', 'clock-face-default'];
 
 function resolveFace() {
   const stored = localStorage.getItem('clockFaceUrl');
@@ -11,7 +12,7 @@ function resolveFace() {
     if (stored && BANNED_FACES.some((b) => stored.includes(b))) {
       localStorage.removeItem('clockFaceUrl');
     }
-    return null;
+    return DEFAULT_CENTER_IMAGE;
   }
   return stored;
 }
@@ -47,7 +48,7 @@ const ClockDial = forwardRef(function ClockDial(
             src={centerImage}
             alt=""
             className="h-full w-full object-cover"
-            style={{ opacity: isGlitching ? 0 : 0.55, transition: 'opacity 0.05s' }}
+            style={{ opacity: isGlitching ? 0 : 1, transition: 'opacity 0.05s' }}
           />
         </div>
       )}
