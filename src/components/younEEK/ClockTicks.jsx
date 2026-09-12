@@ -1,19 +1,20 @@
 import { BLUE, PURPLE } from './clockConstants';
 
-// Single rim like the concept art: 12 slim blue hour bars,
-// four slim purple marks between each pair
-const RIM_TICKS = Array.from({ length: 60 }, (_, i) => {
-  const angle = (i / 60) * Math.PI * 2 - Math.PI / 2;
-  const isHour = i % 5 === 0;
+// 100-unit face. One tick per YouNeek hour.
+// Fat ticks at 00/25/50/75. Medium every 10. Slim otherwise.
+const RIM_TICKS = Array.from({ length: 100 }, (_, i) => {
+  const angle = (i / 100) * Math.PI * 2 - Math.PI / 2;
+  const isCardinal = i % 25 === 0;
+  const isTen = i % 10 === 0;
   const outerR = 197;
-  const innerR = isHour ? 176 : 186;
+  const innerR = isCardinal ? 172 : isTen ? 180 : 188;
   return {
     x1: 200 + Math.cos(angle) * outerR,
     y1: 200 + Math.sin(angle) * outerR,
     x2: 200 + Math.cos(angle) * innerR,
     y2: 200 + Math.sin(angle) * innerR,
-    strokeWidth: isHour ? 2.2 : 1.2,
-    color: isHour ? BLUE : PURPLE,
+    strokeWidth: isCardinal ? 2.6 : isTen ? 1.8 : 0.9,
+    color: isCardinal || isTen ? BLUE : PURPLE,
     key: `rim-${i}`,
   };
 });
