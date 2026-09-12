@@ -1,4 +1,4 @@
-import { BLUE, GOLD } from './clockConstants';
+import { PURPLE, GOLD } from './clockConstants';
 
 const polarPoint = (radius, angleDeg) => {
   const angle = (angleDeg - 90) * (Math.PI / 180);
@@ -34,11 +34,11 @@ export default function ClockLabels({ lunar, source = 'youneek' }) {
             y={p.y}
             textAnchor="middle"
             dominantBaseline="middle"
-            fill={BLUE}
+            fill={PURPLE}
             fontSize={20}
             fontFamily="monospace"
             fontWeight="700"
-            style={{ filter: `drop-shadow(0 0 3px ${BLUE}88)` }}
+            style={{ filter: `drop-shadow(0 0 6px ${PURPLE})` }}
           >
             {item.label}
           </text>
