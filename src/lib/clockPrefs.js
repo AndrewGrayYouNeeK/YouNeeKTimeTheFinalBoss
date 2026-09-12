@@ -1,8 +1,6 @@
 export const CLOCK_SOURCES = [
   { id: 'youneek', label: '100.100.100' },
-  { id: 'youneek12', label: 'YouNeeK Time' },
   { id: 'regular', label: 'Regular Time' },
-  { id: 'army', label: 'Army YouNeeK Time' },
 ];
 
 export const WATCH_DISPLAYS = [
@@ -24,6 +22,7 @@ export const PREFS_EVENT = 'clock-prefs-updated';
 
 export function readClockSource() {
   const id = localStorage.getItem(SOURCE_KEY);
+  if (id === 'youneek12' || id === 'army' || id === 'decimal') return 'youneek';
   return CLOCK_SOURCES.some((s) => s.id === id) ? id : 'youneek';
 }
 
@@ -66,34 +65,28 @@ function pad(value) {
 
 export function getHapticDigits(time, source = 'youneek') {
   if (source === 'regular') {
-    return { hours: time.hours12, minutes: time.regularMinutes ?? 0 };
+    return { hours: time.hours12, minutes: time.regularMinutes ?? 0, seconds: time.regularSeconds ?? 0 };
   }
-  if (source === 'army') {
-    return { hours: time.armyHours, minutes: time.armyMinutes };
-  }
-  if (source === 'youneek12') {
-    return { hours: time.hours12, minutes: time.armyMinutes };
-  }
-  return { hours: time.units, minutes: time.minutes };
+  return { hours: time.units, minutes: time.minutes, seconds: time.seconds };
 }
 
 export function formatDigital(time, source = 'youneek') {
-  if (source === 'regular') {
-    return `${pad(time.hours12)}:${pad(time.regularMinutes)}:${pad(time.regularSeconds ?? 0)}`;
-  }
-  if (source === 'army') {
-    return `${pad(time.armyHours)}:${pad(time.armyMinutes)}:${pad(time.armySeconds)}`;
-  }
-  if (source === 'youneek12') {
-    return `${pad(time.hours12)}:${pad(time.armyMinutes)}:${pad(time.armySeconds)}`;
-  }
-  return `${pad(time.units)}•${pad(time.minutes)}•${pad(time.seconds)}`;
+  const { hours, minutes, seconds } = getHapticDigits(time, source);
+  const sep = source === 'youneek' ? '•' : ':';
+  return `${pad(hours)}${sep}${pad(minutes)}${sep}${pad(seconds)}`;
 }
 
-export function getHandRotations(time) {
+export function getHandRotations(time, source = 'youneek') {
+  if (source === 'regular') {
+    return {
+      hour: time.regularHourRotation,
+      minute: time.regularMinuteRotation,
+      second: time.regularSecondRotation,
+    };
+  }
   return {
-    hour: time.regularHourRotation,
-    minute: time.regularMinuteRotation,
-    second: time.regularSecondRotation,
+    hour: time.unitRotation,
+    minute: time.minuteRotation,
+    second: time.secondRotation,
   };
 }

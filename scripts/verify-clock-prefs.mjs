@@ -10,15 +10,15 @@ const t = getDecimalTime(three);
 
 assert(getHapticDigits(t, 'regular').hours === 3, 'regular hours');
 assert(getHapticDigits(t, 'regular').minutes === 30, 'regular mins');
-assert(getHapticDigits(t, 'army').hours === 15, 'army hours');
 assert(formatDigital(t, 'youneek') === '64•58•33', formatDigital(t, 'youneek'));
 assert(formatDigital(t, 'regular') === '03:30:00', formatDigital(t, 'regular'));
 assert(formatDigital(t, 'youneek').split('•').length === 3, '100.100.100 fields');
 
-const hands = getHandRotations(t, 'youneek');
-assert(Math.abs(hands.hour - t.regularHourRotation) < 1e-9, 'hands follow civil hour');
-assert(Math.abs(hands.minute - t.regularMinuteRotation) < 1e-9, 'hands follow civil minute');
-assert(Math.abs(hands.second - t.regularSecondRotation) < 1e-9, 'hands follow civil second');
+const yn = getHandRotations(t, 'youneek');
+assert(Math.abs(yn.hour - t.unitRotation) < 1e-9, 'YouNeeK hour is 100-scale');
+assert(Math.abs(yn.minute - t.minuteRotation) < 1e-9, 'YouNeeK minute is 100-scale');
+
+const hands = getHandRotations(t, 'regular');
 assert(Math.abs(hands.hour - 105) < 1e-9, `3:30 hour angle ${hands.hour}`);
 assert(Math.abs(hands.minute - 180) < 1e-9, `3:30 minute angle ${hands.minute}`);
 assert(Math.abs(hands.second) < 1e-9, `3:30 second angle ${hands.second}`);

@@ -3,7 +3,7 @@ import ClockTicks from './ClockTicks';
 import ClockLabels from './ClockLabels';
 import ClockHands from './ClockHands';
 
-const DEFAULT_CENTER_IMAGE = '/astronaut-dial-bg.png';
+const DEFAULT_CENTER_IMAGE = '/astronaut-concept.png';
 const BANNED_FACES = ['/clock-face-default.jpg', 'clock-face-default', 'volcano-bg'];
 
 function resolveFace() {
@@ -59,10 +59,10 @@ const ClockDial = forwardRef(function ClockDial(
         aria-hidden="true"
       />
 
-      <ClockTicks />
+      <ClockTicks source={source} />
 
       <div className="pointer-events-none absolute inset-0 z-30">
-        <ClockLabels />
+        <ClockLabels source={source} />
         <ClockHands time={time} source={source} handStyle={handStyle} omitSeconds={omitSeconds} />
       </div>
     </div>

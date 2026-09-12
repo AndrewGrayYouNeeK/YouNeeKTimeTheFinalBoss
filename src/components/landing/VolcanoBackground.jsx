@@ -44,7 +44,7 @@ export default function VolcanoBackground({ parallax = 0 }) {
           }}
         />
       ))}
-      <div className="absolute inset-0 bg-black/45" />
+      <div className="absolute inset-0 bg-[#05010a]/30" />
     </div>
   );
 }

@@ -3,11 +3,11 @@ const GREEN = '#7CFF6B';
 const sections = [
   {
     title: 'What is YouNeeK Time',
-    body: 'YouNeeK Time is 100.100.100 — 100 hours, 100 minutes, and 100 seconds in one civilian day. Not 10 hours. Not a four-digit clock.',
+    body: 'YouNeeK Time is 100.100.100 — 100 hours, 100 minutes, and 100 seconds in one civilian day. That is 1,000,000 ticks from midnight to midnight. Not 10 hours. Not a four-digit clock.',
   },
   {
     title: 'How to Read YouNeeK Time',
-    body: 'The day is 100 YouNeeK hours from midnight to midnight.',
+    body: 'Read it like hours : minutes : seconds, but each place counts to 100. Midnight is 00:00:00. The last tick before the next midnight is 99:99:99.',
     points: [
       '00 = midnight',
       '25 = 6:00 AM',
@@ -18,6 +18,10 @@ const sections = [
   {
     title: 'The Digital Display',
     body: 'The readout is hour.minute.second, each 00 to 99. That is 100.100.100.',
+  },
+  {
+    title: 'The Analog Face',
+    body: 'The hour hand goes around once per real day. 00 is at the top, 25 at the right, 50 at the bottom, 75 at the left. The minute hand laps once every YouNeeK hour (14.4 real minutes). The second hand laps once every YouNeeK minute (8.64 real seconds).',
   },
   {
     title: 'Time Scope',
