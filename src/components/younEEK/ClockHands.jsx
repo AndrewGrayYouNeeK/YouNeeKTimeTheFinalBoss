@@ -1,10 +1,19 @@
-import { ARMY_CYAN, PURPLE, YELLOW } from './clockConstants';
+import { BLUE, PURPLE, YELLOW, ARMY_CYAN } from './clockConstants';
 import { getHandRotations } from '@/lib/clockPrefs';
 
 const CX = 200;
 const CY = 200;
 const CYAN = ARMY_CYAN;
 const MAGENTA = PURPLE;
+const L_SHOULDER_X = 174;
+const L_SHOULDER_Y = 166;
+const R_SHOULDER_X = 226;
+const R_SHOULDER_Y = 166;
+const ARM_RATIO = 0.166;
+const HOUR_ARM_H = 104;
+const HOUR_ROD_TIP = 140;
+const MIN_ARM_H = 122;
+const MIN_ROD_TIP = 160;
 
 function PurpleYHub() {
   return (
@@ -12,7 +21,6 @@ function PurpleYHub() {
       <circle cx={CX} cy={CY} r="18" fill="#050505" stroke={PURPLE} strokeWidth="2.8"
         style={{ filter: `drop-shadow(0 0 6px ${PURPLE}88)` }} />
       <circle cx={CX} cy={CY} r="12.5" fill="#0a0a0a" stroke={PURPLE} strokeWidth="1.2" opacity="0.95" />
-      {/* Purple Y */}
       <path
         d={`M ${CX - 5.5} ${CY - 7} L ${CX} ${CY - 0.5} L ${CX + 5.5} ${CY - 7} M ${CX} ${CY - 0.5} L ${CX} ${CY + 7.5}`}
         stroke={PURPLE}
@@ -22,6 +30,36 @@ function PurpleYHub() {
         fill="none"
         style={{ filter: `drop-shadow(0 0 4px ${PURPLE})` }}
       />
+    </g>
+  );
+}
+
+function BeamArm({ x, y, angle, armH, rodTip, color, clipId, mirror }) {
+  const armW = armH * ARM_RATIO;
+  return (
+    <g transform={`translate(${x} ${y}) rotate(${angle})`} style={{ filter: `drop-shadow(0 0 10px ${color})` }}>
+      <line x1="0" y1={-armH * 0.5} x2="0" y2={-rodTip} stroke={color} strokeWidth="4.5" strokeLinecap="round" />
+      <line x1="0" y1={-armH * 0.5} x2="0" y2={-rodTip + 3} stroke="#ffffff" strokeWidth="1.6" strokeLinecap="round" opacity="0.85" />
+      <g transform={mirror ? 'scale(-1 1)' : undefined}>
+        <image
+          href="/astro-arm.png"
+          x={-armW / 2}
+          y={-armH}
+          width={armW}
+          height={armH}
+          preserveAspectRatio="xMidYMid meet"
+          clipPath={`url(#${clipId})`}
+        />
+      </g>
+    </g>
+  );
+}
+
+function GlowHands({ hour, minute, clipHour, clipMin }) {
+  return (
+    <g>
+      <BeamArm x={L_SHOULDER_X} y={L_SHOULDER_Y} angle={hour} armH={HOUR_ARM_H} rodTip={HOUR_ROD_TIP} color={BLUE} clipId={clipHour} mirror />
+      <BeamArm x={R_SHOULDER_X} y={R_SHOULDER_Y} angle={minute} armH={MIN_ARM_H} rodTip={MIN_ROD_TIP} color={PURPLE} clipId={clipMin} />
     </g>
   );
 }
@@ -76,42 +114,10 @@ function YellowSeconds({ second, handStyle }) {
       </g>
     );
   }
-  // Thin yellow needle with hot tip
   return (
     <g transform={`rotate(${second} ${CX} ${CY})`}>
-      <line
-        x1={CX}
-        y1={CY + 16}
-        x2={CX}
-        y2={CY - 162}
-        stroke={YELLOW}
-        strokeWidth="1.7"
-        strokeLinecap="round"
-        style={{ filter: `drop-shadow(0 0 5px ${YELLOW})` }}
-      />
-      <circle
-        cx={CX}
-        cy={CY - 166}
-        r="3.2"
-        fill="#fff6a0"
-        stroke={YELLOW}
-        strokeWidth="1.2"
-        style={{ filter: `drop-shadow(0 0 8px ${YELLOW})` }}
-      />
-    </g>
-  );
-}
-
-function NeedleHands({ hour, minute }) {
-  return (
-    <g>
-      {/* Hour: short, fat, cyan */}
-      <line x1={CX} y1={CY + 6} x2={CX} y2={CY - 78} stroke={CYAN} strokeWidth="7.5" strokeLinecap="round"
-        transform={`rotate(${hour} ${CX} ${CY})`} style={{ filter: `drop-shadow(0 0 5px ${CYAN}aa)` }} />
-      {/* Minute: long, thin, magenta */}
-      <line x1={CX} y1={CY + 8} x2={CX} y2={CY - 138} stroke={MAGENTA} strokeWidth="2.8" strokeLinecap="round"
-        transform={`rotate(${minute} ${CX} ${CY})`} style={{ filter: `drop-shadow(0 0 4px ${MAGENTA}aa)` }} />
-      <PurpleYHub />
+      <line x1={CX} y1={CY + 16} x2={CX} y2={CY - 162} stroke={YELLOW} strokeWidth="1.7" strokeLinecap="round"
+        style={{ filter: `drop-shadow(0 0 5px ${YELLOW})` }} />
     </g>
   );
 }
@@ -177,14 +183,27 @@ function PulseHands({ hour, minute }) {
 export default function ClockHands({ time, source = 'youneek', handStyle = 'needle', omitSeconds = false }) {
   const { hour, minute, second } = getHandRotations(time, source);
   const props = { hour, minute };
+  const glow = handStyle === 'needle' || !['ring', 'comet', 'pulse'].includes(handStyle);
+  const clipHour = 'armClipHour';
+  const clipMin = 'armClipMin';
 
   return (
     <svg viewBox="0 0 400 400" className="absolute inset-0 h-full w-full" style={{ overflow: 'visible' }}>
+      {glow && (
+        <defs>
+          <clipPath id={clipHour}>
+            <rect x={-HOUR_ARM_H * ARM_RATIO} y={-HOUR_ARM_H * 0.72} width={HOUR_ARM_H * ARM_RATIO * 2} height={HOUR_ARM_H * 0.72 + 5} />
+          </clipPath>
+          <clipPath id={clipMin}>
+            <rect x={-MIN_ARM_H * ARM_RATIO} y={-MIN_ARM_H * 0.72} width={MIN_ARM_H * ARM_RATIO * 2} height={MIN_ARM_H * 0.72 + 5} />
+          </clipPath>
+        </defs>
+      )}
       {handStyle === 'ring' && <RingDartHands {...props} />}
       {handStyle === 'comet' && <CometHands {...props} />}
       {handStyle === 'pulse' && <PulseHands {...props} />}
-      {(handStyle === 'needle' || !['ring', 'comet', 'pulse'].includes(handStyle)) && <NeedleHands {...props} />}
-      {!omitSeconds && <YellowSeconds second={second} handStyle={handStyle} />}
+      {glow && <GlowHands hour={hour} minute={minute} clipHour={clipHour} clipMin={clipMin} />}
+      {!omitSeconds && !glow && <YellowSeconds second={second} handStyle={handStyle} />}
     </svg>
   );
 }

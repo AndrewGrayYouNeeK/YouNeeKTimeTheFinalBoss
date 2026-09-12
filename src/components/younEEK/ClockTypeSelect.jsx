@@ -4,7 +4,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 export default function ClockTypeSelect({ value, className = '' }) {
   return (
     <Select value={value} onValueChange={writeClockSource}>
-      <SelectTrigger className={`w-full max-w-xs mx-auto bg-black/40 border-[#d24dff]/40 text-[#3ecbff] text-[10px] font-mono uppercase tracking-widest ${className}`}>
+      <SelectTrigger className={`w-full max-w-xs mx-auto bg-black/40 border-[#7CFF6B]/30 text-[#7CFF6B] text-[10px] font-mono uppercase tracking-widest ${className}`}>
         <SelectValue>{sourceLabel(value)}</SelectValue>
       </SelectTrigger>
       <SelectContent>

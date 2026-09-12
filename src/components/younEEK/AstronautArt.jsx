@@ -61,7 +61,7 @@ export default function AstronautArt({ className = 'relative', style, thruster =
             width: '34%',
             height: '22%',
             transform: 'translateX(-50%)',
-            background: 'radial-gradient(circle, #ffe600cc 0%, #00b7ff66 45%, transparent 70%)',
+            background: 'radial-gradient(circle, #ffe600cc 0%, #7CFF6B66 45%, transparent 70%)',
             filter: 'blur(2px)',
             opacity: 0.85,
           }}

@@ -1,4 +1,5 @@
-import { BLUE, PURPLE } from './clockConstants';
+const HOUR_MARK = '#3d9eff';
+const MIN_MARK = '#c026ff';
 
 function buildTicks(source) {
   const count = source === 'regular' ? 60 : 100;
@@ -14,7 +15,7 @@ function buildTicks(source) {
       x2: 200 + Math.cos(angle) * innerR,
       y2: 200 + Math.sin(angle) * innerR,
       strokeWidth: isCardinal ? 3.2 : isMajor ? 2.1 : 1.1,
-      color: isCardinal ? BLUE : isMajor ? PURPLE : '#9ae8ff',
+      color: isCardinal || isMajor ? (isMajor && !isCardinal ? MIN_MARK : HOUR_MARK) : MIN_MARK,
       key: `rim-${source}-${i}`,
     };
   });
@@ -33,7 +34,7 @@ export default function ClockTicks({ source = 'youneek' }) {
           stroke={t.color}
           strokeWidth={t.strokeWidth}
           strokeLinecap="round"
-          style={{ filter: `drop-shadow(0 0 3px ${t.color})` }}
+          style={{ filter: `drop-shadow(0 0 3px ${t.color}99)` }}
         />
       ))}
     </svg>

@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { getDecimalTime } from '@/lib/decimalTime';
 import ClockHeader from '@/components/younEEK/ClockHeader';
 import DigitalTimeDisplay from '@/components/younEEK/DigitalTimeDisplay';
@@ -14,9 +14,7 @@ import HandStyleSelect from '@/components/younEEK/HandStyleSelect';
 import { PREFS_EVENT, readClockSource, readHandStyle } from '@/lib/clockPrefs';
 import { getLunarDate } from '@/lib/lunarCalendar';
 import TimeScope from '@/components/TimeScope';
-
-const MAGENTA = '#c026ff';
-const CYAN = '#00b7ff';
+import AppPanel from '@/components/AppPanel';
 
 export default function YouNeekClock() {
   const [now, setNow] = useState(() => new Date());
@@ -25,12 +23,9 @@ export default function YouNeekClock() {
     () => getLunarDate(now),
     [now.getFullYear(), now.getMonth(), now.getDate()],
   );
-  const [isGlitching, setIsGlitching] = useState(false);
   const [source, setSource] = useState(readClockSource);
   const [handStyle, setHandStyle] = useState(readHandStyle);
-  const [scopeOn, setScopeOn] = useState(true);
-  const hour = now.getHours();
-  const skipGlitch = useRef(true);
+  const [scopeOn, setScopeOn] = useState(false);
 
   useEffect(() => {
     const id = window.setInterval(() => setNow(new Date()), 16);
@@ -50,71 +45,60 @@ export default function YouNeekClock() {
     };
   }, []);
 
-  useEffect(() => {
-    if (skipGlitch.current) {
-      skipGlitch.current = false;
-      return;
-    }
-    setIsGlitching(true);
-    const glitchTimer = setTimeout(() => setIsGlitching(false), 3000);
-    return () => clearTimeout(glitchTimer);
-  }, [hour]);
-
   return (
-    <div
-      className="mx-auto flex min-h-screen w-full max-w-[36rem] flex-col items-center gap-7 px-4 pb-28 pt-6 sm:gap-8"
-      style={{ fontFamily: 'system-ui, -apple-system, sans-serif' }}
-    >
+    <div className="flex w-full flex-col items-center gap-6">
       <ClockHeader />
-      <div className="flex w-full overflow-hidden rounded border font-mono text-[10px] uppercase tracking-[0.25em]"
-        style={{ borderColor: `${MAGENTA}55` }}>
+
+      <div className="flex w-full overflow-hidden rounded-2xl border border-white/10 font-mono text-[10px] uppercase tracking-[0.25em]">
         <button
           type="button"
           onClick={() => setScopeOn(true)}
-          className="flex-1 py-2"
-          style={scopeOn
-            ? { background: MAGENTA, color: '#140018' }
-            : { color: `${MAGENTA}cc` }}
+          className={`flex-1 py-2.5 ${scopeOn ? 'bg-[#7CFF6B] text-black' : 'text-white/45'}`}
         >
           TIME SCOPE
         </button>
         <button
           type="button"
           onClick={() => setScopeOn(false)}
-          className="flex-1 py-2"
-          style={scopeOn
-            ? { color: 'rgba(255,255,255,0.35)' }
-            : { background: `${CYAN}22`, color: CYAN }}
+          className={`flex-1 py-2.5 ${scopeOn ? 'text-white/45' : 'bg-[#7CFF6B] text-black'}`}
         >
           FACE
         </button>
       </div>
-      {scopeOn ? (
-        <TimeScope />
-      ) : (
-        <DigitalTimeDisplay time={time} source={source} />
-      )}
-      <p className="text-center text-[13px] text-white/45">
-        {lunar.longLabel}
-      </p>
-      <p className="text-center text-[12px] text-white/35">
-        {lunar.phase} · {lunar.illumination}% · in-app YouNeeK time
-      </p>
-      <HapticTimeManager time={time} />
-      <FrequencyManager time={time} />
+
+      <AppPanel className="!p-4">
+        {scopeOn ? (
+          <TimeScope />
+        ) : (
+          <ClockDial time={time} isGlitching={false} source={source} handStyle={handStyle} lunar={lunar} />
+        )}
+      </AppPanel>
+
+      <AppPanel className="text-center">
+        <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-[#7CFF6B]">Lunar date</p>
+        <p className="mt-2 text-[13px] text-white/75">{lunar.longLabel}</p>
+        <p className="mt-1 text-[12px] text-white/40">
+          {lunar.phase} · {lunar.illumination}%
+        </p>
+      </AppPanel>
+
+      <AppPanel>
+        <HapticTimeManager time={time} />
+        <FrequencyManager time={time} />
+      </AppPanel>
+
       {!scopeOn && (
-        <div className={`w-full overflow-visible ${isGlitching ? 'animate-glitch' : ''}`}>
+        <AppPanel className="flex flex-col gap-5">
           <ClockTypeSelect value={source} />
-          <div className="mt-4">
-            <HandStyleSelect value={handStyle} />
-          </div>
-          <div className="mt-5">
-            <ClockTimeLegend now={now} time={time} source={source} lunar={lunar} />
-          </div>
-          <ClockDial time={time} isGlitching={isGlitching} source={source} handStyle={handStyle} lunar={lunar} />
-        </div>
+          <HandStyleSelect value={handStyle} />
+          <ClockTimeLegend now={now} time={time} source={source} lunar={lunar} />
+          <DigitalTimeDisplay time={time} source={source} />
+        </AppPanel>
       )}
-      <DayProgressBar time={time} />
+
+      <AppPanel>
+        <DayProgressBar time={time} />
+      </AppPanel>
       <LiveMoonPhaseCard />
       <AboutSection />
     </div>

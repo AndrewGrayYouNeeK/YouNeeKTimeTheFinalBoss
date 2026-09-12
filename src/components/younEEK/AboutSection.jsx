@@ -1,10 +1,9 @@
-const PURPLE = '#d24dff';
-const BLUE = '#3ecbff';
+const GREEN = '#7CFF6B';
 
 const sections = [
   {
     title: 'What is YouNeeK Time',
-    body: 'YouNeeK Time splits one real day into 100 hours, 100 minutes, and 100 seconds. That is 1,000,000 ticks from midnight to midnight. It is not a 10-hour clock and it is not 24:60:60.',
+    body: 'YouNeeK Time is 100.100.100 — 100 hours, 100 minutes, and 100 seconds in one civilian day. That is 1,000,000 ticks from midnight to midnight. Not 10 hours. Not a four-digit clock.',
   },
   {
     title: 'How to Read YouNeeK Time',
@@ -18,43 +17,43 @@ const sections = [
   },
   {
     title: 'The Digital Display',
-    body: 'The big digits are YouNeeK hour and YouNeeK minute (00•99). Under the dial, the legend also shows regular 12:60:60 so you can check the conversion. Switch the dropdown to Regular Time if you want the hands on a normal clock.',
+    body: 'The readout is hour.minute.second, each 00 to 99. That is 100.100.100.',
   },
   {
     title: 'The Analog Face',
-    body: 'The hour hand goes around once per real day, same sweep as a 24-hour clock. 00 is at the top, 25 at the right, 50 at the bottom, 75 at the left. The minute hand laps once every YouNeeK hour (14.4 real minutes). The second hand laps once every YouNeeK minute (8.64 real seconds). It does not go around twice a day like a 12-hour watch.',
+    body: 'The hour hand goes around once per real day. 00 is at the top, 25 at the right, 50 at the bottom, 75 at the left. The minute hand laps once every YouNeeK hour (14.4 real minutes). The second hand laps once every YouNeeK minute (8.64 real seconds).',
   },
   {
     title: 'Time Scope',
-    body: 'TIME mode is one YouNeeK hour per sweep (100 YouNeeK minutes). 369 mode is a three-phase day cycle. The beam is now. Blips appear when the beam hits them.',
+    body: 'The Time Scope is a 100-hour PPI. One beam sweep is one YouNeeK hour (14.4 civilian minutes). 369 mode sweeps a 3–6–9 cycle. Events in the current window show as arcs and blips.',
   },
 ];
 
 export default function AboutSection() {
   return (
-    <section className="w-full px-5 py-6 sm:px-6 flex flex-col items-center text-center">
+    <section className="w-full rounded-2xl border border-[#7CFF6B]/15 bg-white/[0.04] px-5 py-6 text-center sm:px-6">
       <div className="space-y-6 max-w-[32rem]">
         {sections.map((section, index) => (
-          <div key={section.title} className={index === 0 ? '' : 'border-t border-[#d24dff]/20 pt-6'}>
+          <div key={section.title} className={index === 0 ? '' : 'border-t border-white/8 pt-6'}>
             <h2 className="font-mono text-sm uppercase tracking-[0.35em] sm:text-[15px]"
-              style={{ color: PURPLE, textShadow: `0 0 8px ${PURPLE}88` }}>
+              style={{ color: GREEN, textShadow: `0 0 8px ${GREEN}88` }}>
               {section.title}
             </h2>
 
-            <p className="mt-4 max-w-[32rem] font-mono text-[13px] leading-8 tracking-[0.06em] text-white/70 sm:text-[14px]">
+            <p className="mt-4 max-w-[32rem] font-mono text-[13px] leading-8 tracking-[0.08em] text-white/45 sm:text-[14px]">
               {section.body}
             </p>
 
             {section.points && (
-              <ul className="mt-4 space-y-3 font-mono text-[13px] tracking-[0.08em] text-white/80 sm:text-[14px] inline-block text-left">
+              <ul className="mt-4 space-y-3 font-mono text-[13px] tracking-[0.08em] text-white/70 sm:text-[14px] inline-block text-left">
                 {section.points.map((point) => {
                   const [value, label] = point.split(' = ');
                   return (
                     <li key={point} className="flex items-center gap-3">
                       <span className="h-1.5 w-1.5 rounded-full flex-shrink-0"
-                        style={{ background: BLUE, boxShadow: `0 0 10px ${BLUE}cc` }} />
-                      <span className="min-w-[2.4rem] font-semibold" style={{ color: BLUE }}>{value}</span>
-                      <span className="text-white/55">= {label}</span>
+                        style={{ background: GREEN, boxShadow: `0 0 10px ${GREEN}cc` }} />
+                      <span className="min-w-[2.4rem] font-semibold" style={{ color: GREEN }}>{value}</span>
+                      <span className="text-white/42">= {label}</span>
                     </li>
                   );
                 })}

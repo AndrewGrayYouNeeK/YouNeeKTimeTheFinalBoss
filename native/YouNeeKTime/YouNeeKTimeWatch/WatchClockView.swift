@@ -63,12 +63,12 @@ struct WatchSettings: View {
             Section("Watch") {
                 Picker("Display", selection: $watchDisplay) {
                     Text("Clock Face").tag("face")
-                    Text("Decimal Clock").tag("decimal")
+                    Text("100.100.100").tag("decimal")
                 }
             }
             Section("Time for face & haptics") {
                 Picker("Clock", selection: $clockSource) {
-                    Text("YouNeeK Digital").tag("youneek")
+                    Text("100.100.100").tag("youneek")
                     Text("YouNeeK Time").tag("youneek12")
                     Text("Regular Time").tag("regular")
                     Text("Army YouNeeK Time").tag("army")
@@ -83,7 +83,7 @@ func sourceTitle(_ source: String) -> String {
     case "regular": return "REGULAR"
     case "army": return "PINEAL ARMY"
     case "youneek12": return "YOUNEEK TIME"
-    default: return "YOUNEEK DIGITAL"
+    default: return "100.100.100"
     }
 }
 

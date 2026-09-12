@@ -1,8 +1,5 @@
 import YouNeekClock from '@/components/YouNeekClock';
-import StarsBackground from '@/components/younEEK/StarsBackground';
-import VolcanoBackground from '@/components/landing/VolcanoBackground';
-import AshCoalOverlay from '@/components/landing/AshCoalOverlay';
-import SkyCraft from '@/components/younEEK/SkyCraft';
+import PageShell from '@/components/PageShell';
 import PullToRefresh from '@/components/PullToRefresh';
 
 export default function Index() {
@@ -12,16 +9,10 @@ export default function Index() {
   };
 
   return (
-    <div className="relative min-h-screen text-white" style={{ background: 'transparent' }}>
-      <StarsBackground />
-      <VolcanoBackground />
-      <AshCoalOverlay />
-      <SkyCraft />
+    <PageShell>
       <PullToRefresh onRefresh={handleRefresh}>
-        <div className="relative z-10">
-          <YouNeekClock />
-        </div>
+        <YouNeekClock />
       </PullToRefresh>
-    </div>
+    </PageShell>
   );
 }

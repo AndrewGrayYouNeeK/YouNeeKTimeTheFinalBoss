@@ -1,5 +1,4 @@
-const PURPLE = '#c026ff';
-const BLUE = '#00b7ff';
+const BLUE = '#7CFF6B';
 
 function pad(value) { return String(value).padStart(2, '0'); }
 
@@ -12,8 +11,8 @@ export default function DayProgressBar({ time }) {
           className="h-full rounded-full transition-all"
           style={{
             width: `${time.progress * 100}%`,
-            background: `linear-gradient(90deg, ${PURPLE}, ${BLUE})`,
-            boxShadow: `0 0 18px ${BLUE}cc, 0 0 10px ${PURPLE}88`,
+            background: `linear-gradient(90deg, #3d8f36, ${BLUE})`,
+            boxShadow: `0 0 18px ${BLUE}99`,
           }}
         />
       </div>
