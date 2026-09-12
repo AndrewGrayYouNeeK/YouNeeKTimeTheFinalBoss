@@ -58,10 +58,10 @@ const ClockDial = forwardRef(function ClockDial(
         aria-hidden="true"
       />
 
-      <ClockTicks />
+      <ClockTicks source={source} />
 
       <div className="pointer-events-none absolute inset-0 z-30">
-        <ClockLabels lunar={lunar} />
+        <ClockLabels lunar={lunar} source={source} />
         <ClockHands time={time} source={source} handStyle={handStyle} omitSeconds={omitSeconds} />
       </div>
     </div>
