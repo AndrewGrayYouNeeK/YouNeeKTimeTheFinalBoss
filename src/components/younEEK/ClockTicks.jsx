@@ -1,7 +1,7 @@
-import { BLUE, PURPLE } from './clockConstants';
+import { PURPLE } from './clockConstants';
 
-// Single rim like the concept art: 12 slim blue hour bars,
-// four slim purple marks between each pair
+const HOUR_MARK = '#3d9eff';
+
 const RIM_TICKS = Array.from({ length: 60 }, (_, i) => {
   const angle = (i / 60) * Math.PI * 2 - Math.PI / 2;
   const isHour = i % 5 === 0;
@@ -13,7 +13,7 @@ const RIM_TICKS = Array.from({ length: 60 }, (_, i) => {
     x2: 200 + Math.cos(angle) * innerR,
     y2: 200 + Math.sin(angle) * innerR,
     strokeWidth: isHour ? 2.2 : 1.2,
-    color: isHour ? BLUE : PURPLE,
+    color: isHour ? HOUR_MARK : PURPLE,
     key: `rim-${i}`,
   };
 });
