@@ -213,7 +213,7 @@ export default function TimeScope() {
       const size = css;
       const cx = size / 2;
       const cy = size / 2;
-      const maxR = size / 2;
+      const maxR = size / 2 * 0.78;
       const innerR = maxR * 0.28;
       const midR = maxR * 0.58;
       const outerR = maxR * 0.86;
@@ -265,7 +265,7 @@ export default function TimeScope() {
           [270, '75'],
         ];
         for (const [deg, text] of labels) {
-          const [lx, ly] = polar(cx, cy, outerR + size * 0.055, deg);
+          const [lx, ly] = polar(cx, cy, outerR + size * 0.06, deg);
           ctx.fillText(text, lx, ly);
         }
       } else {
@@ -274,7 +274,7 @@ export default function TimeScope() {
           [120, '3'],
           [240, '6'],
         ]) {
-          const [lx, ly] = polar(cx, cy, outerR + size * 0.055, deg);
+          const [lx, ly] = polar(cx, cy, outerR + size * 0.06, deg);
           ctx.fillText(text, lx, ly);
         }
       }
