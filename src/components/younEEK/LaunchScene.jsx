@@ -8,7 +8,7 @@ export default function LaunchScene({ sceneFade, parallax }) {
       <div
         className="absolute inset-[-12%] will-change-transform"
         style={{
-          backgroundImage: 'url(/astronaut-dial-bg.png)',
+          backgroundImage: 'url(/astronaut-dial-bg.webp)',
           backgroundSize: 'cover',
           backgroundPosition: 'center 40%',
           transform: `translate3d(0, ${parallax * 0.55}px, 0) scale(1.08)`,

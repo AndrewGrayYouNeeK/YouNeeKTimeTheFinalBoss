@@ -23,7 +23,7 @@ export default function ShipHangarScene({ p, screenHeight, army = false }) {
       <div
         className="absolute inset-[-16%] will-change-transform"
         style={{
-          backgroundImage: 'url(/astronaut-dial-bg.png)',
+          backgroundImage: 'url(/astronaut-dial-bg.webp)',
           backgroundSize: 'cover',
           backgroundPosition: 'center 45%',
           opacity: army ? 0.55 : 0.88,

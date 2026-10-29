@@ -1,65 +1,43 @@
 import { BLUE, PURPLE, YELLOW, ARMY_CYAN } from './clockConstants';
 import { getHandRotations } from '@/lib/clockPrefs';
+import {
+  L_SHOULDER, R_SHOULDER, ARM_RATIO, HOUR_ARM_LEN, MINUTE_ARM_LEN,
+} from './astronautGeometry';
 
 const CX = 200;
 const CY = 200;
 const CYAN = ARMY_CYAN;
 const MAGENTA = PURPLE;
-const L_SHOULDER_X = 174;
-const L_SHOULDER_Y = 166;
-const R_SHOULDER_X = 226;
-const R_SHOULDER_Y = 166;
-const ARM_RATIO = 0.166;
-const HOUR_ARM_H = 104;
-const HOUR_ROD_TIP = 140;
-const MIN_ARM_H = 122;
-const MIN_ROD_TIP = 160;
 
-function PurpleYHub() {
+function ShoulderPivots({ color }) {
   return (
     <g>
-      <circle cx={CX} cy={CY} r="18" fill="#050505" stroke={PURPLE} strokeWidth="2.8"
-        style={{ filter: `drop-shadow(0 0 6px ${PURPLE}88)` }} />
-      <circle cx={CX} cy={CY} r="12.5" fill="#0a0a0a" stroke={PURPLE} strokeWidth="1.2" opacity="0.95" />
-      <path
-        d={`M ${CX - 5.5} ${CY - 7} L ${CX} ${CY - 0.5} L ${CX + 5.5} ${CY - 7} M ${CX} ${CY - 0.5} L ${CX} ${CY + 7.5}`}
-        stroke={PURPLE}
-        strokeWidth="2.4"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        fill="none"
-        style={{ filter: `drop-shadow(0 0 4px ${PURPLE})` }}
-      />
+      {[L_SHOULDER, R_SHOULDER].map((p) => (
+        <circle key={p.x} cx={p.x} cy={p.y} r="4" fill="#0a0a0a" stroke={color} strokeWidth="1.6"
+          style={{ filter: `drop-shadow(0 0 4px ${color})` }} />
+      ))}
     </g>
   );
 }
 
-function BeamArm({ x, y, angle, armH, rodTip, color, clipId, mirror }) {
-  const armW = armH * ARM_RATIO;
+// The astronaut's arm (with its glowing saber) is the hand. It rotates around the shoulder.
+function AstroArm({ shoulder, angle, length, color, mirror }) {
+  const w = length * ARM_RATIO;
   return (
-    <g transform={`translate(${x} ${y}) rotate(${angle})`} style={{ filter: `drop-shadow(0 0 10px ${color})` }}>
-      <line x1="0" y1={-armH * 0.5} x2="0" y2={-rodTip} stroke={color} strokeWidth="4.5" strokeLinecap="round" />
-      <line x1="0" y1={-armH * 0.5} x2="0" y2={-rodTip + 3} stroke="#ffffff" strokeWidth="1.6" strokeLinecap="round" opacity="0.85" />
+    <g transform={`translate(${shoulder.x} ${shoulder.y}) rotate(${angle})`}
+      style={{ filter: `drop-shadow(0 0 5px ${color}) drop-shadow(0 0 2px ${color})` }}>
       <g transform={mirror ? 'scale(-1 1)' : undefined}>
-        <image
-          href="/astro-arm.png"
-          x={-armW / 2}
-          y={-armH}
-          width={armW}
-          height={armH}
-          preserveAspectRatio="xMidYMid meet"
-          clipPath={`url(#${clipId})`}
-        />
+        <image href="/astro-arm.webp" x={-w / 2} y={-length} width={w} height={length} />
       </g>
     </g>
   );
 }
 
-function GlowHands({ hour, minute, clipHour, clipMin }) {
+function GlowHands({ hour, minute }) {
   return (
     <g>
-      <BeamArm x={L_SHOULDER_X} y={L_SHOULDER_Y} angle={hour} armH={HOUR_ARM_H} rodTip={HOUR_ROD_TIP} color={BLUE} clipId={clipHour} mirror />
-      <BeamArm x={R_SHOULDER_X} y={R_SHOULDER_Y} angle={minute} armH={MIN_ARM_H} rodTip={MIN_ROD_TIP} color={PURPLE} clipId={clipMin} />
+      <AstroArm shoulder={L_SHOULDER} angle={hour} length={HOUR_ARM_LEN} color={BLUE} mirror />
+      <AstroArm shoulder={R_SHOULDER} angle={minute} length={MINUTE_ARM_LEN} color={PURPLE} />
     </g>
   );
 }
@@ -138,20 +116,21 @@ function RingDartHands({ hour, minute }) {
   const minuteSpan = ((minute % 360) + 360) % 360 || 0.01;
   return (
     <g>
-      <path d={ringArc(118, hourSpan)} fill="none" stroke={CYAN} strokeWidth="8" strokeLinecap="round"
+      <path d={ringArc(120, hourSpan)} fill="none" stroke={CYAN} strokeWidth="6" strokeLinecap="round"
         style={{ filter: `drop-shadow(0 0 4px ${CYAN}99)` }} />
-      <path d={ringArc(148, minuteSpan)} fill="none" stroke={MAGENTA} strokeWidth="5" strokeLinecap="round"
+      <path d={ringArc(131, minuteSpan)} fill="none" stroke={MAGENTA} strokeWidth="4" strokeLinecap="round"
         style={{ filter: `drop-shadow(0 0 4px ${MAGENTA}99)` }} />
-      <PurpleYHub />
+      <ShoulderPivots color={PURPLE} />
     </g>
   );
 }
 
-function Blade({ angle, length, width, color }) {
+function Blade({ shoulder, angle, length, width, color }) {
+  const { x, y } = shoulder;
   return (
-    <g transform={`rotate(${angle} ${CX} ${CY})`}>
+    <g transform={`rotate(${angle} ${x} ${y})`}>
       <polygon
-        points={`${CX},${CY - length} ${CX - width},${CY + 8} ${CX + width},${CY + 8}`}
+        points={`${x},${y - length} ${x - width},${y + 4} ${x + width},${y + 4}`}
         fill={color}
         opacity="0.92"
         style={{ filter: `drop-shadow(0 0 5px ${color}aa)` }}
@@ -163,9 +142,9 @@ function Blade({ angle, length, width, color }) {
 function CometHands({ hour, minute }) {
   return (
     <g>
-      <Blade angle={hour} length={96} width={7} color={CYAN} />
-      <Blade angle={minute} length={128} width={5} color={MAGENTA} />
-      <PurpleYHub />
+      <Blade shoulder={L_SHOULDER} angle={hour} length={92} width={6} color={CYAN} />
+      <Blade shoulder={R_SHOULDER} angle={minute} length={124} width={4.5} color={MAGENTA} />
+      <ShoulderPivots color={PURPLE} />
     </g>
   );
 }
@@ -173,9 +152,9 @@ function CometHands({ hour, minute }) {
 function PulseHands({ hour, minute }) {
   return (
     <g>
-      <Blade angle={hour} length={90} width={6} color={CYAN} />
-      <Blade angle={minute} length={122} width={4.5} color={MAGENTA} />
-      <PurpleYHub />
+      <Blade shoulder={L_SHOULDER} angle={hour} length={88} width={5} color={CYAN} />
+      <Blade shoulder={R_SHOULDER} angle={minute} length={120} width={4} color={MAGENTA} />
+      <ShoulderPivots color={PURPLE} />
     </g>
   );
 }
@@ -184,25 +163,13 @@ export default function ClockHands({ time, source = 'youneek', handStyle = 'need
   const { hour, minute, second } = getHandRotations(time, source);
   const props = { hour, minute };
   const glow = handStyle === 'needle' || !['ring', 'comet', 'pulse'].includes(handStyle);
-  const clipHour = 'armClipHour';
-  const clipMin = 'armClipMin';
 
   return (
     <svg viewBox="0 0 400 400" className="absolute inset-0 h-full w-full" style={{ overflow: 'visible' }}>
-      {glow && (
-        <defs>
-          <clipPath id={clipHour}>
-            <rect x={-HOUR_ARM_H * ARM_RATIO} y={-HOUR_ARM_H * 0.72} width={HOUR_ARM_H * ARM_RATIO * 2} height={HOUR_ARM_H * 0.72 + 5} />
-          </clipPath>
-          <clipPath id={clipMin}>
-            <rect x={-MIN_ARM_H * ARM_RATIO} y={-MIN_ARM_H * 0.72} width={MIN_ARM_H * ARM_RATIO * 2} height={MIN_ARM_H * 0.72 + 5} />
-          </clipPath>
-        </defs>
-      )}
       {handStyle === 'ring' && <RingDartHands {...props} />}
       {handStyle === 'comet' && <CometHands {...props} />}
       {handStyle === 'pulse' && <PulseHands {...props} />}
-      {glow && <GlowHands hour={hour} minute={minute} clipHour={clipHour} clipMin={clipMin} />}
+      {glow && <GlowHands hour={hour} minute={minute} />}
       {!omitSeconds && !glow && <YellowSeconds second={second} handStyle={handStyle} />}
     </svg>
   );

@@ -2,19 +2,19 @@ export default function AstronautArt({ className = 'relative', style, thruster =
   return (
     <div className={className} style={style} aria-hidden="true">
       <img
-        src="/astro-leg.png"
+        src="/astro-leg.webp"
         alt=""
         className="absolute"
         style={{ left: '28%', top: '48%', width: '18%', height: '48%', transform: 'rotate(18deg)', transformOrigin: 'top center' }}
       />
       <img
-        src="/astro-leg.png"
+        src="/astro-leg.webp"
         alt=""
         className="absolute"
         style={{ left: '54%', top: '48%', width: '18%', height: '48%', transform: 'rotate(-18deg)', transformOrigin: 'top center' }}
       />
       <img
-        src="/astro-torso.png"
+        src="/astro-torso.webp"
         alt=""
         className="absolute left-1/2 top-0 -translate-x-1/2"
         style={{ width: '72%', height: '58%', objectFit: 'contain' }}
@@ -22,7 +22,7 @@ export default function AstronautArt({ className = 'relative', style, thruster =
       {arms && (
         <>
           <img
-            src="/astro-arm.png"
+            src="/astro-arm.webp"
             alt=""
             className="absolute"
             style={{
@@ -37,7 +37,7 @@ export default function AstronautArt({ className = 'relative', style, thruster =
             }}
           />
           <img
-            src="/astro-arm.png"
+            src="/astro-arm.webp"
             alt=""
             className="absolute"
             style={{

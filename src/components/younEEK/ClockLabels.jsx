@@ -7,38 +7,35 @@ const polarPoint = (radius, angleDeg) => {
 
 function labelsFor(source) {
   if (source === 'regular') {
-    return [
-      { label: '12', angle: 0 },
-      { label: '3', angle: 90 },
-      { label: '6', angle: 180 },
-      { label: '9', angle: 270 },
-    ];
+    return Array.from({ length: 12 }, (_, i) => ({ label: String(i === 0 ? 12 : i), angle: i * 30 }));
   }
-  return [
-    { label: '00', angle: 0 },
-    { label: '25', angle: 90 },
-    { label: '50', angle: 180 },
-    { label: '75', angle: 270 },
-  ];
+  // 100.100.100: label every 10 (00, 10, ... 90)
+  return Array.from({ length: 10 }, (_, i) => ({ label: String(i * 10).padStart(2, '0'), angle: i * 36 }));
 }
 
 export default function ClockLabels({ source = 'youneek' }) {
+  const regular = source === 'regular';
   return (
     <svg viewBox="0 0 400 400" className="pointer-events-none absolute inset-0 h-full w-full">
       {labelsFor(source).map((item) => {
-        const p = polarPoint(158, item.angle);
+        const p = polarPoint(147, item.angle);
+        const top = item.angle === 0;
         return (
           <text
             key={`${source}-${item.label}`}
             x={p.x}
             y={p.y}
             textAnchor="middle"
-            dominantBaseline="middle"
-            fill={HOUR_MARK}
-            fontSize="16"
-            fontFamily="monospace"
-            fontWeight="600"
-            style={{ filter: `drop-shadow(0 0 4px ${HOUR_MARK}88)` }}
+            dominantBaseline="central"
+            fill={top ? '#ffffff' : HOUR_MARK}
+            stroke="#000"
+            strokeWidth="3.5"
+            strokeLinejoin="round"
+            paintOrder="stroke"
+            fontSize={regular ? 24 : 21}
+            fontFamily="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace"
+            fontWeight="800"
+            style={{ filter: `drop-shadow(0 0 5px ${top ? '#ffffff' : HOUR_MARK}99)` }}
           >
             {item.label}
           </text>

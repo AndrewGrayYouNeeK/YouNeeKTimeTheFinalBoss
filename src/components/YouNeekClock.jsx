@@ -70,7 +70,10 @@ export default function YouNeekClock() {
         {scopeOn ? (
           <TimeScope />
         ) : (
-          <ClockDial time={time} isGlitching={false} source={source} handStyle={handStyle} lunar={lunar} />
+          <div className="flex flex-col items-center gap-3">
+            <ClockDial time={time} isGlitching={false} source={source} handStyle={handStyle} lunar={lunar} />
+            <DigitalTimeDisplay time={time} source={source} />
+          </div>
         )}
       </AppPanel>
 
@@ -92,7 +95,6 @@ export default function YouNeekClock() {
           <ClockTypeSelect value={source} />
           <HandStyleSelect value={handStyle} />
           <ClockTimeLegend now={now} time={time} source={source} lunar={lunar} />
-          <DigitalTimeDisplay time={time} source={source} />
         </AppPanel>
       )}
 

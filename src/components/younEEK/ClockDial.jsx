@@ -2,9 +2,10 @@ import { useState, useEffect, forwardRef } from 'react';
 import ClockTicks from './ClockTicks';
 import ClockLabels from './ClockLabels';
 import ClockHands from './ClockHands';
+import AstronautBody from './AstronautBody';
 
-const DEFAULT_CENTER_IMAGE = '/astronaut-concept.png';
-const BANNED_FACES = ['/clock-face-default.jpg', 'clock-face-default', 'volcano-bg'];
+const DEFAULT_CENTER_IMAGE = '/astronaut-dial-bg.webp';
+const BANNED_FACES = ['/clock-face-default.jpg', 'clock-face-default', 'volcano-bg', 'astronaut-concept'];
 
 function resolveFace() {
   const stored = localStorage.getItem('clockFaceUrl');
@@ -26,7 +27,7 @@ const ClockDial = forwardRef(function ClockDial(
     hubRef,
     omitSeconds = false,
     lunar,
-    maxWidthClass = 'max-w-[22rem] sm:max-w-[24rem]',
+    maxWidthClass = 'max-w-[24rem] sm:max-w-[30rem]',
   },
   ref
 ) {
@@ -59,7 +60,18 @@ const ClockDial = forwardRef(function ClockDial(
         aria-hidden="true"
       />
 
+      {/* darken the number ring so labels stay legible over any face image */}
+      <div
+        className="pointer-events-none absolute inset-[8%] z-[12] rounded-full"
+        style={{ background: 'radial-gradient(circle, rgba(0,0,0,0) 52%, rgba(0,0,0,0.55) 70%, rgba(0,0,0,0.8) 100%)' }}
+        aria-hidden="true"
+      />
+
       <ClockTicks source={source} />
+
+      <div className="pointer-events-none absolute inset-0 z-[25]">
+        <AstronautBody />
+      </div>
 
       <div className="pointer-events-none absolute inset-0 z-30">
         <ClockLabels source={source} />
