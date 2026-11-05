@@ -1,20 +1,20 @@
 import {
-  CX, TORSO_X, TORSO_Y, TORSO_W, TORSO_H, LEG_H, LEG_W,
+  CX, TORSO_X, TORSO_Y, TORSO_W, TORSO_H, LEG_H, LEG_W, LEG_DX,
 } from './astronautGeometry';
 
 // Static astronaut (legs + torso) in the centre of the dial. The arms are the clock hands (ClockHands).
 export default function AstronautBody() {
-  const legTop = TORSO_Y + TORSO_H - 14;
+  const legTop = TORSO_Y + TORSO_H - 16;
   const leg = (dir) => (
     <image
       href="/astro-leg.webp"
-      x={CX + dir * 17 - LEG_W / 2}
+      x={CX + dir * LEG_DX - LEG_W / 2}
       y={legTop}
       width={LEG_W}
       height={LEG_H}
       preserveAspectRatio="none"
       filter="url(#astroShadow)"
-      transform={`rotate(${dir * -5} ${CX + dir * 17} ${legTop})`}
+      transform={`rotate(${dir * -3} ${CX + dir * LEG_DX} ${legTop})`}
     />
   );
   return (

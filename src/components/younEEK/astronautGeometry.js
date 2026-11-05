@@ -9,10 +9,11 @@ export const TORSO_H = TORSO_W * (556 / 400);
 export const TORSO_X = CX - TORSO_W / 2;
 export const TORSO_Y = 90;
 
-// Legs (public/astro-leg.webp is 118x700)
-export const LEG_H = 82;
+// Legs (public/astro-leg.webp is 118x530: the shin was shortened so it stays proportionate)
+export const LEG_H = 138;
 // Wider than the raw aspect ratio so the legs have the same bulk as the torso (stretched with preserveAspectRatio=none).
-export const LEG_W = 21;
+export const LEG_W = 47;
+export const LEG_DX = 24;
 
 // Shoulder pivot points: the arms (clock hands) rotate around these, not around the dial centre.
 export const SHOULDER_DX = 33;
