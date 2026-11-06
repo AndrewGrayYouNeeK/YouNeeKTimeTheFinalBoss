@@ -16,9 +16,24 @@ import { PREFS_EVENT, readClockSource, readHandStyle } from '@/lib/clockPrefs';
 import { getLunarDate } from '@/lib/lunarCalendar';
 import TimeScope from '@/components/TimeScope';
 import AppPanel from '@/components/AppPanel';
-import VolcanoBackground from '@/components/landing/VolcanoBackground';
 import AshCoalOverlay from '@/components/landing/AshCoalOverlay';
 import useYouNeekHourEruption from '@/hooks/useYouNeekHourEruption';
+
+function formatLocalLine(now) {
+  const parts = new Intl.DateTimeFormat('en-US', {
+    timeZone: 'America/Chicago',
+    hour: 'numeric',
+    minute: '2-digit',
+    hour12: true,
+    timeZoneName: 'shortOffset',
+  }).formatToParts(now);
+  const get = (t) => parts.find((p) => p.type === t)?.value || '';
+  const hour = get('hour');
+  const minute = get('minute');
+  const dayPeriod = get('dayPeriod');
+  const tz = get('timeZoneName') || 'UTC-6';
+  return `• ${hour}:${minute} ${dayPeriod} ${tz}`;
+}
 
 export default function YouNeekClock() {
   const [now, setNow] = useState(() => new Date());
@@ -52,12 +67,16 @@ export default function YouNeekClock() {
   }, []);
 
   return (
-    <div className="relative flex w-full flex-col items-center gap-6">
-      <VolcanoBackground erupting={erupting} />
+    <div className="relative flex w-full flex-col items-center gap-5 sm:gap-6">
+      {/* Hourly ash across the whole screen; volcano smoke lives inside the dial */}
       <AshCoalOverlay active={erupting} />
       <StickyFallAstronaut dialRef={dialRef} />
 
       <ClockHeader />
+
+      <p className="font-mono text-[11px] uppercase tracking-[0.28em] text-white/40">
+        {formatLocalLine(now)}
+      </p>
 
       <div className="flex w-full overflow-hidden rounded-2xl border border-white/10 font-mono text-[10px] uppercase tracking-[0.25em]">
         <button
@@ -76,11 +95,16 @@ export default function YouNeekClock() {
         </button>
       </div>
 
-      <AppPanel className="!p-4">
-        {scopeOn ? (
+      {scopeOn ? (
+        <AppPanel className="!p-4 w-full">
           <TimeScope />
-        ) : (
-          <div className="flex flex-col items-center gap-3">
+        </AppPanel>
+      ) : (
+        <>
+          {/* Digital ABOVE the dial — reference layout */}
+          <DigitalTimeDisplay time={time} source={source} />
+
+          <div className="w-full">
             <ClockDial
               ref={dialRef}
               time={time}
@@ -88,13 +112,17 @@ export default function YouNeekClock() {
               source={source}
               handStyle={handStyle}
               lunar={lunar}
+              erupting={erupting}
             />
-            <DigitalTimeDisplay time={time} source={source} />
           </div>
-        )}
-      </AppPanel>
 
-      <AppPanel className="text-center">
+          <div className="w-full px-1">
+            <DayProgressBar time={time} />
+          </div>
+        </>
+      )}
+
+      <AppPanel className="text-center w-full">
         <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-[#7CFF6B]">Lunar date</p>
         <p className="mt-2 text-[13px] text-white/75">{lunar.longLabel}</p>
         <p className="mt-1 text-[12px] text-white/40">
@@ -102,23 +130,21 @@ export default function YouNeekClock() {
         </p>
       </AppPanel>
 
-      <AppPanel>
-        <HapticTimeManager time={time} />
-        <FrequencyManager time={time} />
-      </AppPanel>
+      <LiveMoonPhaseCard />
 
       {!scopeOn && (
-        <AppPanel className="flex flex-col gap-5">
+        <AppPanel className="flex w-full flex-col gap-5">
           <ClockTypeSelect value={source} />
           <HandStyleSelect value={handStyle} />
           <ClockTimeLegend now={now} time={time} source={source} lunar={lunar} />
         </AppPanel>
       )}
 
-      <AppPanel>
-        <DayProgressBar time={time} />
+      <AppPanel className="w-full">
+        <HapticTimeManager time={time} />
+        <FrequencyManager time={time} />
       </AppPanel>
-      <LiveMoonPhaseCard />
+
       <AboutSection />
     </div>
   );

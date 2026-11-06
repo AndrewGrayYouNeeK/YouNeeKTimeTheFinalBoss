@@ -210,56 +210,79 @@
   transition: opacity 0.05s linear, filter 0.05s linear;
 }
 
-.lava-header-title,
-.lava-header-subtitle {
+/* Black stone wordmark — dim on black, revealed by cyan/purple lightning */
+.lightning-header-title,
+.lightning-header-subtitle {
   display: block;
   width: auto;
   height: auto;
   object-fit: contain;
   pointer-events: none;
-  filter: hue-rotate(195deg) saturate(1.25) brightness(1.35) contrast(1.06);
-  transition: filter 0.28s ease, opacity 0.28s ease;
-  opacity: 0.92;
+  transition: filter 0.18s ease, opacity 0.18s ease;
+  opacity: 0.42;
+  filter: brightness(0.55) contrast(1.15);
 }
 
-/* Zoomed OUT so the entire YOUNEEK TIME wordmark (meteor included) fits with padding */
-.lava-header-title {
-  width: min(68vw, 360px);
+.lightning-header-title {
+  width: min(78vw, 420px);
   max-width: 100%;
-  max-height: none;
   margin-inline: auto;
 }
 
-.lava-header-subtitle {
-  margin-top: 0.4rem;
-  width: min(42vw, 220px);
+.lightning-header-subtitle {
+  margin-top: 0.15rem;
+  width: min(48vw, 260px);
   max-width: 100%;
-  max-height: none;
   margin-inline: auto;
 }
 
 .logo-hit {
   position: relative;
   overflow: visible;
-  padding-top: 2.25rem;
-  padding-bottom: 0.75rem;
-  padding-inline: 1rem;
+  padding-top: 1.25rem;
+  padding-bottom: 0.35rem;
+  padding-inline: 0.75rem;
 }
 
-.logo-hit.is-lit .lava-header-title,
-.logo-hit.is-lit .lava-header-subtitle {
+.logo-hit.is-lit .lightning-header-title,
+.logo-hit.is-lit .lightning-header-subtitle {
   opacity: 1;
-  filter: hue-rotate(195deg) saturate(1.45) brightness(1.55) contrast(1.08)
-    drop-shadow(0 0 12px #7CFF6B88) drop-shadow(0 0 28px #7CFF6B44);
+  filter: brightness(1.35) contrast(1.2) saturate(1.35)
+    drop-shadow(0 0 10px #4dd2ffaa)
+    drop-shadow(0 0 28px #b84dff88)
+    drop-shadow(0 0 48px #2f8bff55);
 }
 
 @media (min-width: 640px) {
-  .lava-header-title {
-    width: min(55vw, 440px);
+  .lightning-header-title {
+    width: min(58vw, 480px);
   }
-  .lava-header-subtitle {
-    width: min(28vw, 260px);
+  .lightning-header-subtitle {
+    width: min(32vw, 300px);
   }
+}
+
+.logo-lightning {
+  position: absolute;
+  left: 8%;
+  top: -8%;
+  z-index: 2;
+  width: 3px;
+  height: 70%;
+  pointer-events: none;
+  background: linear-gradient(180deg, transparent 0%, #e8f7ff 20%, #4dd2ff 45%, #b84dff 70%, transparent 100%);
+  box-shadow: 0 0 10px #4dd2ff, 0 0 22px #b84dff, 0 0 40px #4dd2ff66;
+  transform-origin: top center;
+  animation: logo-lightning-strike 0.85s ease-out forwards;
+  clip-path: polygon(40% 0%, 70% 0%, 55% 28%, 85% 28%, 20% 100%, 40% 48%, 15% 48%);
+}
+
+@keyframes logo-lightning-strike {
+  0% { opacity: 0; transform: translate3d(-10%, -20%, 0) scaleY(0.2); }
+  12% { opacity: 1; transform: translate3d(10%, 0, 0) scaleY(1); }
+  28% { opacity: 0.15; }
+  40% { opacity: 1; transform: translate3d(55%, 10%, 0) scaleY(1.05); }
+  100% { opacity: 0; transform: translate3d(110%, 40%, 0) scaleY(0.6); }
 }
 
 .volcano-bg-drift {
@@ -384,6 +407,39 @@
     transform: translate3d(0, -82vh, 0) scale(1.7);
     opacity: 0;
   }
+}
+
+/* Dial-local smoke (clipped to clock face — not a page backdrop) */
+@keyframes dial-smoke-rise {
+  0% {
+    transform: translate3d(0, 0, 0) scale(0.7);
+    opacity: 0;
+  }
+  12% { opacity: 0.8; }
+  60% { opacity: 0.45; }
+  100% {
+    transform: translate3d(0, -55%, 0) scale(1.55);
+    opacity: 0;
+  }
+}
+
+@keyframes dial-ember-rise {
+  0% {
+    transform: translate3d(0, 0, 0) scale(1);
+    opacity: 0;
+  }
+  12% { opacity: 0.95; }
+  100% {
+    transform: translate3d(0, -70%, 0) scale(0.35);
+    opacity: 0;
+  }
+}
+
+.dial-erupt-flash {
+  background:
+    radial-gradient(ellipse at 30% 55%, #ff6a2a88 0%, #c026ff44 35%, transparent 65%);
+  animation: volcano-erupt-flash 0.9s ease-out 2;
+  mix-blend-mode: screen;
 }
 
 @keyframes ember-rise-straight {

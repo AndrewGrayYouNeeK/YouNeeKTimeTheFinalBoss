@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 
 /**
- * Full lava wordmark + byline. Sized so the ENTIRE logo (including meteor)
- * is readable — zoomed out, not cropped.
+ * Black stone wordmark revealed by electric lightning on the black starfield.
+ * Sized so the FULL logo is readable (zoomed out).
  */
 export default function ClockHeader() {
   const [lit, setLit] = useState(false);
@@ -11,23 +11,25 @@ export default function ClockHeader() {
   useEffect(() => {
     let dead = false;
     const timers = [];
-    const fly = () => {
+    const strike = () => {
       if (dead) return;
       setPass((n) => n + 1);
-      timers.push(window.setTimeout(() => { if (!dead) setLit(true); }, 380));
-      timers.push(window.setTimeout(() => { if (!dead) setLit(false); }, 1400));
+      timers.push(window.setTimeout(() => { if (!dead) setLit(true); }, 120));
+      timers.push(window.setTimeout(() => { if (!dead) setLit(false); }, 900));
+      timers.push(window.setTimeout(() => { if (!dead) setLit(true); }, 1050));
+      timers.push(window.setTimeout(() => { if (!dead) setLit(false); }, 1500));
     };
     const loop = () => {
       if (dead) return;
       timers.push(window.setTimeout(() => {
-        fly();
+        strike();
         loop();
-      }, 6500 + Math.random() * 7500));
+      }, 5500 + Math.random() * 6500));
     };
     timers.push(window.setTimeout(() => {
-      fly();
+      strike();
       loop();
-    }, 1400));
+    }, 900));
     return () => {
       dead = true;
       timers.forEach((id) => window.clearTimeout(id));
@@ -35,21 +37,20 @@ export default function ClockHeader() {
   }, []);
 
   return (
-    <div className={`logo-hit relative w-full overflow-visible px-2 py-4 text-center ${lit ? 'is-lit' : ''}`}>
-      {pass > 0 && <span key={pass} className="logo-meteor" aria-hidden="true" />}
+    <div className={`logo-hit relative w-full overflow-visible px-2 pt-3 pb-2 text-center ${lit ? 'is-lit' : ''}`}>
+      {pass > 0 && <span key={pass} className="logo-lightning" aria-hidden="true" />}
       <img
-        src="/lava-header-youneek-time.png"
+        src="/black-lightning-youneek-time.png"
         alt="YouNeeK Time"
-        className="lava-header-title mx-auto"
+        className="lightning-header-title mx-auto"
         draggable={false}
       />
       <img
-        src="/lava-header-by-andrew.png"
+        src="/black-lightning-by-andrew.png"
         alt="by Andrew Gray"
-        className="lava-header-subtitle mx-auto"
+        className="lightning-header-subtitle mx-auto"
         draggable={false}
       />
-      {/* Accessible text fallback for screen readers / SEO */}
       <h1 className="sr-only">YouNeeK Time</h1>
       <p className="sr-only">by Andrew Gray</p>
     </div>

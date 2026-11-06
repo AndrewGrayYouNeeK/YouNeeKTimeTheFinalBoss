@@ -9,7 +9,7 @@ export default function Index() {
   };
 
   return (
-    <PageShell stars={false}>
+    <PageShell stars>
       <PullToRefresh onRefresh={handleRefresh}>
         <YouNeekClock />
       </PullToRefresh>

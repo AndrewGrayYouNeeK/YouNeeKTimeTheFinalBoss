@@ -3,6 +3,7 @@ import ClockTicks from './ClockTicks';
 import ClockLabels from './ClockLabels';
 import ClockHands from './ClockHands';
 import AstronautBody from './AstronautBody';
+import DialSmoke from './DialSmoke';
 
 const DEFAULT_CENTER_IMAGE = '/astronaut-dial-bg.webp';
 const BANNED_FACES = ['/clock-face-default.jpg', 'clock-face-default', 'volcano-bg', 'astronaut-concept'];
@@ -27,7 +28,8 @@ const ClockDial = forwardRef(function ClockDial(
     hubRef,
     omitSeconds = false,
     lunar,
-    maxWidthClass = 'max-w-[24rem] sm:max-w-[30rem]',
+    erupting = false,
+    maxWidthClass = 'max-w-[26rem] sm:max-w-[32rem]',
   },
   ref
 ) {
@@ -54,13 +56,14 @@ const ClockDial = forwardRef(function ClockDial(
         </div>
       )}
 
+      <DialSmoke erupting={erupting} />
+
       <div
         ref={hubRef}
         className="absolute left-1/2 top-1/2 z-[15] h-[22%] w-[22%] -translate-x-1/2 -translate-y-1/2 rounded-full"
         aria-hidden="true"
       />
 
-      {/* darken the number ring so labels stay legible over any face image */}
       <div
         className="pointer-events-none absolute inset-[8%] z-[12] rounded-full"
         style={{ background: 'radial-gradient(circle, rgba(0,0,0,0) 52%, rgba(0,0,0,0.55) 70%, rgba(0,0,0,0.8) 100%)' }}
