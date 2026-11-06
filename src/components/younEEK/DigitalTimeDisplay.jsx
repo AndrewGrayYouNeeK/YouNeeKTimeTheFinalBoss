@@ -21,7 +21,7 @@ function DigitCard({ digit }) {
   );
 }
 
-const UNIT_LABELS = ['UNITS', '/100', '/100'];
+const UNIT_LABELS = ['UNITS', 'MIN', 'SEC'];
 
 export default function DigitalTimeDisplay({ time, source = 'youneek' }) {
   const chars = [...formatDigital(time, source)];
@@ -73,6 +73,11 @@ export default function DigitalTimeDisplay({ time, source = 'youneek' }) {
           );
         })}
       </div>
+      {source !== 'regular' && (
+        <p className="mt-2 font-mono text-[9px] uppercase tracking-[0.32em] text-white/30">
+          each counts to 100
+        </p>
+      )}
     </div>
   );
 }

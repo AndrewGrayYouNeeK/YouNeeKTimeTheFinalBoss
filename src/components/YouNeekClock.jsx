@@ -27,12 +27,9 @@ function formatLocalLine(now) {
     hour12: true,
     timeZoneName: 'shortOffset',
   }).formatToParts(now);
-  const get = (t) => parts.find((p) => p.type === t)?.value || '';
-  const hour = get('hour');
-  const minute = get('minute');
-  const dayPeriod = get('dayPeriod');
-  const tz = get('timeZoneName') || 'UTC-6';
-  return `• ${hour}:${minute} ${dayPeriod} ${tz}`;
+  const get = (type) => parts.find((p) => p.type === type)?.value || '';
+  const tz = (get('timeZoneName') || 'GMT-6').replace(/^GMT/, 'UTC');
+  return `• ${get('hour')}:${get('minute')} ${get('dayPeriod')} ${tz}`;
 }
 
 export default function YouNeekClock() {
