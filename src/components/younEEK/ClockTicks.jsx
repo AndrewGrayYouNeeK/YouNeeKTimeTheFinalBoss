@@ -8,7 +8,7 @@ function buildTicks(source) {
     const isCardinal = source === 'regular' ? i % 15 === 0 : i % 25 === 0;
     const isMajor = source === 'regular' ? i % 5 === 0 : i % 10 === 0;
     const outerR = 197;
-    const innerR = isCardinal ? 168 : isMajor ? 178 : 188;
+    const innerR = isCardinal ? 184 : isMajor ? 187 : 191;
     return {
       x1: 200 + Math.cos(angle) * outerR,
       y1: 200 + Math.sin(angle) * outerR,

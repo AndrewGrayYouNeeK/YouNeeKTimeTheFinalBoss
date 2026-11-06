@@ -1,7 +1,7 @@
-import { BLUE, PURPLE, YELLOW, ARMY_CYAN } from './clockConstants';
+import { PURPLE, YELLOW, ARMY_CYAN } from './clockConstants';
 import { getHandRotations } from '@/lib/clockPrefs';
 import {
-  L_SHOULDER, R_SHOULDER, ARM_RATIO, HOUR_ARM_LEN, MINUTE_ARM_LEN,
+  L_SHOULDER, R_SHOULDER, ARM_RATIO, HOUR_ARM_LEN, MINUTE_ARM_LEN, ARM_SEG,
 } from './astronautGeometry';
 
 const CX = 200;
@@ -20,15 +20,33 @@ function ShoulderPivots({ color }) {
   );
 }
 
-// The astronaut's arm (with its glowing saber) is the hand. It rotates around the shoulder.
+const LASER_BLUE = '#2f8bff';
+const LASER_PURPLE = '#b84dff';
+
+// Arm = short suit-arm from the shoulder + a lightning laser out to the tip. Rotates around the shoulder.
 function AstroArm({ shoulder, angle, length, color, mirror }) {
-  const w = length * ARM_RATIO;
+  const segW = ARM_SEG * ARM_RATIO * 1.9;
+  const beam = length - ARM_SEG + 6;
+  const y0 = -ARM_SEG + 4;
+  const zig = [];
+  const n = 7;
+  for (let i = 0; i <= n; i++) {
+    const y = y0 - (beam * i) / n;
+    const x = i === 0 || i === n ? 0 : (i % 2 ? 3.2 : -3.2);
+    zig.push(`${x},${y}`);
+  }
   return (
-    <g transform={`translate(${shoulder.x} ${shoulder.y}) rotate(${angle})`}
-      style={{ filter: `drop-shadow(0 0 5px ${color}) drop-shadow(0 0 2px ${color})` }}>
-      <g transform={mirror ? 'scale(-1 1)' : undefined}>
-        <image href="/astro-arm.webp" x={-w / 2} y={-length} width={w} height={length} />
+    <g transform={`translate(${shoulder.x} ${shoulder.y}) rotate(${angle})`}>
+      <line x1="0" y1={y0} x2="0" y2={y0 - beam} stroke={color} strokeWidth="7" strokeLinecap="round" opacity="0.35"
+        style={{ filter: `blur(2px)` }} />
+      <line x1="0" y1={y0} x2="0" y2={y0 - beam} stroke={color} strokeWidth="3.2" strokeLinecap="round"
+        style={{ filter: `drop-shadow(0 0 6px ${color}) drop-shadow(0 0 3px ${color})` }} />
+      <polyline points={zig.join(' ')} fill="none" stroke="#ffffff" strokeWidth="1.1" strokeLinejoin="round" opacity="0.95" />
+      <circle cx="0" cy={y0 - beam} r="3.4" fill="#fff" style={{ filter: `drop-shadow(0 0 6px ${color})` }} />
+      <g transform={mirror ? 'scale(-1 1)' : undefined} style={{ filter: 'drop-shadow(0 0 2px #000)' }}>
+        <image href="/astro-arm.webp" x={-segW / 2} y={-ARM_SEG - 2} width={segW} height={ARM_SEG + 6} preserveAspectRatio="none" />
       </g>
+      <circle cx="0" cy={y0} r="3.6" fill={color} stroke="#fff" strokeWidth="0.8" style={{ filter: `drop-shadow(0 0 5px ${color})` }} />
     </g>
   );
 }
@@ -36,66 +54,32 @@ function AstroArm({ shoulder, angle, length, color, mirror }) {
 function GlowHands({ hour, minute }) {
   return (
     <g>
-      <AstroArm shoulder={L_SHOULDER} angle={hour} length={HOUR_ARM_LEN} color={BLUE} mirror />
-      <AstroArm shoulder={R_SHOULDER} angle={minute} length={MINUTE_ARM_LEN} color={PURPLE} />
+      <AstroArm shoulder={L_SHOULDER} angle={hour} length={HOUR_ARM_LEN} color={LASER_BLUE} mirror />
+      <AstroArm shoulder={R_SHOULDER} angle={minute} length={MINUTE_ARM_LEN} color={LASER_PURPLE} />
     </g>
   );
 }
 
-function YellowSeconds({ second, handStyle }) {
-  if (handStyle === 'pulse') {
-    const tick = Math.floor((((second % 360) + 360) % 360) / 6);
-    const pulseAngle = tick * 6;
-    const rad = ((pulseAngle - 90) * Math.PI) / 180;
+// Seconds: a lit notch travelling continuously around the rim, with a fading trail.
+function RimSeconds({ second, count }) {
+  const a = ((second % 360) + 360) % 360;
+  const step = 360 / count;
+  const trail = Array.from({ length: 8 }, (_, i) => i);
+  const notch = (ang, op, w, key) => {
+    const r = ((ang - 90) * Math.PI) / 180;
     return (
-      <g>
-        <line
-          x1={CX + Math.cos(rad) * 186}
-          y1={CY + Math.sin(rad) * 186}
-          x2={CX + Math.cos(rad) * 198}
-          y2={CY + Math.sin(rad) * 198}
-          stroke={YELLOW}
-          strokeWidth="4.5"
-          strokeLinecap="round"
-          style={{ filter: `drop-shadow(0 0 10px ${YELLOW})` }}
-        />
-        <circle cx={CX + Math.cos(rad) * 198} cy={CY + Math.sin(rad) * 198} r="3" fill={YELLOW} />
-      </g>
+      <line key={key} x1={CX + Math.cos(r) * 184} y1={CY + Math.sin(r) * 184} x2={CX + Math.cos(r) * 198} y2={CY + Math.sin(r) * 198}
+        stroke={YELLOW} strokeWidth={w} strokeLinecap="round" opacity={op}
+        style={{ filter: `drop-shadow(0 0 ${op > 0.9 ? 9 : 4}px ${YELLOW})` }} />
     );
-  }
-  if (handStyle === 'comet') {
-    const a = ((second - 90) * Math.PI) / 180;
-    const r = 176;
-    const x = CX + Math.cos(a) * r;
-    const y = CY + Math.sin(a) * r;
-    const tx = CX + Math.cos(a) * (r - 28);
-    const ty = CY + Math.sin(a) * (r - 28);
-    return (
-      <g>
-        <defs>
-          <linearGradient id="handCometTrail" x1={tx} y1={ty} x2={x} y2={y} gradientUnits="userSpaceOnUse">
-            <stop offset="0%" stopColor={YELLOW} stopOpacity="0" />
-            <stop offset="100%" stopColor={YELLOW} stopOpacity="1" />
-          </linearGradient>
-        </defs>
-        <line x1={tx} y1={ty} x2={x} y2={y} stroke="url(#handCometTrail)" strokeWidth="3.2" strokeLinecap="round" />
-        <circle cx={x} cy={y} r="4.2" fill={YELLOW} style={{ filter: `drop-shadow(0 0 8px ${YELLOW})` }} />
-      </g>
-    );
-  }
-  if (handStyle === 'ring') {
-    return (
-      <g transform={`rotate(${second} ${CX} ${CY})`}>
-        <polygon points={`${CX},${CY - 178} ${CX - 5},${CY - 152} ${CX + 5},${CY - 152}`} fill={YELLOW}
-          style={{ filter: `drop-shadow(0 0 6px ${YELLOW})` }} />
-        <line x1={CX} y1={CY - 20} x2={CX} y2={CY - 152} stroke={YELLOW} strokeWidth="1.8" strokeLinecap="round" />
-      </g>
-    );
-  }
+  };
+  const lit = Math.floor(a / step) * step;
   return (
-    <g transform={`rotate(${second} ${CX} ${CY})`}>
-      <line x1={CX} y1={CY + 16} x2={CX} y2={CY - 162} stroke={YELLOW} strokeWidth="1.7" strokeLinecap="round"
-        style={{ filter: `drop-shadow(0 0 5px ${YELLOW})` }} />
+    <g>
+      {trail.map((i) => notch(lit - i * step, i === 0 ? 1 : 0.55 - i * 0.065, i === 0 ? 4.5 : 2.6, `t${i}`))}
+      {notch(a, 1, 3, 'smooth')}
+      <circle cx={CX + Math.cos(((a - 90) * Math.PI) / 180) * 199} cy={CY + Math.sin(((a - 90) * Math.PI) / 180) * 199} r="3.2" fill="#fff8b0"
+        style={{ filter: `drop-shadow(0 0 8px ${YELLOW})` }} />
     </g>
   );
 }
@@ -170,7 +154,7 @@ export default function ClockHands({ time, source = 'youneek', handStyle = 'need
       {handStyle === 'comet' && <CometHands {...props} />}
       {handStyle === 'pulse' && <PulseHands {...props} />}
       {glow && <GlowHands hour={hour} minute={minute} />}
-      {!omitSeconds && !glow && <YellowSeconds second={second} handStyle={handStyle} />}
+      {!omitSeconds && <RimSeconds second={second} count={source === 'regular' ? 60 : 100} />}
     </svg>
   );
 }
