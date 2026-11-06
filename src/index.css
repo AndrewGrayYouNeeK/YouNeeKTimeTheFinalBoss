@@ -100,10 +100,6 @@
   background: linear-gradient(to bottom, #000 0%, #000 72%, rgba(0, 0, 0, 0) 100%);
 }
 
-.logo-hit {
-  position: relative;
-}
-
 .logo-title {
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
   font-size: 1.65rem;
@@ -218,21 +214,52 @@
 .lava-header-subtitle {
   display: block;
   width: auto;
-  max-width: min(92vw, 920px);
   height: auto;
   object-fit: contain;
   pointer-events: none;
-  filter: hue-rotate(195deg) saturate(1.3) brightness(1.4) contrast(1.08);
+  filter: hue-rotate(195deg) saturate(1.25) brightness(1.35) contrast(1.06);
+  transition: filter 0.28s ease, opacity 0.28s ease;
+  opacity: 0.92;
 }
 
+/* Zoomed OUT so the entire YOUNEEK TIME wordmark (meteor included) fits with padding */
 .lava-header-title {
-  max-height: min(9vh, 88px);
+  width: min(68vw, 360px);
+  max-width: 100%;
+  max-height: none;
+  margin-inline: auto;
 }
 
 .lava-header-subtitle {
-  margin-top: 0.15rem;
-  max-width: min(48vw, 340px);
-  max-height: min(3.2vh, 28px);
+  margin-top: 0.4rem;
+  width: min(42vw, 220px);
+  max-width: 100%;
+  max-height: none;
+  margin-inline: auto;
+}
+
+.logo-hit {
+  position: relative;
+  overflow: visible;
+  padding-top: 2.25rem;
+  padding-bottom: 0.75rem;
+  padding-inline: 1rem;
+}
+
+.logo-hit.is-lit .lava-header-title,
+.logo-hit.is-lit .lava-header-subtitle {
+  opacity: 1;
+  filter: hue-rotate(195deg) saturate(1.45) brightness(1.55) contrast(1.08)
+    drop-shadow(0 0 12px #7CFF6B88) drop-shadow(0 0 28px #7CFF6B44);
+}
+
+@media (min-width: 640px) {
+  .lava-header-title {
+    width: min(55vw, 440px);
+  }
+  .lava-header-subtitle {
+    width: min(28vw, 260px);
+  }
 }
 
 .volcano-bg-drift {
@@ -332,6 +359,205 @@
   background-image: radial-gradient(2px 2px at 80px 110px, #ffffff, transparent), radial-gradient(2px 2px at 120px 50px, #ffffff, transparent), radial-gradient(2px 2px at 30px 90px, #ffffff, transparent);
   background-size: 300px 300px;
   animation: twinkle 5s infinite ease-in-out 2s;
+}
+
+
+/* Constant volcano smoke — straight up */
+.volcano-smoke-puff {
+  background: radial-gradient(ellipse at 50% 60%, #9aa3b899 0%, #5a627288 40%, #2a2e3888 70%, transparent 100%);
+  filter: blur(6px);
+  will-change: transform, opacity;
+}
+
+@keyframes volcano-smoke-rise {
+  0% {
+    transform: translate3d(0, 0, 0) scale(0.75);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.85;
+  }
+  55% {
+    opacity: 0.55;
+  }
+  100% {
+    transform: translate3d(0, -82vh, 0) scale(1.7);
+    opacity: 0;
+  }
+}
+
+@keyframes ember-rise-straight {
+  0% {
+    transform: translate3d(0, 0, 0) scale(1);
+    opacity: 0;
+  }
+  10% { opacity: 0.95; }
+  100% {
+    transform: translate3d(0, -90vh, 0) scale(0.35);
+    opacity: 0;
+  }
+}
+
+.volcano-erupt-flash {
+  background:
+    radial-gradient(ellipse at 50% 72%, #ff6a2a88 0%, #c026ff44 35%, transparent 65%),
+    radial-gradient(ellipse at 50% 40%, #ffe08a33 0%, transparent 55%);
+  animation: volcano-erupt-flash 0.9s ease-out 2;
+  mix-blend-mode: screen;
+}
+
+@keyframes volcano-erupt-flash {
+  0% { opacity: 0; }
+  20% { opacity: 1; }
+  100% { opacity: 0.15; }
+}
+
+/* Dial astronaut fades while the sticky/fall clone is active */
+html.ynt-astro-detached .clock-astro-body {
+  opacity: 0 !important;
+  transition: opacity 0.2s ease;
+}
+
+.sticky-fall-astro {
+  position: fixed;
+  z-index: 55;
+  pointer-events: none;
+  top: 12px;
+  filter: drop-shadow(0 8px 18px #000c) drop-shadow(0 0 10px #7CFF6B55);
+  will-change: transform, top, left;
+}
+
+.sticky-fall-astro--stuck {
+  transition: none;
+}
+
+.sticky-fall-astro--falling {
+  left: 50% !important;
+  transform: translateX(-50%);
+  animation: sticky-fall-drop 1.05s cubic-bezier(0.45, 0.05, 0.85, 0.35) forwards;
+}
+
+.sticky-fall-astro--landed {
+  left: 50% !important;
+  top: auto;
+  bottom: 88px;
+  transform: translateX(-50%);
+  animation: sticky-fall-land 0.55s ease-out both;
+}
+
+.sticky-fall-body {
+  animation: none;
+}
+
+.sticky-fall-astro--falling .sticky-fall-body {
+  animation: sticky-fall-spin 1.05s linear forwards;
+}
+
+.sticky-fall-trail {
+  position: absolute;
+  left: 50%;
+  top: -40%;
+  width: 6px;
+  height: 70%;
+  transform: translateX(-50%);
+  background: linear-gradient(to top, #7CFF6Bcc, #2f8bff88, transparent);
+  filter: blur(1.5px);
+  opacity: 0.85;
+}
+
+.sticky-fall-laser {
+  position: absolute;
+  top: 28%;
+  width: 3px;
+  height: 42%;
+  border-radius: 999px;
+  transform-origin: top center;
+}
+
+.sticky-fall-laser--blue {
+  left: 18%;
+  background: linear-gradient(to bottom, #fff, #2f8bff);
+  box-shadow: 0 0 8px #2f8bff, 0 0 16px #2f8bff;
+  transform: rotate(-28deg);
+}
+
+.sticky-fall-laser--purple {
+  right: 18%;
+  background: linear-gradient(to bottom, #fff, #b84dff);
+  box-shadow: 0 0 8px #b84dff, 0 0 16px #b84dff;
+  transform: rotate(28deg);
+}
+
+.sticky-fall-astro--falling .sticky-fall-laser--blue {
+  animation: laser-whip-l 1.05s linear;
+}
+.sticky-fall-astro--falling .sticky-fall-laser--purple {
+  animation: laser-whip-r 1.05s linear;
+}
+
+.sticky-fall-flag {
+  position: absolute;
+  right: -6%;
+  bottom: 8%;
+  width: 34%;
+  height: 55%;
+  animation: flag-plant 0.5s ease-out both;
+}
+
+.sticky-fall-flag-pole {
+  position: absolute;
+  left: 4px;
+  bottom: 0;
+  width: 3px;
+  height: 100%;
+  background: linear-gradient(#ddd, #7CFF6B);
+  box-shadow: 0 0 6px #7CFF6B;
+}
+
+.sticky-fall-flag-cloth {
+  position: absolute;
+  left: 7px;
+  top: 0;
+  min-width: 22px;
+  padding: 2px 5px;
+  font-family: ui-monospace, Menlo, Consolas, monospace;
+  font-size: 11px;
+  font-weight: 800;
+  color: #041004;
+  background: #7CFF6B;
+  box-shadow: 0 0 10px #7CFF6B;
+  border-radius: 2px 4px 4px 2px;
+}
+
+@keyframes sticky-fall-drop {
+  0% { top: 12px; }
+  85% { top: calc(100vh - 200px); }
+  100% { top: calc(100vh - 170px); }
+}
+
+@keyframes sticky-fall-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(540deg); }
+}
+
+@keyframes sticky-fall-land {
+  0% { transform: translateX(-50%) translateY(-18px) scale(1.05); }
+  60% { transform: translateX(-50%) translateY(6px) scale(0.98); }
+  100% { transform: translateX(-50%) translateY(0) scale(1); }
+}
+
+@keyframes laser-whip-l {
+  from { transform: rotate(-28deg); }
+  to { transform: rotate(-28deg + 540deg); }
+}
+@keyframes laser-whip-r {
+  from { transform: rotate(28deg); }
+  to { transform: rotate(28deg + 540deg); }
+}
+
+@keyframes flag-plant {
+  0% { transform: translateY(-20px) scaleY(0.2); opacity: 0; }
+  100% { transform: translateY(0) scaleY(1); opacity: 1; }
 }
 
 html.watch-mode,

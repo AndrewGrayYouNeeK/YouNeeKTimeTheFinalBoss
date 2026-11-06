@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { getDecimalTime } from '@/lib/decimalTime';
 import ClockHeader from '@/components/younEEK/ClockHeader';
 import DigitalTimeDisplay from '@/components/younEEK/DigitalTimeDisplay';
@@ -11,10 +11,14 @@ import FrequencyManager from '@/components/younEEK/FrequencyManager';
 import LiveMoonPhaseCard from '@/components/younEEK/LiveMoonPhaseCard';
 import AboutSection from '@/components/younEEK/AboutSection';
 import HandStyleSelect from '@/components/younEEK/HandStyleSelect';
+import StickyFallAstronaut from '@/components/younEEK/StickyFallAstronaut';
 import { PREFS_EVENT, readClockSource, readHandStyle } from '@/lib/clockPrefs';
 import { getLunarDate } from '@/lib/lunarCalendar';
 import TimeScope from '@/components/TimeScope';
 import AppPanel from '@/components/AppPanel';
+import VolcanoBackground from '@/components/landing/VolcanoBackground';
+import AshCoalOverlay from '@/components/landing/AshCoalOverlay';
+import useYouNeekHourEruption from '@/hooks/useYouNeekHourEruption';
 
 export default function YouNeekClock() {
   const [now, setNow] = useState(() => new Date());
@@ -26,6 +30,8 @@ export default function YouNeekClock() {
   const [source, setSource] = useState(readClockSource);
   const [handStyle, setHandStyle] = useState(readHandStyle);
   const [scopeOn, setScopeOn] = useState(false);
+  const dialRef = useRef(null);
+  const { erupting } = useYouNeekHourEruption();
 
   useEffect(() => {
     const id = window.setInterval(() => setNow(new Date()), 16);
@@ -46,7 +52,11 @@ export default function YouNeekClock() {
   }, []);
 
   return (
-    <div className="flex w-full flex-col items-center gap-6">
+    <div className="relative flex w-full flex-col items-center gap-6">
+      <VolcanoBackground erupting={erupting} />
+      <AshCoalOverlay active={erupting} />
+      <StickyFallAstronaut dialRef={dialRef} />
+
       <ClockHeader />
 
       <div className="flex w-full overflow-hidden rounded-2xl border border-white/10 font-mono text-[10px] uppercase tracking-[0.25em]">
@@ -71,7 +81,14 @@ export default function YouNeekClock() {
           <TimeScope />
         ) : (
           <div className="flex flex-col items-center gap-3">
-            <ClockDial time={time} isGlitching={false} source={source} handStyle={handStyle} lunar={lunar} />
+            <ClockDial
+              ref={dialRef}
+              time={time}
+              isGlitching={false}
+              source={source}
+              handStyle={handStyle}
+              lunar={lunar}
+            />
             <DigitalTimeDisplay time={time} source={source} />
           </div>
         )}

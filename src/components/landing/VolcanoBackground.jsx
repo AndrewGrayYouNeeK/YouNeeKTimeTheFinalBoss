@@ -1,17 +1,30 @@
 import { useMemo } from 'react';
 
-export default function VolcanoBackground({ parallax = 0 }) {
+/** Space volcano backdrop with a constant vertical smoke plume. */
+export default function VolcanoBackground({ parallax = 0, erupting = false }) {
   const sparks = useMemo(
     () =>
-      Array.from({ length: 26 }).map((_, i) => ({
+      Array.from({ length: 16 }).map((_, i) => ({
         id: i,
-        left: Math.random() * 100,
-        delay: Math.random() * 7,
-        duration: 5 + Math.random() * 7,
-        size: 2 + Math.random() * 3.5,
-        drift: -50 + Math.random() * 100,
+        left: 47 + Math.random() * 6,
+        delay: Math.random() * 5,
+        duration: 3.5 + Math.random() * 4.5,
+        size: 2 + Math.random() * 2.8,
       })),
-    []
+    [],
+  );
+
+  const smoke = useMemo(
+    () =>
+      Array.from({ length: 18 }).map((_, i) => ({
+        id: `sm-${i}`,
+        left: 49 + ((i % 5) - 2) * 0.9,
+        delay: i * 0.6,
+        duration: 8 + (i % 4) * 1.5,
+        size: 48 + (i % 5) * 18,
+        opacity: 0.35 + (i % 4) * 0.08,
+      })),
+    [],
   );
 
   return (
@@ -30,20 +43,38 @@ export default function VolcanoBackground({ parallax = 0 }) {
         />
       </div>
       <div className="volcano-bg-pulse absolute inset-0" />
+
+      {/* Constant smoke: straight up from the crater into the air */}
+      {smoke.map((s) => (
+        <span
+          key={s.id}
+          className="volcano-smoke-puff absolute rounded-full"
+          style={{
+            left: `${s.left}%`,
+            bottom: '18%',
+            width: `${s.size}px`,
+            height: `${s.size * 1.4}px`,
+            marginLeft: `${-s.size / 2}px`,
+            opacity: s.opacity,
+            animation: `volcano-smoke-rise ${s.duration}s linear ${s.delay}s infinite`,
+          }}
+        />
+      ))}
       {sparks.map((s) => (
         <span
           key={s.id}
           className="ember-spark absolute rounded-full"
           style={{
             left: `${s.left}%`,
-            bottom: '-10px',
+            bottom: '21%',
             width: `${s.size}px`,
             height: `${s.size}px`,
-            '--drift': `${s.drift}px`,
-            animation: `ember-rise ${s.duration}s linear ${s.delay}s infinite`,
+            animation: `ember-rise-straight ${s.duration}s linear ${s.delay}s infinite`,
           }}
         />
       ))}
+
+      {erupting && <div className="volcano-erupt-flash absolute inset-0" aria-hidden="true" />}
       <div className="absolute inset-0 bg-[#05010a]/30" />
     </div>
   );

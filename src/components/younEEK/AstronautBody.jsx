@@ -18,7 +18,7 @@ export default function AstronautBody() {
     />
   );
   return (
-    <svg viewBox="0 0 400 400" className="pointer-events-none absolute inset-0 h-full w-full" aria-hidden="true">
+    <svg viewBox="0 0 400 400" className="clock-astro-body pointer-events-none absolute inset-0 h-full w-full" aria-hidden="true">
       <defs>
         <radialGradient id="astroGlow" cx="50%" cy="50%" r="50%">
           <stop offset="0%" stopColor="#7CFF6B" stopOpacity="0.16" />
