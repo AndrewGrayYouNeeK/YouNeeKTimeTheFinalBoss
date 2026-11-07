@@ -11,8 +11,11 @@ import FrequencyManager from '@/components/younEEK/FrequencyManager';
 import LiveMoonPhaseCard from '@/components/younEEK/LiveMoonPhaseCard';
 import AboutSection from '@/components/younEEK/AboutSection';
 import HandStyleSelect from '@/components/younEEK/HandStyleSelect';
+import RenderModeSelect from '@/components/younEEK/RenderModeSelect';
+import DiaryPanel from '@/components/younEEK/DiaryPanel';
+import SoundControls from '@/components/younEEK/SoundControls';
 import StickyFallAstronaut from '@/components/younEEK/StickyFallAstronaut';
-import { PREFS_EVENT, readClockSource, readHandStyle } from '@/lib/clockPrefs';
+import { PREFS_EVENT, readClockSource, readHandStyle, readRenderMode } from '@/lib/clockPrefs';
 import { getLunarDate } from '@/lib/lunarCalendar';
 import TimeScope from '@/components/TimeScope';
 import AppPanel from '@/components/AppPanel';
@@ -41,6 +44,9 @@ export default function YouNeekClock() {
   );
   const [source, setSource] = useState(readClockSource);
   const [handStyle, setHandStyle] = useState(readHandStyle);
+  const [renderMode, setRenderMode] = useState(readRenderMode);
+  const [diaryDayOffset, setDiaryDayOffset] = useState(0);
+  const [diaryTraversal, setDiaryTraversal] = useState('live');
   const [scopeOn, setScopeOn] = useState(false);
   const dialRef = useRef(null);
   const { erupting } = useYouNeekHourEruption();
@@ -54,6 +60,7 @@ export default function YouNeekClock() {
     const sync = () => {
       setSource(readClockSource());
       setHandStyle(readHandStyle());
+      setRenderMode(readRenderMode());
     };
     window.addEventListener(PREFS_EVENT, sync);
     window.addEventListener('storage', sync);
@@ -98,6 +105,9 @@ export default function YouNeekClock() {
         </AppPanel>
       ) : (
         <>
+          {/* Mood switch: one canonical renderMode flag drives the dial */}
+          <RenderModeSelect value={renderMode} />
+
           {/* Digital ABOVE the dial — reference layout */}
           <DigitalTimeDisplay time={time} source={source} />
 
@@ -108,6 +118,8 @@ export default function YouNeekClock() {
               isGlitching={false}
               source={source}
               handStyle={handStyle}
+              renderMode={renderMode}
+              diaryView={renderMode === 'hilbert' ? { dayOffset: diaryDayOffset, traversal: diaryTraversal } : null}
               lunar={lunar}
               erupting={erupting}
             />
@@ -116,6 +128,24 @@ export default function YouNeekClock() {
           <div className="w-full px-1">
             <DayProgressBar time={time} />
           </div>
+
+          {renderMode === 'hilbert' && (
+            <AppPanel className="w-full">
+              <DiaryPanel
+                dayOffset={diaryDayOffset}
+                traversal={diaryTraversal}
+                onDayOffset={setDiaryDayOffset}
+                onTraversal={setDiaryTraversal}
+                time={now}
+              />
+            </AppPanel>
+          )}
+
+          {renderMode !== 'legacy' && (
+            <AppPanel className="w-full">
+              <SoundControls />
+            </AppPanel>
+          )}
         </>
       )}
 

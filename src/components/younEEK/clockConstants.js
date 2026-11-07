@@ -41,3 +41,19 @@ export const HAND_RED = '#ff2a2a';
 export const HAND_WHITE = '#e8ecf4';
 export const HAND_BLUE = BLUE;
 export const HAND_PURPLE = PURPLE;
+
+// Charcoal / felt-green / ivory palette for the Hilbert and log-spiral render
+// modes. These intentionally replace the neon palette inside those modes only.
+export const CHARCOAL = '#1d211e';
+export const FELT_GREEN = '#2e6b4f';
+export const IVORY = '#f3eedd';
+
+// Diary inks stay inside the mode palette family (felt green -> ivory ramp) so
+// tag colors never reintroduce the neon palette.
+export const DIARY_INKS = ['#3f8a66', '#5fa87e', '#9ec4a8', '#f3eedd'];
+
+export function hexAlpha(hex, alpha = 1) {
+  const n = (h) => [h.length - 6, h.length - 4, h.length - 2].map((i) => parseInt(h.slice(i, i + 2), 16));
+  const [r, g, b] = n(hex);
+  return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+}
