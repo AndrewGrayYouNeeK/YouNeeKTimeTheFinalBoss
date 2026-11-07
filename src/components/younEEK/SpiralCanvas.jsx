@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { CHARCOAL, FELT_GREEN, IVORY, hexAlpha, mixHex } from './clockConstants';
 import { SPIRAL_VOID_R, spiralRadiusFraction, spiralTurnsToVoid } from '@/lib/logSpiral';
 import { getSoundPrefs, playSpiralTick } from '@/lib/segmentAudio';
@@ -19,6 +19,7 @@ export default function SpiralCanvas({ time }) {
   const canvasRef = useRef(null);
   const sizeRef = useRef({ w: 0, h: 0, dpr: 1 });
   const lastTickRef = useRef(null);
+  const [frame, setFrame] = useState(0);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -30,6 +31,7 @@ export default function SpiralCanvas({ time }) {
       canvas.width = Math.max(1, Math.round(w * dpr));
       canvas.height = Math.max(1, Math.round(h * dpr));
       sizeRef.current = { w, h, dpr };
+      setFrame((n) => n + 1);
     };
     resize();
     const observer = new ResizeObserver(resize);
@@ -141,7 +143,7 @@ export default function SpiralCanvas({ time }) {
       playSpiralTick(time?.progress ?? 0, prefs.gain);
     }
     lastTickRef.current = tick;
-  }, [time]);
+  }, [time, frame]);
 
   return <canvas ref={canvasRef} className="h-full w-full" />;
 }

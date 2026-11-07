@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { CHARCOAL, FELT_GREEN, IVORY, DIARY_INKS, hexAlpha } from './clockConstants';
 import { HILBERT_SEGMENTS, hilbertCells, hilbertPointAt } from '@/lib/hilbert';
 import { dateKeyFor, traversalCoverage } from '@/lib/hilbertDiary';
@@ -11,6 +11,7 @@ export default function HilbertCanvas({ time, diary = null }) {
   const sizeRef = useRef({ w: 0, h: 0, dpr: 1 });
   const pathCacheRef = useRef({ key: '', path: null });
   const lastSegmentRef = useRef(null);
+  const [frame, setFrame] = useState(0);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -22,6 +23,7 @@ export default function HilbertCanvas({ time, diary = null }) {
       canvas.width = Math.max(1, Math.round(w * dpr));
       canvas.height = Math.max(1, Math.round(h * dpr));
       sizeRef.current = { w, h, dpr };
+      setFrame((n) => n + 1);
     };
     resize();
     const observer = new ResizeObserver(resize);
@@ -142,7 +144,7 @@ export default function HilbertCanvas({ time, diary = null }) {
       if (delta === 1) playSegmentClick(prefs.gain);
     }
     lastSegmentRef.current = segment;
-  }, [time, diary]);
+  }, [time, diary, frame]);
 
   return <canvas ref={canvasRef} className="h-full w-full" />;
 }

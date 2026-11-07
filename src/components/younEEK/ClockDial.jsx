@@ -49,7 +49,7 @@ const ClockDial = forwardRef(function ClockDial(
     <div ref={ref} className={`relative mx-auto aspect-square w-full ${maxWidthClass}`}>
       <div className="absolute inset-[8%] z-0 rounded-full bg-black" aria-hidden="true" />
 
-      {centerImage && (
+      {centerImage && renderMode === 'legacy' && (
         <div className="absolute inset-[8%] z-10 overflow-hidden rounded-full" style={{ pointerEvents: 'none' }}>
           <img
             src={centerImage}
@@ -77,12 +77,12 @@ const ClockDial = forwardRef(function ClockDial(
       <ClockTicks source={source} />
 
       {renderMode === 'hilbert' && (
-        <div className="pointer-events-none absolute inset-[8%] z-[13] overflow-hidden rounded-full">
+        <div className="pointer-events-none absolute inset-[8%] z-[22] overflow-hidden rounded-full">
           <HilbertCanvas time={time} diary={diaryView} />
         </div>
       )}
       {renderMode === 'spiral' && (
-        <div className="pointer-events-none absolute inset-[8%] z-[13] overflow-hidden rounded-full">
+        <div className="pointer-events-none absolute inset-[8%] z-[22] overflow-hidden rounded-full">
           <SpiralCanvas time={time} />
         </div>
       )}
