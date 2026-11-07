@@ -1,5 +1,4 @@
 import { HILBERT_SEGMENTS } from './hilbert';
-import { DIARY_INKS } from '@/components/younEEK/clockConstants';
 
 // Personal spatial diary for the Reflect (Hilbert) mode.
 //
@@ -68,7 +67,7 @@ export function addEntry(dayKey, { startMin, endMin, label, colorIndex }) {
     startMin: clampMinute(startMin),
     endMin: clampMinute(endMin),
     label: String(label || '').slice(0, 40),
-    colorIndex: Math.min(DIARY_INKS.length - 1, Math.max(0, Math.trunc(colorIndex) || 0)),
+    colorIndex: Math.min(3, Math.max(0, Math.trunc(colorIndex) || 0)),
   };
   day.entries.push(entry);
   store.days[dayKey] = day;

@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import {
-  DIARY_INKS,
   TRAVERSALS_PER_DAY,
   addEntry,
   dateKeyFor,
@@ -8,7 +7,7 @@ import {
   realToDecimalMinutes,
   removeEntry,
 } from '@/lib/hilbertDiary';
-import { FELT_GREEN, IVORY } from './clockConstants';
+import { DIARY_INKS, FELT_GREEN, IVORY } from './clockConstants';
 
 function dayLabel(dayOffset) {
   if (dayOffset === 0) return 'Today';
