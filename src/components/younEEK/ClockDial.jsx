@@ -4,6 +4,8 @@ import ClockLabels from './ClockLabels';
 import ClockHands from './ClockHands';
 import AstronautBody from './AstronautBody';
 import DialSmoke from './DialSmoke';
+import HilbertCanvas from './HilbertCanvas';
+import SpiralCanvas from './SpiralCanvas';
 
 const DEFAULT_CENTER_IMAGE = '/astronaut-dial-bg.webp';
 const BANNED_FACES = ['/clock-face-default.jpg', 'clock-face-default', 'volcano-bg', 'astronaut-concept'];
@@ -25,6 +27,8 @@ const ClockDial = forwardRef(function ClockDial(
     isGlitching,
     source = 'youneek',
     handStyle = 'needle',
+    renderMode = 'legacy',
+    diaryView = null,
     hubRef,
     omitSeconds = false,
     lunar,
@@ -72,13 +76,28 @@ const ClockDial = forwardRef(function ClockDial(
 
       <ClockTicks source={source} />
 
-      <div className="pointer-events-none absolute inset-0 z-[25]">
-        <AstronautBody />
-      </div>
+      {renderMode === 'hilbert' && (
+        <div className="pointer-events-none absolute inset-[8%] z-[13] overflow-hidden rounded-full">
+          <HilbertCanvas time={time} diary={diaryView} />
+        </div>
+      )}
+      {renderMode === 'spiral' && (
+        <div className="pointer-events-none absolute inset-[8%] z-[13] overflow-hidden rounded-full">
+          <SpiralCanvas time={time} />
+        </div>
+      )}
+
+      {renderMode === 'legacy' && (
+        <div className="pointer-events-none absolute inset-0 z-[25]">
+          <AstronautBody />
+        </div>
+      )}
 
       <div className="pointer-events-none absolute inset-0 z-30">
         <ClockLabels source={source} />
-        <ClockHands time={time} source={source} handStyle={handStyle} omitSeconds={omitSeconds} />
+        {renderMode === 'legacy' && (
+          <ClockHands time={time} source={source} handStyle={handStyle} omitSeconds={omitSeconds} />
+        )}
       </div>
     </div>
   );

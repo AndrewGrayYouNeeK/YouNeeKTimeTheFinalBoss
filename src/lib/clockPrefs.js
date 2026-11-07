@@ -18,7 +18,14 @@ export const HAND_STYLES = [
 export const SOURCE_KEY = 'hapticClockSource';
 export const WATCH_DISPLAY_KEY = 'watchDisplay';
 export const HAND_STYLE_KEY = 'clockHandStyle';
+export const RENDER_MODE_KEY = 'clockRenderMode';
 export const PREFS_EVENT = 'clock-prefs-updated';
+
+export const RENDER_MODES = [
+  { id: 'legacy', label: 'Classic Dial' },
+  { id: 'hilbert', label: 'Reflect' },
+  { id: 'spiral', label: 'Move' },
+];
 
 export function readClockSource() {
   const id = localStorage.getItem(SOURCE_KEY);
@@ -34,6 +41,16 @@ export function readWatchDisplay() {
 export function readHandStyle() {
   const id = localStorage.getItem(HAND_STYLE_KEY);
   return HAND_STYLES.some((s) => s.id === id) ? id : 'needle';
+}
+
+export function readRenderMode() {
+  const id = localStorage.getItem(RENDER_MODE_KEY);
+  return RENDER_MODES.some((m) => m.id === id) ? id : 'legacy';
+}
+
+export function writeRenderMode(id) {
+  localStorage.setItem(RENDER_MODE_KEY, id);
+  window.dispatchEvent(new Event(PREFS_EVENT));
 }
 
 export function writeClockSource(id) {
@@ -57,6 +74,10 @@ export function sourceLabel(id) {
 
 export function handStyleLabel(id) {
   return HAND_STYLES.find((s) => s.id === id)?.label || 'Needle';
+}
+
+export function renderModeLabel(id) {
+  return RENDER_MODES.find((m) => m.id === id)?.label || 'Classic Dial';
 }
 
 function pad(value) {

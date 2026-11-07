@@ -13,12 +13,15 @@ import AppPanel from '@/components/AppPanel';
 import {
   CLOCK_SOURCES,
   HAND_STYLES,
+  RENDER_MODES,
   WATCH_DISPLAYS,
   readClockSource,
   readHandStyle,
+  readRenderMode,
   readWatchDisplay,
   writeClockSource,
   writeHandStyle,
+  writeRenderMode,
   writeWatchDisplay,
 } from '@/lib/clockPrefs';
 
@@ -33,6 +36,7 @@ export default function Settings() {
   const [clockSource, setClockSource] = useState(readClockSource);
   const [watchDisplay, setWatchDisplay] = useState(readWatchDisplay);
   const [handStyle, setHandStyle] = useState(readHandStyle);
+  const [renderMode, setRenderMode] = useState(readRenderMode);
 
   useEffect(() => {
     localStorage.setItem('hourlyFreqEnabled', freqEnabled);
@@ -45,6 +49,7 @@ export default function Settings() {
       setClockSource(readClockSource());
       setWatchDisplay(readWatchDisplay());
       setHandStyle(readHandStyle());
+      setRenderMode(readRenderMode());
     };
     window.addEventListener('clock-prefs-updated', sync);
     return () => window.removeEventListener('clock-prefs-updated', sync);
@@ -96,6 +101,20 @@ export default function Settings() {
                   </SelectContent>
                 </Select>
                 <p className="mt-2 text-xs text-white/35">Seconds stay marked on every style.</p>
+              </div>
+              <div>
+                <p className="text-sm text-white/50 mb-2">Render mode</p>
+                <Select value={renderMode} onValueChange={(id) => { setRenderMode(id); writeRenderMode(id); }}>
+                  <SelectTrigger className="w-full border-[#7CFF6B]/25 bg-black/40 text-white sm:w-[240px]">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {RENDER_MODES.map((item) => (
+                      <SelectItem key={item.id} value={item.id}>{item.label}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <p className="mt-2 text-xs text-white/35">Hilbert Trace and Log Spiral replace the hands with canvas modes.</p>
               </div>
               <div>
                 <p className="text-sm text-white/50 mb-2">Clock Face Background</p>
