@@ -52,6 +52,16 @@ export const IVORY = '#f3eedd';
 // tag colors never reintroduce the neon palette.
 export const DIARY_INKS = ['#3f8a66', '#5fa87e', '#9ec4a8', '#f3eedd'];
 
+// Reflect / Move face only. Classic dial keeps the neon tokens above.
+export const VOID = '#0c0d0e';
+export const FELT_PATH = '#1a5c3a';
+export const FELT_PATH_BRIGHT = '#2f7a52';
+export const PATH_IVORY = '#f4f0e6';
+export const PALE_CYAN = '#d7efe9';
+export const COOL_MIST = '#8d9a93';
+export const PATH_AMBER = '#c4893a';
+export const PATH_RED = '#8f3d3a';
+
 export function hexAlpha(hex, alpha = 1) {
   const n = (h) => [h.length - 6, h.length - 4, h.length - 2].map((i) => parseInt(h.slice(i, i + 2), 16));
   const [r, g, b] = n(hex);

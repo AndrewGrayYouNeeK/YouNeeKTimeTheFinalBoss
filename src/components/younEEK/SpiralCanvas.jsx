@@ -1,25 +1,37 @@
 import { useEffect, useRef, useState } from 'react';
-import { CHARCOAL, FELT_GREEN, IVORY, hexAlpha, mixHex } from './clockConstants';
-import { SPIRAL_VOID_R, spiralRadiusFraction, spiralTurnsToVoid } from '@/lib/logSpiral';
+import {
+  COOL_MIST, FELT_PATH, PATH_AMBER, PATH_IVORY, PATH_RED, PALE_CYAN, VOID, mixHex,
+} from './clockConstants';
 import { getSoundPrefs, playSpiralTick } from '@/lib/segmentAudio';
+import { SPIRAL_ARMS, armState } from './spiralPath';
+import { drawVoidDrift } from './voidDrift';
+import { useMidnightVeil } from './useMidnightVeil';
 
-const TAU = Math.PI * 2;
-const SAMPLES_PER_TURN = 90;
-const RECENT_TURNS = 0.6;
+const TRAIL = 8;
 
-// Two competing inward arms. k is in radians: r = r0 * e^(-phi / k), phi the
-// accumulated winding. Larger k decays slower, so arm 2 stays outside longer
-// and spins slower — the "slow outer arm".
-const ARMS = [
-  { k: Math.PI * 6, secondsPerTurn: 9, windowTurns: 2.5, width: 2.2, hot: true },
-  { k: Math.PI * 15, secondsPerTurn: 21, windowTurns: 1.75, width: 1.4, hot: false },
-];
+// TIME MAPPING — unchanged. dsec = dayProgress * 1e6. Each arm still cycles on
+// its own k and secondsPerTurn (inner ~81s, outer ~472s of decimal time) and
+// fades at the void. That mid-day cycle is NOT removed.
+// NOT APPLIED (needs approval): one inward journey across the decimal day that
+// only restarts at midnight.
+// Color DOES change: outer cool mist/ivory, amber mid, muted red at the center.
+// Midnight veil only holds the pre-midnight frame while it fades.
 
 export default function SpiralCanvas({ time }) {
   const canvasRef = useRef(null);
   const sizeRef = useRef({ w: 0, h: 0, dpr: 1 });
   const lastTickRef = useRef(null);
+  const reducedRef = useRef(false);
   const [frame, setFrame] = useState(0);
+  const { drawProgress, pathAlpha } = useMidnightVeil(time?.progress ?? 0);
+
+  useEffect(() => {
+    const media = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const sync = () => { reducedRef.current = media.matches; };
+    sync();
+    media.addEventListener('change', sync);
+    return () => media.removeEventListener('change', sync);
+  }, []);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -45,105 +57,77 @@ export default function SpiralCanvas({ time }) {
     const { w, h, dpr } = sizeRef.current;
     if (!w || !h) return;
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-
-    ctx.fillStyle = CHARCOAL;
+    ctx.fillStyle = VOID;
     ctx.fillRect(0, 0, w, h);
+    drawVoidDrift(ctx, w, h, performance.now(), reducedRef.current);
 
     const cx = w / 2;
     const cy = h / 2;
-    const r0 = (Math.min(w, h) / 2) * 0.94;
+    const r0 = (Math.min(w, h) / 2) * 0.9;
+    const dsec = drawProgress * 1e6;
+    const xy = (p) => ({ x: cx + Math.cos(p.ang) * p.rFrac * r0, y: cy + Math.sin(p.ang) * p.rFrac * r0 });
 
-    // Decimal seconds since local midnight (100 decimal hours x 100 x 100).
-    const dsec = (time?.progress ?? 0) * 1e6;
+    const heat = ctx.createRadialGradient(cx, cy, r0 * 0.05, cx, cy, r0);
+    heat.addColorStop(0, PATH_RED);
+    heat.addColorStop(0.22, PATH_AMBER);
+    heat.addColorStop(0.55, FELT_PATH);
+    heat.addColorStop(1, mixHex(COOL_MIST, PATH_IVORY, 0.7));
 
     ctx.lineJoin = 'round';
     ctx.lineCap = 'round';
 
-    const hotGradient = ctx.createRadialGradient(cx, cy, SPIRAL_VOID_R * r0, cx, cy, r0);
-    hotGradient.addColorStop(0, CHARCOAL);
-    hotGradient.addColorStop(0.3, FELT_GREEN);
-    hotGradient.addColorStop(0.62, mixHex(FELT_GREEN, IVORY, 0.55));
-    hotGradient.addColorStop(1, IVORY);
-
-    for (const arm of ARMS) {
-      // One visible inward journey runs r0 -> void in spiralTurnsToVoid(k)
-      // turns; the cycle is that journey's duration. The wrap is deliberate
-      // and visible (envelope fade over the end turns), not a hidden reset.
-      // The curve itself stays r = r0 * e^(-phi/k): mathematically infinite
-      // inward, rendered only over its finite on-canvas window.
-      const cycleSeconds = spiralTurnsToVoid(arm.k) * arm.secondsPerTurn;
-      const inCycle = dsec % cycleSeconds;
-      const phiHead = (TAU * inCycle) / arm.secondsPerTurn;
-      const turnsIn = inCycle / arm.secondsPerTurn;
-      const turnsLeft = (cycleSeconds - inCycle) / arm.secondsPerTurn;
-      const envelope = Math.max(0, Math.min(1, turnsIn, turnsLeft));
-
-      const trace = (windowPhi) => {
-        ctx.beginPath();
-        let started = false;
-        const steps = Math.ceil((windowPhi / TAU) * SAMPLES_PER_TURN);
-        for (let i = 0; i <= steps; i++) {
-          const phi = phiHead - (windowPhi * i) / steps;
-          if (phi < 0) break;
-          const rFrac = spiralRadiusFraction(phi, arm.k);
-          if (rFrac <= SPIRAL_VOID_R) break;
-          const ang = -Math.PI / 2 + phi;
-          const x = cx + Math.cos(ang) * rFrac * r0;
-          const y = cy + Math.sin(ang) * rFrac * r0;
-          if (!started) {
-            ctx.moveTo(x, y);
-            started = true;
-          } else {
-            ctx.lineTo(x, y);
-          }
-        }
-      };
-
-      trace(arm.windowTurns * TAU);
-      if (arm.hot) {
-        ctx.strokeStyle = hotGradient;
-        ctx.globalAlpha = 0.3 * envelope;
-      } else {
-        ctx.strokeStyle = hexAlpha(FELT_GREEN, 0.5 * envelope);
-      }
+    for (const arm of SPIRAL_ARMS) {
+      const { pts, envelope } = armState(dsec, arm);
+      if (pts.length < 2) continue;
+      ctx.beginPath();
+      pts.forEach((p, i) => {
+        const q = xy(p);
+        if (i === 0) ctx.moveTo(q.x, q.y);
+        else ctx.lineTo(q.x, q.y);
+      });
+      ctx.globalAlpha = (arm.hot ? 0.85 : 0.4) * envelope * pathAlpha;
       ctx.lineWidth = arm.width;
+      ctx.strokeStyle = arm.hot ? heat : mixHex(COOL_MIST, PATH_IVORY, 0.45);
       ctx.stroke();
 
-      trace(RECENT_TURNS * TAU);
       if (arm.hot) {
-        ctx.strokeStyle = hotGradient;
-        ctx.globalAlpha = 0.95 * envelope;
-      } else {
-        ctx.strokeStyle = hexAlpha(FELT_GREEN, 0.85 * envelope);
-      }
-      ctx.lineWidth = arm.width * 1.6;
-      ctx.stroke();
-
-      const rHead = spiralRadiusFraction(phiHead, arm.k) * r0;
-      if (rHead > SPIRAL_VOID_R * r0) {
-        const ang = -Math.PI / 2 + phiHead;
-        const hx = cx + Math.cos(ang) * rHead;
-        const hy = cy + Math.sin(ang) * rHead;
-        ctx.globalAlpha = envelope;
+        const n = Math.min(TRAIL, pts.length - 1);
+        for (let i = 0; i < n; i++) {
+          const a = xy(pts[i]);
+          const b = xy(pts[i + 1]);
+          ctx.strokeStyle = i < 2 ? PATH_IVORY : PALE_CYAN;
+          ctx.globalAlpha = (1 - i / TRAIL) * envelope * pathAlpha;
+          ctx.lineWidth = arm.width * (1.3 - i / TRAIL);
+          ctx.beginPath();
+          ctx.moveTo(a.x, a.y);
+          ctx.lineTo(b.x, b.y);
+          ctx.stroke();
+        }
+        const h = xy(pts[0]);
+        ctx.globalAlpha = envelope * pathAlpha;
+        const glow = ctx.createRadialGradient(h.x, h.y, 0, h.x, h.y, r0 * 0.06);
+        glow.addColorStop(0, PATH_IVORY);
+        glow.addColorStop(0.4, 'rgba(215,239,233,0.45)');
+        glow.addColorStop(1, 'rgba(215,239,233,0)');
+        ctx.fillStyle = glow;
         ctx.beginPath();
-        ctx.arc(hx, hy, Math.max(2, r0 * 0.012), 0, Math.PI * 2);
-        ctx.fillStyle = arm.hot ? IVORY : FELT_GREEN;
+        ctx.arc(h.x, h.y, r0 * 0.06, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.beginPath();
+        ctx.arc(h.x, h.y, Math.max(1.6, r0 * 0.012), 0, Math.PI * 2);
+        ctx.fillStyle = PATH_IVORY;
         ctx.fill();
       }
-      ctx.globalAlpha = 1;
     }
+    ctx.globalAlpha = 1;
 
-    // Soft tick per decimal second; pitch rises slowly with day progress and
-    // stays bounded (180-440 Hz, low gain). Missed ticks (throttled background
-    // tab, midnight wrap) are never replayed as a backlog.
-    const tick = Math.floor(dsec);
-    const prevTick = lastTickRef.current;
-    if (prevTick !== null && tick !== prevTick && tick - prevTick === 1) {
-      const prefs = getSoundPrefs();
-      playSpiralTick(time?.progress ?? 0, prefs.gain);
+    const live = Math.floor((time?.progress ?? 0) * 1e6);
+    const prev = lastTickRef.current;
+    if (prev !== null && live !== prev && live - prev === 1) {
+      playSpiralTick(time?.progress ?? 0, getSoundPrefs().gain);
     }
-    lastTickRef.current = tick;
-  }, [time, frame]);
+    lastTickRef.current = live;
+  }, [time, frame, drawProgress, pathAlpha]);
 
   return <canvas ref={canvasRef} className="h-full w-full" />;
 }
