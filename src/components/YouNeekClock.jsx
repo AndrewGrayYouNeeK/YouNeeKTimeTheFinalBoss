@@ -15,7 +15,8 @@ import RenderModeSelect from '@/components/younEEK/RenderModeSelect';
 import DiaryPanel from '@/components/younEEK/DiaryPanel';
 import SoundControls from '@/components/younEEK/SoundControls';
 import StickyFallAstronaut from '@/components/younEEK/StickyFallAstronaut';
-import { PREFS_EVENT, readClockSource, readHandStyle, readRenderMode } from '@/lib/clockPrefs';
+import { PREFS_EVENT, formatDigital, readClockSource, readHandStyle, readRenderMode } from '@/lib/clockPrefs';
+import { PATH_IVORY } from '@/components/younEEK/clockConstants';
 import { getLunarDate } from '@/lib/lunarCalendar';
 import TimeScope from '@/components/TimeScope';
 import AppPanel from '@/components/AppPanel';
@@ -108,8 +109,7 @@ export default function YouNeekClock() {
           {/* Mood switch: one canonical renderMode flag drives the dial */}
           <RenderModeSelect value={renderMode} />
 
-          {/* Digital ABOVE the dial — reference layout */}
-          <DigitalTimeDisplay time={time} source={source} />
+          {renderMode === 'legacy' && <DigitalTimeDisplay time={time} source={source} />}
 
           <div className="w-full">
             <ClockDial
@@ -124,6 +124,16 @@ export default function YouNeekClock() {
               erupting={erupting}
             />
           </div>
+
+          {renderMode !== 'legacy' && (
+            <p
+              className="font-mono text-[13px] tracking-[0.42em]"
+              style={{ color: PATH_IVORY }}
+              aria-label="Decimal time"
+            >
+              {formatDigital(time, source)}
+            </p>
+          )}
 
           <div className="w-full px-1">
             <DayProgressBar time={time} />

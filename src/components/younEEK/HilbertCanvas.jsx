@@ -1,17 +1,36 @@
 import { useEffect, useRef, useState } from 'react';
-import { CHARCOAL, FELT_GREEN, IVORY, DIARY_INKS, hexAlpha } from './clockConstants';
+import {
+  DIARY_INKS, FELT_PATH, FELT_PATH_BRIGHT, PATH_IVORY, PALE_CYAN, VOID, mixHex,
+} from './clockConstants';
 import { HILBERT_SEGMENTS, hilbertCells, hilbertPointAt } from '@/lib/hilbert';
 import { dateKeyFor, traversalCoverage } from '@/lib/hilbertDiary';
 import { getSoundPrefs, playSegmentClick } from '@/lib/segmentAudio';
+import { drawVoidDrift } from './voidDrift';
+import { useMidnightVeil } from './useMidnightVeil';
 
-const TRAIL_SEGMENTS = 8;
+const TRAIL = 8;
+
+// TIME MAPPING — unchanged. Not the single day-weave.
+// Head = (dayProgress * 10000) % 255. One decimal minute = one segment.
+// A day is ~39.2 passes. Passes are not drawn on top of each other.
+// NOT APPLIED (needs approval): head = dayProgress * 255, one weave per day.
+// Midnight veil only holds the pre-midnight frame while it fades.
 
 export default function HilbertCanvas({ time, diary = null }) {
   const canvasRef = useRef(null);
   const sizeRef = useRef({ w: 0, h: 0, dpr: 1 });
-  const pathCacheRef = useRef({ key: '', path: null });
   const lastSegmentRef = useRef(null);
+  const reducedRef = useRef(false);
   const [frame, setFrame] = useState(0);
+  const { drawProgress, pathAlpha } = useMidnightVeil(time?.progress ?? 0);
+
+  useEffect(() => {
+    const media = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const sync = () => { reducedRef.current = media.matches; };
+    sync();
+    media.addEventListener('change', sync);
+    return () => media.removeEventListener('change', sync);
+  }, []);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -37,114 +56,94 @@ export default function HilbertCanvas({ time, diary = null }) {
     const { w, h, dpr } = sizeRef.current;
     if (!w || !h) return;
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-
-    ctx.fillStyle = CHARCOAL;
+    ctx.fillStyle = VOID;
     ctx.fillRect(0, 0, w, h);
+    drawVoidDrift(ctx, w, h, performance.now(), reducedRef.current);
 
     const side = Math.min(w, h);
-    const pad = side * 0.07;
+    const pad = side * 0.1;
     const cell = (side - pad * 2) / 16;
     const originX = (w - side) / 2 + pad;
     const originY = (h - side) / 2 + pad;
     const px = (p) => ({ x: originX + (p.x + 0.5) * cell, y: originY + (p.y + 0.5) * cell });
+    const cells = hilbertCells();
 
-    const cacheKey = `${w}x${h}`;
-    if (pathCacheRef.current.key !== cacheKey) {
-      const path = new Path2D();
-      hilbertCells().forEach((p, i) => {
-        const q = px(p);
-        if (i === 0) path.moveTo(q.x, q.y);
-        else path.lineTo(q.x, q.y);
-      });
-      pathCacheRef.current = { key: cacheKey, path };
-    }
-
-    ctx.lineJoin = 'round';
-    ctx.lineCap = 'round';
-
-    ctx.strokeStyle = FELT_GREEN;
-    ctx.globalAlpha = 0.18;
-    ctx.lineWidth = Math.max(1, side * 0.003);
-    ctx.stroke(pathCacheRef.current.path);
-    ctx.globalAlpha = 1;
-
-    // Decimal minutes since local midnight: 0..10000, monotonic across hour
-    // boundaries. 100 decimal minutes per hour vs 255 curve segments: the trace
-    // advances one segment per decimal minute continuously (2.55 h per full
-    // traversal, ~39.2 traversals per day) and wraps at 255 by design. No
-    // fictitious connector from the last cell back to the first: the head
-    // re-enters at cell 0.
-    const totalDecimalMinutes = (time?.progress ?? 0) * 10000;
+    const totalDecimalMinutes = drawProgress * 10000;
     const t = totalDecimalMinutes % HILBERT_SEGMENTS;
     const liveTraversal = Math.floor(totalDecimalMinutes / HILBERT_SEGMENTS);
+    const head = hilbertPointAt(t);
+    const first = Math.floor(t);
 
-    // Diary overlay: exactly one traversal at a time (the selected day/pass, or
-    // today's live pass). Cells repeat across passes, so mixing passes would
-    // color one cell with conflicting timestamps — never done here.
     let showLiveHead = true;
+    let coverage = null;
     if (diary) {
       const traversal = diary.traversal === 'live' ? liveTraversal : diary.traversal;
       showLiveHead = diary.dayOffset === 0 && diary.traversal === 'live';
-      const coverage = traversalCoverage(dateKeyFor(diary.dayOffset), traversal);
-      for (let s = 0; s < HILBERT_SEGMENTS; s++) {
-        const mark = coverage[s];
-        if (!mark) continue;
-        const p0 = px(hilbertCells()[s]);
-        const p1 = px(hilbertCells()[s + 1]);
-        ctx.strokeStyle = DIARY_INKS[mark.colorIndex] || IVORY;
-        ctx.globalAlpha = 0.95;
-        ctx.lineWidth = Math.max(1.5, side * 0.012);
-        ctx.beginPath();
-        ctx.moveTo(p0.x, p0.y);
-        ctx.lineTo(p1.x, p1.y);
-        ctx.stroke();
-      }
-      ctx.globalAlpha = 1;
+      coverage = traversalCoverage(dateKeyFor(diary.dayOffset), traversal);
     }
 
-    const cells = hilbertCells();
-    const head = hilbertPointAt(t);
-    const hp = px(head);
-    const first = Math.floor(t);
+    const end = showLiveHead ? first : HILBERT_SEGMENTS;
+    ctx.lineJoin = 'round';
+    ctx.lineCap = 'round';
+    ctx.lineWidth = Math.max(1.25, side * 0.008);
+
+    for (let s = 0; s < end; s++) {
+      const mark = coverage ? coverage[s] : null;
+      const along = end <= 1 ? 1 : s / (end - 1);
+      const color = mark
+        ? mixHex(FELT_PATH, DIARY_INKS[mark.colorIndex] || FELT_PATH_BRIGHT, 0.35)
+        : mixHex(FELT_PATH, FELT_PATH_BRIGHT, along * 0.85);
+      const p0 = px(cells[s]);
+      const p1 = px(cells[s + 1] || cells[s]);
+      ctx.strokeStyle = color;
+      ctx.globalAlpha = (mark ? 0.42 : 0.07 + 0.16 * along) * pathAlpha;
+      ctx.beginPath();
+      ctx.moveTo(p0.x, p0.y);
+      ctx.lineTo(p1.x, p1.y);
+      ctx.stroke();
+    }
 
     if (showLiveHead) {
-      for (let s = first; s > first - TRAIL_SEGMENTS - 1; s--) {
+      const hp = px(head);
+      for (let i = 0; i < TRAIL; i++) {
+        const s = first - i;
         if (s < 0) break;
-        const age = t - s;
-        const alpha = Math.max(0, 1 - age / (TRAIL_SEGMENTS + 1));
         const p0 = px(cells[s]);
-        const p1 = s === first ? hp : px(cells[s + 1]);
-        ctx.strokeStyle = IVORY;
+        const p1 = i === 0 ? hp : px(cells[s + 1]);
+        const alpha = (1 - i / TRAIL) * pathAlpha;
+        ctx.strokeStyle = i < 2 ? PATH_IVORY : PALE_CYAN;
         ctx.globalAlpha = alpha * 0.9;
-        ctx.lineWidth = Math.max(1, side * (0.005 + 0.009 * alpha));
+        ctx.lineWidth = Math.max(1.2, side * (0.006 + 0.008 * (1 - i / TRAIL)));
         ctx.beginPath();
         ctx.moveTo(p0.x, p0.y);
         ctx.lineTo(p1.x, p1.y);
         ctx.stroke();
       }
-      ctx.globalAlpha = 1;
-
+      ctx.globalAlpha = pathAlpha;
+      const glow = ctx.createRadialGradient(hp.x, hp.y, 0, hp.x, hp.y, side * 0.04);
+      glow.addColorStop(0, PATH_IVORY);
+      glow.addColorStop(0.35, 'rgba(215,239,233,0.55)');
+      glow.addColorStop(1, 'rgba(215,239,233,0)');
+      ctx.fillStyle = glow;
       ctx.beginPath();
-      ctx.arc(hp.x, hp.y, Math.max(2.5, side * 0.014), 0, Math.PI * 2);
-      ctx.fillStyle = hexAlpha(FELT_GREEN, 0.3);
+      ctx.arc(hp.x, hp.y, side * 0.04, 0, Math.PI * 2);
       ctx.fill();
       ctx.beginPath();
-      ctx.arc(hp.x, hp.y, Math.max(1.5, side * 0.007), 0, Math.PI * 2);
-      ctx.fillStyle = IVORY;
+      ctx.arc(hp.x, hp.y, Math.max(1.6, side * 0.008), 0, Math.PI * 2);
+      ctx.fillStyle = PATH_IVORY;
       ctx.fill();
     }
+    ctx.globalAlpha = 1;
 
-    // Soft click on each live segment advance. Skipped transitions (throttled
-    // background tab) are never replayed as a backlog.
-    const segment = first;
+    const liveT = ((time?.progress ?? 0) * 10000) % HILBERT_SEGMENTS;
+    const segment = Math.floor(liveT);
     const prevSegment = lastSegmentRef.current;
     if (prevSegment !== null && segment !== prevSegment) {
       const delta = ((segment - prevSegment) % HILBERT_SEGMENTS + HILBERT_SEGMENTS) % HILBERT_SEGMENTS;
-      const prefs = getSoundPrefs();
-      if (delta === 1) playSegmentClick(prefs.gain);
+      if (delta === 1) playSegmentClick(getSoundPrefs().gain);
     }
     lastSegmentRef.current = segment;
-  }, [time, diary, frame]);
+  }, [time, diary, frame, drawProgress, pathAlpha]);
 
   return <canvas ref={canvasRef} className="h-full w-full" />;
 }
