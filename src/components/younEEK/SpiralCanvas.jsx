@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import {
-  COOL_MIST, FELT_PATH, PATH_AMBER, PATH_IVORY, PATH_RED, PALE_CYAN, VOID, mixHex,
+  COOL_MIST, FELT_PATH, PATH_AMBER, PATH_IVORY, PATH_RED, VOID, mixHex,
 } from './clockConstants';
 import { getSoundPrefs, playSpiralTick } from '@/lib/segmentAudio';
 import { SPIRAL_ARMS, armState } from './spiralPath';
@@ -75,44 +75,56 @@ export default function SpiralCanvas({ time }) {
     for (const arm of SPIRAL_ARMS) {
       const { pts } = armState(drawProgress, arm);
       if (pts.length < 2) continue;
+      const bodyEnd = arm.hot ? Math.max(1, pts.length - 1 - TRAIL) : pts.length - 1;
       ctx.beginPath();
-      pts.forEach((p, i) => {
-        const q = xy(p);
+      for (let i = 0; i <= bodyEnd; i++) {
+        const q = xy(pts[i]);
         if (i === 0) ctx.moveTo(q.x, q.y);
         else ctx.lineTo(q.x, q.y);
-      });
-      ctx.globalAlpha = (arm.hot ? 0.9 : 0.42) * pathAlpha;
-      ctx.lineWidth = arm.width;
-      ctx.strokeStyle = arm.hot ? heat : mixHex('#6e8f7c', PATH_IVORY, 0.55);
+      }
+      ctx.globalAlpha = (arm.hot ? 0.2 : 0.16) * pathAlpha;
+      ctx.lineWidth = arm.width * 0.85;
+      ctx.strokeStyle = arm.hot ? heat : mixHex('#6e8f7c', PATH_IVORY, 0.35);
       ctx.stroke();
 
       if (!arm.hot) continue;
-      const start = Math.max(0, pts.length - 1 - TRAIL);
-      for (let i = start; i < pts.length - 1; i++) {
+      const trailStart = Math.max(0, pts.length - 1 - TRAIL);
+      for (let i = trailStart; i < pts.length - 1; i++) {
         const age = pts.length - 2 - i;
-        const fade = 1 - age / TRAIL;
+        const near = 1 - age / TRAIL;
+        const ramp = near * near * (3 - 2 * near);
         const a = xy(pts[i]);
         const b = xy(pts[i + 1]);
-        ctx.strokeStyle = fade > 0.75 ? PATH_IVORY : PALE_CYAN;
-        ctx.globalAlpha = fade * pathAlpha;
-        ctx.lineWidth = arm.width * (0.8 + fade);
+        if (ramp > 0.62) {
+          ctx.strokeStyle = PATH_IVORY;
+          ctx.globalAlpha = 0.16 * ramp * pathAlpha;
+          ctx.lineWidth = arm.width * (1.6 + ramp);
+          ctx.beginPath();
+          ctx.moveTo(a.x, a.y);
+          ctx.lineTo(b.x, b.y);
+          ctx.stroke();
+        }
+        ctx.strokeStyle = mixHex(PATH_AMBER, PATH_IVORY, 0.3 + 0.7 * ramp);
+        ctx.globalAlpha = (0.32 + 0.64 * ramp) * pathAlpha;
+        ctx.lineWidth = arm.width * (0.7 + 0.55 * ramp);
         ctx.beginPath();
         ctx.moveTo(a.x, a.y);
         ctx.lineTo(b.x, b.y);
         ctx.stroke();
       }
       const h = xy(pts[pts.length - 1]);
-      ctx.globalAlpha = pathAlpha;
-      const glow = ctx.createRadialGradient(h.x, h.y, 0, h.x, h.y, r0 * 0.055);
-      glow.addColorStop(0, PATH_IVORY);
-      glow.addColorStop(0.4, 'rgba(215,239,233,0.45)');
+      const glowR = r0 * 0.04;
+      const glow = ctx.createRadialGradient(h.x, h.y, 0, h.x, h.y, glowR);
+      glow.addColorStop(0, 'rgba(244,240,230,0.95)');
+      glow.addColorStop(0.4, 'rgba(215,239,233,0.22)');
       glow.addColorStop(1, 'rgba(215,239,233,0)');
+      ctx.globalAlpha = pathAlpha;
       ctx.fillStyle = glow;
       ctx.beginPath();
-      ctx.arc(h.x, h.y, r0 * 0.055, 0, Math.PI * 2);
+      ctx.arc(h.x, h.y, glowR, 0, Math.PI * 2);
       ctx.fill();
       ctx.beginPath();
-      ctx.arc(h.x, h.y, Math.max(1.6, r0 * 0.012), 0, Math.PI * 2);
+      ctx.arc(h.x, h.y, Math.max(2.2, r0 * 0.014), 0, Math.PI * 2);
       ctx.fillStyle = PATH_IVORY;
       ctx.fill();
     }

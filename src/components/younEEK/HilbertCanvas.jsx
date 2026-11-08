@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import {
-  DIARY_INKS, FELT_PATH, FELT_PATH_BRIGHT, PATH_IVORY, PALE_CYAN, VOID, mixHex,
+  DIARY_INKS, FELT_PATH, PATH_IVORY, PALE_CYAN, VOID, mixHex,
 } from './clockConstants';
 import { HILBERT_SEGMENTS, hilbertCells, hilbertPointAt } from '@/lib/hilbert';
 import { dateKeyFor, traversalCoverage } from '@/lib/hilbertDiary';
@@ -82,21 +82,19 @@ export default function HilbertCanvas({ time, diary = null }) {
       coverage = traversalCoverage(dateKeyFor(diary.dayOffset), traversal);
     }
 
-    const end = showLiveHead ? first : HILBERT_SEGMENTS;
+    const ghostEnd = showLiveHead ? Math.max(0, first - TRAIL) : HILBERT_SEGMENTS;
     ctx.lineJoin = 'round';
     ctx.lineCap = 'round';
-    ctx.lineWidth = Math.max(1.25, side * 0.008);
 
-    for (let s = 0; s < end; s++) {
+    for (let s = 0; s < ghostEnd; s++) {
       const mark = coverage ? coverage[s] : null;
-      const along = end <= 1 ? 1 : s / (end - 1);
-      const color = mark
-        ? mixHex(FELT_PATH, DIARY_INKS[mark.colorIndex] || FELT_PATH_BRIGHT, 0.35)
-        : mixHex(FELT_PATH, FELT_PATH_BRIGHT, along * 0.85);
       const p0 = px(cells[s]);
       const p1 = px(cells[s + 1] || cells[s]);
-      ctx.strokeStyle = color;
-      ctx.globalAlpha = (mark ? 0.42 : 0.07 + 0.16 * along) * pathAlpha;
+      ctx.strokeStyle = mark
+        ? mixHex(FELT_PATH, DIARY_INKS[mark.colorIndex] || FELT_PATH, 0.28)
+        : FELT_PATH;
+      ctx.globalAlpha = (mark ? 0.2 : 0.09) * pathAlpha;
+      ctx.lineWidth = Math.max(1.1, side * 0.006);
       ctx.beginPath();
       ctx.moveTo(p0.x, p0.y);
       ctx.lineTo(p1.x, p1.y);
@@ -105,31 +103,42 @@ export default function HilbertCanvas({ time, diary = null }) {
 
     if (showLiveHead) {
       const hp = px(head);
-      for (let i = 0; i < TRAIL; i++) {
+      for (let i = TRAIL - 1; i >= 0; i--) {
         const s = first - i;
-        if (s < 0) break;
+        if (s < 0) continue;
+        const near = 1 - i / TRAIL;
+        const ramp = near * near * (3 - 2 * near);
         const p0 = px(cells[s]);
         const p1 = i === 0 ? hp : px(cells[s + 1]);
-        const alpha = (1 - i / TRAIL) * pathAlpha;
-        ctx.strokeStyle = i < 2 ? PATH_IVORY : PALE_CYAN;
-        ctx.globalAlpha = alpha * 0.9;
-        ctx.lineWidth = Math.max(1.2, side * (0.006 + 0.008 * (1 - i / TRAIL)));
+        if (i < 3) {
+          ctx.strokeStyle = PATH_IVORY;
+          ctx.globalAlpha = 0.14 * ramp * pathAlpha;
+          ctx.lineWidth = Math.max(3.5, side * 0.016 * ramp);
+          ctx.beginPath();
+          ctx.moveTo(p0.x, p0.y);
+          ctx.lineTo(p1.x, p1.y);
+          ctx.stroke();
+        }
+        ctx.strokeStyle = mixHex(FELT_PATH, i < 4 ? PATH_IVORY : PALE_CYAN, 0.35 + 0.65 * ramp);
+        ctx.globalAlpha = (0.34 + 0.62 * ramp) * pathAlpha;
+        ctx.lineWidth = Math.max(1.15, side * (0.005 + 0.005 * ramp));
         ctx.beginPath();
         ctx.moveTo(p0.x, p0.y);
         ctx.lineTo(p1.x, p1.y);
         ctx.stroke();
       }
-      ctx.globalAlpha = pathAlpha;
-      const glow = ctx.createRadialGradient(hp.x, hp.y, 0, hp.x, hp.y, side * 0.04);
-      glow.addColorStop(0, PATH_IVORY);
-      glow.addColorStop(0.35, 'rgba(215,239,233,0.55)');
+      const glowR = side * 0.028;
+      const glow = ctx.createRadialGradient(hp.x, hp.y, 0, hp.x, hp.y, glowR);
+      glow.addColorStop(0, 'rgba(244,240,230,0.95)');
+      glow.addColorStop(0.35, 'rgba(215,239,233,0.28)');
       glow.addColorStop(1, 'rgba(215,239,233,0)');
+      ctx.globalAlpha = pathAlpha;
       ctx.fillStyle = glow;
       ctx.beginPath();
-      ctx.arc(hp.x, hp.y, side * 0.04, 0, Math.PI * 2);
+      ctx.arc(hp.x, hp.y, glowR, 0, Math.PI * 2);
       ctx.fill();
       ctx.beginPath();
-      ctx.arc(hp.x, hp.y, Math.max(1.6, side * 0.008), 0, Math.PI * 2);
+      ctx.arc(hp.x, hp.y, Math.max(2.2, side * 0.011), 0, Math.PI * 2);
       ctx.fillStyle = PATH_IVORY;
       ctx.fill();
     }
