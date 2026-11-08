@@ -47,7 +47,7 @@ function hilbertPts(progress, layout) {
 }
 
 function spiralPts(progress, layout) {
-  const { pts } = armState(progress * 1e6, SPIRAL_ARMS[0]);
+  const { pts } = armState(progress, SPIRAL_ARMS[0]);
   const mapped = pts.map((p) => ({
     x: layout.cx + Math.cos(p.ang) * p.rFrac * layout.r0,
     y: layout.cy + Math.sin(p.ang) * p.rFrac * layout.r0,
@@ -56,7 +56,6 @@ function spiralPts(progress, layout) {
     const c = { x: layout.cx, y: layout.cy - layout.r0 };
     return [c, c];
   }
-  mapped.reverse();
   return mapped;
 }
 

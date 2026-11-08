@@ -9,13 +9,10 @@ import { useMidnightVeil } from './useMidnightVeil';
 
 const TRAIL = 8;
 
-// TIME MAPPING — unchanged. dsec = dayProgress * 1e6. Each arm still cycles on
-// its own k and secondsPerTurn (inner ~81s, outer ~472s of decimal time) and
-// fades at the void. That mid-day cycle is NOT removed.
-// NOT APPLIED (needs approval): one inward journey across the decimal day that
-// only restarts at midnight.
-// Color DOES change: outer cool mist/ivory, amber mid, muted red at the center.
-// Midnight veil only holds the pre-midnight frame while it fades.
+// The inner arm tightens from the rim to the void floor across the decimal
+// day. It is not an infinite drawing: r is clamped at 0.05, and local midnight
+// fades this frame and starts the next day at the rim. The outer arm uses a
+// different, larger k and fewer turns, so it lags outside.
 
 export default function SpiralCanvas({ time }) {
   const canvasRef = useRef(null);
@@ -64,7 +61,6 @@ export default function SpiralCanvas({ time }) {
     const cx = w / 2;
     const cy = h / 2;
     const r0 = (Math.min(w, h) / 2) * 0.9;
-    const dsec = drawProgress * 1e6;
     const xy = (p) => ({ x: cx + Math.cos(p.ang) * p.rFrac * r0, y: cy + Math.sin(p.ang) * p.rFrac * r0 });
 
     const heat = ctx.createRadialGradient(cx, cy, r0 * 0.05, cx, cy, r0);
@@ -77,7 +73,7 @@ export default function SpiralCanvas({ time }) {
     ctx.lineCap = 'round';
 
     for (const arm of SPIRAL_ARMS) {
-      const { pts, envelope } = armState(dsec, arm);
+      const { pts } = armState(drawProgress, arm);
       if (pts.length < 2) continue;
       ctx.beginPath();
       pts.forEach((p, i) => {
@@ -85,39 +81,40 @@ export default function SpiralCanvas({ time }) {
         if (i === 0) ctx.moveTo(q.x, q.y);
         else ctx.lineTo(q.x, q.y);
       });
-      ctx.globalAlpha = (arm.hot ? 0.85 : 0.4) * envelope * pathAlpha;
+      ctx.globalAlpha = (arm.hot ? 0.9 : 0.42) * pathAlpha;
       ctx.lineWidth = arm.width;
-      ctx.strokeStyle = arm.hot ? heat : mixHex(COOL_MIST, PATH_IVORY, 0.45);
+      ctx.strokeStyle = arm.hot ? heat : mixHex('#6e8f7c', PATH_IVORY, 0.55);
       ctx.stroke();
 
-      if (arm.hot) {
-        const n = Math.min(TRAIL, pts.length - 1);
-        for (let i = 0; i < n; i++) {
-          const a = xy(pts[i]);
-          const b = xy(pts[i + 1]);
-          ctx.strokeStyle = i < 2 ? PATH_IVORY : PALE_CYAN;
-          ctx.globalAlpha = (1 - i / TRAIL) * envelope * pathAlpha;
-          ctx.lineWidth = arm.width * (1.3 - i / TRAIL);
-          ctx.beginPath();
-          ctx.moveTo(a.x, a.y);
-          ctx.lineTo(b.x, b.y);
-          ctx.stroke();
-        }
-        const h = xy(pts[0]);
-        ctx.globalAlpha = envelope * pathAlpha;
-        const glow = ctx.createRadialGradient(h.x, h.y, 0, h.x, h.y, r0 * 0.06);
-        glow.addColorStop(0, PATH_IVORY);
-        glow.addColorStop(0.4, 'rgba(215,239,233,0.45)');
-        glow.addColorStop(1, 'rgba(215,239,233,0)');
-        ctx.fillStyle = glow;
+      if (!arm.hot) continue;
+      const start = Math.max(0, pts.length - 1 - TRAIL);
+      for (let i = start; i < pts.length - 1; i++) {
+        const age = pts.length - 2 - i;
+        const fade = 1 - age / TRAIL;
+        const a = xy(pts[i]);
+        const b = xy(pts[i + 1]);
+        ctx.strokeStyle = fade > 0.75 ? PATH_IVORY : PALE_CYAN;
+        ctx.globalAlpha = fade * pathAlpha;
+        ctx.lineWidth = arm.width * (0.8 + fade);
         ctx.beginPath();
-        ctx.arc(h.x, h.y, r0 * 0.06, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.beginPath();
-        ctx.arc(h.x, h.y, Math.max(1.6, r0 * 0.012), 0, Math.PI * 2);
-        ctx.fillStyle = PATH_IVORY;
-        ctx.fill();
+        ctx.moveTo(a.x, a.y);
+        ctx.lineTo(b.x, b.y);
+        ctx.stroke();
       }
+      const h = xy(pts[pts.length - 1]);
+      ctx.globalAlpha = pathAlpha;
+      const glow = ctx.createRadialGradient(h.x, h.y, 0, h.x, h.y, r0 * 0.055);
+      glow.addColorStop(0, PATH_IVORY);
+      glow.addColorStop(0.4, 'rgba(215,239,233,0.45)');
+      glow.addColorStop(1, 'rgba(215,239,233,0)');
+      ctx.fillStyle = glow;
+      ctx.beginPath();
+      ctx.arc(h.x, h.y, r0 * 0.055, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.beginPath();
+      ctx.arc(h.x, h.y, Math.max(1.6, r0 * 0.012), 0, Math.PI * 2);
+      ctx.fillStyle = PATH_IVORY;
+      ctx.fill();
     }
     ctx.globalAlpha = 1;
 
