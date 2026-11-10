@@ -12,7 +12,9 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          # Project Wrangler 4 requires Node 22. On Node 20 this action
+          # installs Wrangler 3.90, which rejects an assets-only config.
+          node-version: 22
           cache: npm
       - run: npm ci
       - run: npm run build
