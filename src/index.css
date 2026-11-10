@@ -210,7 +210,7 @@
   transition: opacity 0.05s linear, filter 0.05s linear;
 }
 
-/* Black stone wordmark — dim on black, revealed by cyan/purple lightning */
+/* Solid black on the starfield. Lightning is the only thing that reveals the art. */
 .lightning-header-title,
 .lightning-header-subtitle {
   display: block;
@@ -218,9 +218,9 @@
   height: auto;
   object-fit: contain;
   pointer-events: none;
-  transition: filter 0.18s ease, opacity 0.18s ease;
-  opacity: 0.42;
-  filter: brightness(0.55) contrast(1.15);
+  transition: filter 0.08s linear;
+  opacity: 1;
+  filter: brightness(0);
 }
 
 .lightning-header-title {
@@ -247,10 +247,7 @@
 .logo-hit.is-lit .lightning-header-title,
 .logo-hit.is-lit .lightning-header-subtitle {
   opacity: 1;
-  filter: brightness(1.35) contrast(1.2) saturate(1.35)
-    drop-shadow(0 0 10px #4dd2ffaa)
-    drop-shadow(0 0 28px #b84dff88)
-    drop-shadow(0 0 48px #2f8bff55);
+  filter: none;
 }
 
 @media (min-width: 640px) {
@@ -409,28 +406,33 @@
   }
 }
 
-/* Dial-local smoke (clipped to clock face — not a page backdrop) */
+/* Dial-local smoke: a straight column from the crater to the top of the face */
+.dial-smoke-column {
+  background: radial-gradient(ellipse at 50% 55%, #e7edf6ee 0%, #9aa3b2d0 38%, #5c6574bb 68%, transparent 100%);
+  filter: blur(4px);
+}
+
 @keyframes dial-smoke-rise {
   0% {
-    transform: translate3d(0, 0, 0) scale(0.7);
+    transform: translate3d(0, 16px, 0) scale(0.45);
     opacity: 0;
   }
-  12% { opacity: 0.8; }
-  60% { opacity: 0.45; }
+  10% { opacity: 0.92; }
+  55% { opacity: 0.62; }
   100% {
-    transform: translate3d(0, -55%, 0) scale(1.55);
+    transform: translate3d(0, -230px, 0) scale(1.2);
     opacity: 0;
   }
 }
 
 @keyframes dial-ember-rise {
   0% {
-    transform: translate3d(0, 0, 0) scale(1);
+    transform: translate3d(0, 8px, 0) scale(1);
     opacity: 0;
   }
   12% { opacity: 0.95; }
   100% {
-    transform: translate3d(0, -70%, 0) scale(0.35);
+    transform: translate3d(0, -200px, 0) scale(0.35);
     opacity: 0;
   }
 }

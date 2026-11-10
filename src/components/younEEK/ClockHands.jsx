@@ -32,17 +32,17 @@ function AstroArm({ shoulder, angle, length, color, mirror }) {
   const n = 7;
   for (let i = 0; i <= n; i++) {
     const y = y0 - (beam * i) / n;
-    const x = i === 0 || i === n ? 0 : (i % 2 ? 3.2 : -3.2);
+    const x = i === 0 || i === n ? 0 : (i % 2 ? 3.6 : -3.6);
     zig.push(`${x},${y}`);
   }
   return (
     <g transform={`translate(${shoulder.x} ${shoulder.y}) rotate(${angle})`}>
-      <line x1="0" y1={y0} x2="0" y2={y0 - beam} stroke={color} strokeWidth="7" strokeLinecap="round" opacity="0.35"
+      <line x1="0" y1={y0} x2="0" y2={y0 - beam} stroke={color} strokeWidth="8" strokeLinecap="round" opacity="0.35"
         style={{ filter: `blur(2px)` }} />
-      <line x1="0" y1={y0} x2="0" y2={y0 - beam} stroke={color} strokeWidth="3.2" strokeLinecap="round"
+      <line x1="0" y1={y0} x2="0" y2={y0 - beam} stroke={color} strokeWidth="3.6" strokeLinecap="round"
         style={{ filter: `drop-shadow(0 0 6px ${color}) drop-shadow(0 0 3px ${color})` }} />
-      <polyline points={zig.join(' ')} fill="none" stroke="#ffffff" strokeWidth="1.1" strokeLinejoin="round" opacity="0.95" />
-      <circle cx="0" cy={y0 - beam} r="3.4" fill="#fff" style={{ filter: `drop-shadow(0 0 6px ${color})` }} />
+      <polyline points={zig.join(' ')} fill="none" stroke="#ffffff" strokeWidth="1.2" strokeLinejoin="round" opacity="0.95" />
+      <circle cx="0" cy={y0 - beam} r="3.8" fill="#fff" style={{ filter: `drop-shadow(0 0 6px ${color})` }} />
       <g transform={mirror ? 'scale(-1 1)' : undefined} style={{ filter: 'drop-shadow(0 0 2px #000)' }}>
         <image href="/astro-arm.webp" x={-segW / 2} y={-ARM_SEG - 2} width={segW} height={ARM_SEG + 6} preserveAspectRatio="none" />
       </g>
@@ -154,7 +154,7 @@ export default function ClockHands({ time, source = 'youneek', handStyle = 'need
       {handStyle === 'comet' && <CometHands {...props} />}
       {handStyle === 'pulse' && <PulseHands {...props} />}
       {glow && <GlowHands hour={hour} minute={minute} />}
-      {!omitSeconds && <RimSeconds second={second} count={source === 'regular' ? 60 : 100} />}
+      {!omitSeconds && <RimSeconds second={second} count={100} />}
     </svg>
   );
 }

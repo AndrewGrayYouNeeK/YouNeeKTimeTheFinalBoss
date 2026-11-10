@@ -1,24 +1,50 @@
+import { dialFace } from '@/lib/clockPrefs';
+
 const HOUR_MARK = '#3d9eff';
 const MIN_MARK = '#c026ff';
+const FIVE_MARK = '#d58bff';
+
+function polar(radius, angle) {
+  return {
+    x: 200 + Math.cos(angle) * radius,
+    y: 200 + Math.sin(angle) * radius,
+  };
+}
+
+function tickAt(angle, innerR, strokeWidth, color, key) {
+  const outer = polar(197, angle);
+  const inner = polar(innerR, angle);
+  return {
+    x1: outer.x,
+    y1: outer.y,
+    x2: inner.x,
+    y2: inner.y,
+    strokeWidth,
+    color,
+    key,
+  };
+}
 
 function buildTicks(source) {
-  const count = source === 'regular' ? 60 : 100;
-  return Array.from({ length: count }, (_, i) => {
+  const twelve = dialFace(source) === 'twelve';
+  const count = 100;
+  const ticks = Array.from({ length: count }, (_, i) => {
     const angle = (i / count) * Math.PI * 2 - Math.PI / 2;
-    const isCardinal = source === 'regular' ? i % 15 === 0 : i % 25 === 0;
-    const isMajor = source === 'regular' ? i % 5 === 0 : i % 10 === 0;
-    const outerR = 197;
-    const innerR = isCardinal ? 184 : isMajor ? 187 : 191;
-    return {
-      x1: 200 + Math.cos(angle) * outerR,
-      y1: 200 + Math.sin(angle) * outerR,
-      x2: 200 + Math.cos(angle) * innerR,
-      y2: 200 + Math.sin(angle) * innerR,
-      strokeWidth: isCardinal ? 3.2 : isMajor ? 2.1 : 1.1,
-      color: isCardinal || isMajor ? (isMajor && !isCardinal ? MIN_MARK : HOUR_MARK) : MIN_MARK,
-      key: `rim-${source}-${i}`,
-    };
+    const isCardinal = i % 25 === 0;
+    const isTen = i % 10 === 0;
+    const isFive = i % 5 === 0;
+    const innerR = isCardinal ? 176 : isTen ? 180 : isFive ? 184 : 192;
+    const strokeWidth = isCardinal ? 3.3 : isTen ? 2.6 : isFive ? 2.4 : 1;
+    const color = isCardinal ? HOUR_MARK : isFive ? FIVE_MARK : MIN_MARK;
+    return tickAt(angle, innerR, strokeWidth, color, `rim-${source}-${i}`);
   });
+  if (twelve) {
+    for (let hour = 0; hour < 12; hour += 1) {
+      const angle = (hour / 12) * Math.PI * 2 - Math.PI / 2;
+      ticks.push(tickAt(angle, 170, 3.6, HOUR_MARK, `hour-${hour}`));
+    }
+  }
+  return ticks;
 }
 
 export default function ClockTicks({ source = 'youneek' }) {
