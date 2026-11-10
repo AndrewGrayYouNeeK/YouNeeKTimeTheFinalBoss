@@ -56,9 +56,9 @@ export default function DigitalTimeDisplay({ time, source = 'youneek' }) {
               </div>
             );
           }
-          const label = source === 'regular'
-            ? ['H', 'M', 'S'][labelIdx++]
-            : UNIT_LABELS[labelIdx++] || '';
+          const label = source === 'youneek'
+            ? UNIT_LABELS[labelIdx++] || ''
+            : ['H', 'M', 'S'][labelIdx++];
           return (
             <div key={`g-${gi}`} className="flex flex-col items-center gap-1.5">
               <div className="flex gap-1 sm:gap-1.5">
@@ -73,7 +73,7 @@ export default function DigitalTimeDisplay({ time, source = 'youneek' }) {
           );
         })}
       </div>
-      {source !== 'regular' && (
+      {source === 'youneek' && (
         <p className="mt-2 font-mono text-[9px] uppercase tracking-[0.32em] text-white/30">
           each counts to 100
         </p>

@@ -1,5 +1,6 @@
 export const CLOCK_SOURCES = [
   { id: 'youneek', label: '100.100.100' },
+  { id: 'youneek12', label: '12 hours' },
   { id: 'regular', label: 'Regular Time' },
 ];
 
@@ -29,8 +30,14 @@ export const RENDER_MODES = [
 
 export function readClockSource() {
   const id = localStorage.getItem(SOURCE_KEY);
-  if (id === 'youneek12' || id === 'army' || id === 'decimal') return 'youneek';
+  if (id === 'army' || id === 'decimal') return 'youneek';
   return CLOCK_SOURCES.some((s) => s.id === id) ? id : 'youneek';
+}
+
+// youneek12 keeps 12 hour marks plus a 0–100 minute/second scale.
+// Every other source is a single 0–100 scale (hours, minutes, and seconds each count to 100).
+export function dialFace(source) {
+  return source === 'youneek12' ? 'twelve' : 'hundred';
 }
 
 export function readWatchDisplay() {
@@ -85,6 +92,9 @@ function pad(value) {
 }
 
 export function getHapticDigits(time, source = 'youneek') {
+  if (source === 'youneek12') {
+    return { hours: time.hours12, minutes: time.armyMinutes ?? 0, seconds: time.armySeconds ?? 0 };
+  }
   if (source === 'regular') {
     return { hours: time.hours12, minutes: time.regularMinutes ?? 0, seconds: time.regularSeconds ?? 0 };
   }
@@ -98,16 +108,18 @@ export function formatDigital(time, source = 'youneek') {
 }
 
 export function getHandRotations(time, source = 'youneek') {
-  if (source === 'regular') {
+  if (source === 'youneek') {
     return {
-      hour: time.regularHourRotation,
-      minute: time.regularMinuteRotation,
-      second: time.regularSecondRotation,
+      hour: time.unitRotation,
+      minute: time.minuteRotation,
+      second: time.secondRotation,
     };
   }
+  // 12-hour and regular: the hour hand walks the 12-hour circle.
+  // Minute and second angles match a 0–100 scale (60 civil units span the same circle).
   return {
-    hour: time.unitRotation,
-    minute: time.minuteRotation,
-    second: time.secondRotation,
+    hour: time.regularHourRotation,
+    minute: time.regularMinuteRotation,
+    second: time.regularSecondRotation,
   };
 }

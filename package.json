@@ -9,6 +9,7 @@
     "lint": "eslint . --quiet",
     "lint:fix": "eslint . --fix",
     "typecheck": "tsc -p ./jsconfig.json",
+    "test": "node --test test/*.test.js",
     "preview": "vite preview",
     "deploy": "npm run build && wrangler deploy",
     "cf:version": "npm run build && wrangler versions upload"
