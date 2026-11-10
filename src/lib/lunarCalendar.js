@@ -71,14 +71,29 @@ export function lunationIndexForDate(date) {
   return { index, bounds, dayStart };
 }
 
+function firstLunationStartingInYear(year) {
+  let index = lunationIndexForDate(new Date(year, 0, 1, 12, 0, 0)).index;
+  if (lunationBounds(index).start.getFullYear() < year) index += 1;
+  return index;
+}
+
+// Months are the new moons that start in that civil year, numbered 1–12.
+// A 13th new moon stays in month 12 so the year never shows 13 or skips 1.
+export function lunarMonthForIndex(index) {
+  const year = lunationBounds(index).start.getFullYear();
+  const first = firstLunationStartingInYear(year);
+  let monthInYear = index - first + 1;
+  if (monthInYear < 1) monthInYear = 1;
+  if (monthInYear > 12) monthInYear = 12;
+  return { year, monthInYear };
+}
+
 export function getLunarDate(date = new Date()) {
   const { index, bounds, dayStart } = lunationIndexForDate(date);
   const dayMs = 86400000;
   const day = Math.floor((dayStart.getTime() - startOfLocalDay(bounds.start).getTime()) / dayMs) + 1;
   const moon = getMoonPhase({ date });
-  const year = bounds.start.getFullYear();
-  const firstOfYear = lunationIndexForDate(new Date(year, 0, 1)).index;
-  const monthInYear = index - firstOfYear + 1;
+  const { year, monthInYear } = lunarMonthForIndex(index);
 
   return {
     index,
