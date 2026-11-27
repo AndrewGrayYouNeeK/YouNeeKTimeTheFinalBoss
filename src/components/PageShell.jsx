@@ -5,7 +5,7 @@ export default function PageShell({ children, wide = false, topPad = false, star
     <div className="relative min-h-screen text-white" style={{ background: '#000' }}>
       {stars && <StarsBackground />}
       <div
-        className={`relative z-10 mx-auto w-full px-4 pb-28 ${wide ? 'max-w-2xl' : 'max-w-[36rem]'} ${
+        className={`relative z-10 mx-auto w-full px-4 pb-6 ${wide ? 'max-w-2xl' : 'max-w-[36rem]'} ${
           topPad ? 'pt-24' : 'pt-8'
         }`}
       >
