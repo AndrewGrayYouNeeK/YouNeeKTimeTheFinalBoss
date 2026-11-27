@@ -10,6 +10,7 @@ import Watch from '@/pages/Watch';
 import Calendar from '@/pages/Calendar';
 import Header from '@/components/Header';
 import BottomTab from '@/components/BottomTab';
+import SiteFooter from '@/components/SiteFooter';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useEffect } from 'react';
 // Add page imports here
@@ -45,6 +46,7 @@ const AuthenticatedApp = () => {
           <Route path="*" element={<PageNotFound />} />
         </Routes>
       </AnimatePresence>
+      {!isWatch && <SiteFooter />}
       {!isWatch && <BottomTab />}
     </div>
   );

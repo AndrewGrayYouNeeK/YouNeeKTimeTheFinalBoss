@@ -58,3 +58,5 @@ After that, either:
 ## Built By
 
 Andrew Gray — YouNeeK
+
+YouNeeK™ · © 2026 Andrew Gray
